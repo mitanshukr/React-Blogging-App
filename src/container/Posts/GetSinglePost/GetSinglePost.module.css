@@ -1,0 +1,30 @@
+.GetSinglePost {
+    background-color: #fff;
+    text-align: left;
+    max-width: 650px;
+    padding: 50px 0;
+    margin: 0 auto;
+}
+
+.GetSinglePost h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.GetSinglePost > div:nth-of-type(1){
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    color: rgb(47, 47, 47);
+}
+
+.GetSinglePost small:first-of-type {
+    margin-left: 5px;
+}
+
+.GetSinglePost svg:hover {
+    color: tomato;
+    cursor: pointer;
+}

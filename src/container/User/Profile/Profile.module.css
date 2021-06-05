@@ -1,0 +1,24 @@
+.Profile {
+    background-color: #fff;
+    padding: 10px 100px;
+    height: 100vh;
+    border: 1px solid red;
+    position: relative;
+}
+
+.Profile > div:first-child {
+    width: 300px;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    border: 1px solid grey;
+}
+
+.Profile > div:last-child {
+    position: absolute;
+    left: 450px;
+    width: 600px;
+    border: 1px solid blue;
+}

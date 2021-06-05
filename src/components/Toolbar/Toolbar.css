@@ -1,0 +1,32 @@
+.Header {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 40px;
+    background-color: #2C2926;
+    height: 55px;
+}
+
+.Header nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+.Header nav ul li {
+    padding: 0 10px;
+    list-style: none;
+}
+
+.Header nav ul li a {
+    font-weight: 500;
+    text-decoration: none;
+    color: white;
+}
+
+.Header nav ul li a:hover,
+.Header nav ul li a.active {
+    color: tomato;
+}

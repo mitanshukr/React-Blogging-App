@@ -1,0 +1,16 @@
+.InputText {
+    display: block;
+    margin: 12px auto;
+    width: 300px;
+    padding: 8px;
+}
+
+.RadioBtn {
+    display: inline-block;
+}
+
+.RadioBtn label {
+    display: inline-block !important;
+    padding: 0 10px 0 1px !important;
+    cursor: pointer;
+}

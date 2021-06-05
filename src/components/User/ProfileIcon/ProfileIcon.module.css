@@ -1,0 +1,23 @@
+.ProfileIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* position: absolute;
+    top: -5px;
+    right: 10px; */
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    background-color: rgb(156, 154, 154);
+    padding: 0;
+    color: white;
+} 
+
+.ProfileIcon p {
+    margin: 0;
+    padding: 0;
+    vertical-align:baseline;
+    font-weight: bold;
+    font-size: 10px;
+}
+
