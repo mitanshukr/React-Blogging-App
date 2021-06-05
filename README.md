@@ -11,4 +11,3 @@ Will update this section soon.
 + Axios
 + Styling:
   - CSS Module
->>>>>>> b199600d84ef4f78be931b03f3ba08fa25f5ad5a
