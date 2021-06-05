@@ -11,3 +11,5 @@ Will update this section soon.
 + Axios
 + Styling:
   - CSS Module
+
+Thank you!
