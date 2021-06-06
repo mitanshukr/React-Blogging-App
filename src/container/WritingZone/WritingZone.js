@@ -241,7 +241,7 @@ class WritingZone extends Component {
         </Modal>
         <form onSubmit={this.createPostHandler} className="WritingZone">
           <Editor
-          apiKey="05bc9ua78q937d3pm883xjkkerst4usg2o74wcmxa7l3znq8"
+          apiKey={process.env.REACT_APP_TINYMCE_API}
           value={this.state.inputElements.body.value}
           init={{
             placeholder: "What's in your mind right now?\nThe rule is simple...\nDon't think, just write.",

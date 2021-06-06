@@ -79,7 +79,7 @@ const loginActionHandler = (email, password) => {
     }
     return (dispatch) => {
         dispatch({type: 'serverStatus', serverBusy: true});
-        axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCUnhR5E92IJUKpmuj-cP5gKBeXGerxkRA', userCred)
+        axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_API}`, userCred)
         .then(response => {
             loginResponse = {...response};
             const URI = `/users.json?auth=${response?.data.idToken}&orderBy="userId"&equalTo="${response?.data.localId}"`;
