@@ -1,0 +1,72 @@
+.EditPost {
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    margin-left: 90px;
+    width: 85vw;
+    flex-wrap: nowrap;
+}
+
+.EditPost > div:first-of-type {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 80%;
+    align-items: flex-start;
+    margin-right: 35px;
+}
+
+.EditPost > div:first-of-type p {
+    font-weight: bold;
+    color: tomato;
+}
+
+.EditPost input:first-of-type {
+    margin: 12px 0;
+    width: 96%;
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding-left: 0;
+    border: none;
+    outline-color: rgba(102, 102, 102, 0.315);
+    margin-bottom: 20px;
+}
+
+.EditPost > div:last-of-type {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+    /* justify-content: center; */
+    flex-basis: 20%;
+}
+
+.EditPost > div:last-of-type > input {
+    width: 90%;
+}
+
+.EditPost > div:last-of-type p {
+    font-weight: 500;
+}
+
+.EditPost > div:last-of-type div {
+    align-self: flex-end;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-bottom: 75px;
+}
+
+.EditPost > div:last-of-type div button {
+    margin-left: 10px;
+}
+
+.EditPost textarea {
+    width: 90%;
+    align-self: flex-end;
+    resize: none;
+    height: 150px;
+    padding: 10px;
+}
+
+.EditPost textarea::-webkit-scrollbar {
+    display: none;
+}
