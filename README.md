@@ -1,7 +1,7 @@
 # react-blog
 A full featured Blogging site powered by React and Firebase.
 
-Under Development...</br>
+Under Development.....</br>
 Will update this section soon.
 
 ## Stacks:
