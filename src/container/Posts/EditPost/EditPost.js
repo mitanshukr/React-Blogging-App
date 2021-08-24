@@ -69,7 +69,7 @@ class EditPost extends Component {
   cancelUpdateHandler = (e) => {
     e.preventDefault();
     this.props.history.goBack();
-  }
+  };
 
   updatePostHandler = (e) => {
     e.preventDefault();
@@ -91,6 +91,8 @@ class EditPost extends Component {
         axios
           .post(`/privatePosts.json?auth=${this.props.idToken}`, updatedPost)
           .then((response) => {
+            console.log("happy:::");
+            console.log(response);
             newPostId = response.data.name;
             console.log(newPostId);
             return axios.delete(
@@ -112,6 +114,8 @@ class EditPost extends Component {
         axios
           .post(`/publicPosts.json?auth=${this.props.idToken}`, updatedPost)
           .then((response) => {
+            console.log("happy:::");
+            console.log(response);
             newPostId = response.data.name;
             console.log(newPostId);
             return axios.delete(
@@ -150,7 +154,8 @@ class EditPost extends Component {
       axios
         .patch(URI, updatedPost)
         .then((response) => {
-          console.log(response);
+          console.log("happy:::");
+            console.log(response);
           this.setState({ serverBusy: false });
         })
         .catch((err) => {
@@ -161,17 +166,19 @@ class EditPost extends Component {
   };
 
   inputHandler = (event) => {
-    if (event.target.name === "body") {
-      this.setState({ body: event.target.value });
-    } else if (event.target.name === "title") {
-      this.setState({ title: event.target.value });
+    if (event.target.name === "title") {
+      this.setState({ ...this.state, title: event.target.value });
     } else if (event.target.name === "excerpt") {
-      this.setState({ excerpt: event.target.value });
+      this.setState({ ...this.state, excerpt: event.target.value });
     } else if (event.target.name === "isPrivate") {
-      this.setState({ isPrivate: !this.state.isPrivate });
+      this.setState({ ...this.state, isPrivate: event.target.checked });
     } else if (event.target.name === "tags") {
-      this.setState({ tags: event.target.value });
+      this.setState({ ...this.state, tags: event.target.value });
     }
+  };
+
+  editorChangeHandler = (data) => {
+    this.setState({ ...this.state, body: data });
   };
 
   render() {
@@ -220,26 +227,24 @@ class EditPost extends Component {
                 toolbar:
                   "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
               }}
-              onEditorChange={this.inputHandler}
+              onEditorChange={this.editorChangeHandler}
             />
           </div>
           <div>
-             <div>
-            <Button onClick={this.updatePostHandler}>Update</Button>
-            <Button onClick={this.cancelUpdateHandler}>Cancel</Button>
+            <div>
+              <Button onClick={this.updatePostHandler}>Update</Button>
+              <Button onClick={this.cancelUpdateHandler}>Cancel</Button>
             </div>
             <p>Excerpt</p>
             <Input
               onChange={this.inputHandler}
               elementType="textarea"
-              elementConfig={
-                {
-                  name: "excerpt",
-                  type: 'textarea',
-                  placeholder: "Add a Brief Summary",
-                  autoComplete: "off",
-                }
-              }
+              elementConfig={{
+                name: "excerpt",
+                type: "textarea",
+                placeholder: "Add a Brief Summary",
+                autoComplete: "off",
+              }}
               value={this.state.excerpt}
             />
             <input type="hidden" />
@@ -248,16 +253,14 @@ class EditPost extends Component {
               onChange={this.inputHandler}
               value={this.state.tags}
               elementType="input"
-              elementConfig={
-                {
-                  name: "tags",
-                  type: 'text',
-                  placeholder: "Add Tags separated with commas",
-                  autoComplete: "off",
-                }
-              }
+              elementConfig={{
+                name: "tags",
+                type: "text",
+                placeholder: "Add Tags separated with commas",
+                autoComplete: "off",
+              }}
             />
-            <label for="isPrivate">Private Post?</label>
+            <label htmlFor="isPrivate">Private Post?</label>
             <input
               onChange={this.inputHandler}
               type="checkbox"

@@ -1,6 +1,6 @@
 const initialState = {
     body: null,
-    idToken: null,
+    authToken: null,
     userId: null,
     email: null,
     userName: null,
@@ -19,9 +19,9 @@ const reducer = (state = initialState, action) => {
     if(action.type === 'loginSuccess'){
         return {
             ...state,
-            idToken: action.userData.idToken,
-            userId: action.userData.localId,
-            expiryTime: (action.userData.expiryTime * 1000),
+            authToken: action.userData.token,
+            userId: action.userData.userId,
+            expiryTime: (Date.now() + 3600 * 1000),
             firstName: action.userData.firstName,
             lastName: action.userData.lastName,
             userName: action.userData.userName,
@@ -38,7 +38,7 @@ const reducer = (state = initialState, action) => {
     } else if(action.type === 'logoutSuccess'){
         return {
             ...state,
-            idToken: null,
+            authToken: null,
             userId: null,
             expiryTime: null,
             isAuthenticated: false,
