@@ -7,20 +7,19 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../../hoc/withErrorHandler";
 import classes from "./Feed.module.css";
 
-import getPostShareHandler from '../../../Utility/getPostShareHandler';
-import editPostHandler from '../Utility/editPostHandler';
-import getSinglePostHandler from '../Utility/getSinglePostHandler';
-import getPostsAPIHandler from "../Utility/getPostsAPIHandler";
+import getPostShareHandler from "../../../Utility/getPostShareHandler";
+import editPostHandler from "../Utility/editPostHandler";
+import getSinglePostHandler from "../Utility/getSinglePostHandler";
 import deletePostHandler from "../Utility/deletePostHandler";
 
 class Feed extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       posts: null,
       serverBusy: false,
     };
-  } 
+  }
 
   singlePostDeletion = (e, postId, isPrivate) => {
     deletePostHandler(
@@ -39,17 +38,19 @@ class Feed extends Component {
   };
 
   componentDidMount() {
-    this.setState({serverBusy: true});
-    getPostsAPIHandler("ALL", this.props.idToken, this.props.userId)
-      .then((postsArray) => {
-        const posts = postsArray.sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    this.setState({ serverBusy: true });
+    axios
+      .get("http://localhost:8000/post/feed/all")
+      .then((response) => {
+        const posts = response.data.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
         this.setState({ posts: posts, serverBusy: false });
       })
       .catch((err) => {
         console.log(err);
-        this.setState({serverBusy: false});
+        this.setState({ serverBusy: false });
       });
   }
 
@@ -62,19 +63,30 @@ class Feed extends Component {
             this.state.posts.map((post) => {
               return (
                 <GetPost
-                  key={post.postId}
+                  key={post._id}
                   title={post.title}
                   excerpt={post.excerpt}
-                  date={post.date}
+                  date={post.createdAt}
                   isPrivate={post.isPrivate}
-                  firstName={post.user?.firstName}
-                  lastName={post.user?.lastName}
-                  userName={post.user?.userName}
-                  isCurrentUser={post.user?.userId === this.props.userId}
-                  clicked={(e) => getSinglePostHandler(e, this.props, post.postId, post.isPrivate)}
-                  edit={(e) => editPostHandler(e, this.props, post.postId, post.isPrivate)}
-                  delete={(e) => this.singlePostDeletion(e, post.postId, post.isPrivate)}
-                  share={(e) => getPostShareHandler(e, post.postId)}
+                  firstName={post.creator?.firstName}
+                  lastName={post.creator?.lastName}
+                  userName={post.creator?.userName}
+                  isCurrentUser={post.creator?._id === this.props.userId}
+                  clicked={(e) =>
+                    getSinglePostHandler(
+                      e,
+                      this.props,
+                      post._id,
+                      post.isPrivate
+                    )
+                  }
+                  edit={(e) =>
+                    editPostHandler(e, this.props, post._id, post.isPrivate)
+                  }
+                  delete={(e) =>
+                    this.singlePostDeletion(e, post._id, post.isPrivate)
+                  }
+                  share={(e) => getPostShareHandler(e, post._id)}
                 />
               );
             })
@@ -98,7 +110,7 @@ class Feed extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    idToken: state.idToken,
+    authToken: state.authToken,
     userId: state.userId,
     isAuthenticated: state.isAuthenticated,
   };

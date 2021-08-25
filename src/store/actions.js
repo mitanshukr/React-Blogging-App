@@ -24,11 +24,22 @@ const localStorageHandler = (
   }
 };
 
+const logoutActionHandler = () => {
+  console.log("Logout Handler called...!");
+  return (dispatch) => {
+    localStorageHandler("REMOVE_ITEM");
+    clearTimeout(timeout);
+    dispatch({ type: "logoutSuccess" });
+  };
+};
+
 let timeout;
 const sessionTimeout = (timeoutInMilliSec) => {
   return (dispatch) => {
+    console.log("logoutSet...");
     timeout = setTimeout(() => {
-      //   dispatch(logoutActionHandler());
+      console.log("logout called...");
+      dispatch(logoutActionHandler());
     }, timeoutInMilliSec);
   };
 };
@@ -41,7 +52,6 @@ const errorHandler = (error) => {
 
 const sessionRefresher = () => {
   return (dispatch) => {
-    console.log("session Refresher....inside If!");
     dispatch({ type: "serverStatus", serverBusy: true });
     let localStorageData = localStorageHandler("GET_ITEM");
     const timeLeft = localStorageData.expiryTime - Date.now();
@@ -56,6 +66,8 @@ const sessionRefresher = () => {
         .then((response) => {
           clearTimeout(timeout);
           dispatch(sessionTimeout(timeLeft));
+          response.data.authToken = localStorageData.authToken;
+          console.log(response.data);
           dispatch({ type: "loginSuccess", userData: response.data });
           dispatch({ type: "serverStatus", serverBusy: false });
         })
@@ -72,7 +84,6 @@ const sessionRefresher = () => {
 };
 
 const loginActionHandler = (email, password) => {
-  console.log("Login...called!");
   const userCred = {
     email: email,
     password: password,
@@ -84,11 +95,11 @@ const loginActionHandler = (email, password) => {
       .then((response) => {
         localStorageHandler(
           "SET_ITEM",
-          response.data.token,
+          response.data.authToken,
           response.data.userId,
-          Date.now() + 3600 * 1000
+          Date.now() + response.data.expiresIn * 1000
         );
-        dispatch(sessionTimeout(Date.now() + 3600 * 1000));
+        dispatch(sessionTimeout(response.data.expiresIn * 1000));
         dispatch({ type: "loginSuccess", userData: response.data });
         dispatch({ type: "serverStatus", serverBusy: false });
       })
@@ -101,53 +112,31 @@ const loginActionHandler = (email, password) => {
 };
 
 function capitalize(s) {
-  return s[0].toUpperCase() + s.slice(1);
+  return s[0].toUpperCase() + s.slice(1).toLowerCase();
 }
 
 const signupActionHandler = (email, password, firstName, lastName) => {
-  const userCred = {
+  const userData = {
     email: email,
     password: password,
-    returnSecureToken: true,
-  };
-
-  const userData = {
-    userId: null,
-    email: email,
-    userName: email.split("@")[0],
     firstName: capitalize(firstName),
     lastName: capitalize(lastName),
-    isEmailVerified: false,
   };
 
   return (dispatch) => {
     dispatch({ type: "serverStatus", serverBusy: true });
     axios
-      .post(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCUnhR5E92IJUKpmuj-cP5gKBeXGerxkRA",
-        userCred
-      )
+      .post("http://localhost:8000/auth/signup", userData)
       .then((response) => {
-        userData.userId = response.data.userId;
-        return myAxios.post("/users.json", userData);
-      })
-      .then(() => {
+        console.log(response.data);
         dispatch({ type: "signupSuccess" });
         dispatch({ type: "serverStatus", serverBusy: false });
       })
-      .catch((err) => {
-        dispatch(errorHandler(err.response?.data.error || err));
+      .catch((error) => {
+        console.log(error.message);
+        dispatch(errorHandler(error.message || error));
         dispatch({ type: "serverStatus", serverBusy: false });
       });
-  };
-};
-
-const logoutActionHandler = () => {
-  console.log("Logout Handler called...!");
-  return (dispatch) => {
-    localStorageHandler("REMOVE_ITEM");
-    clearTimeout(timeout);
-    dispatch({ type: "logoutSuccess" });
   };
 };
 

@@ -19,7 +19,6 @@ class WritingZone extends Component {
   //         body: ''
   //       };
   // }
-
   state = {
     inputElements: {
       title: {
@@ -87,7 +86,7 @@ class WritingZone extends Component {
         validation: {},
       },
     },
-    visibility: false,
+    modalVisibility: false,
     serverBusy: false,
     localError: null,
   };
@@ -104,44 +103,48 @@ class WritingZone extends Component {
     this.props.dispatchBody(null);
   }
 
-  checkValidity(value, rules) {
-    let isValid = true;
-    if (!rules) {
-      return true;
-    }
-
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-
-    if (rules.minLength) {
-      isValid = value.length >= rules.minLength && isValid;
-    }
-
-    if (rules.maxLength) {
-      isValid = value.length <= rules.maxLength && isValid;
-    }
-
-    if (rules.isEmail) {
-      const pattern =
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-      isValid = pattern.test(value) && isValid;
-    }
-
-    if (rules.isNumeric) {
-      const pattern = /^\d+$/;
-      isValid = pattern.test(value) && isValid;
-    }
-
-    return isValid;
+  componentWillUnmount() {
+    // if (this.state.inputElements?.body?.value)
+    this.props.dispatchBody(this.state.inputElements.body.value);
   }
+
+  // checkValidity(value, rules) {
+  //   let isValid = true;
+  //   if (!rules) {
+  //     return true;
+  //   }
+
+  //   if (rules.required) {
+  //     isValid = value.trim() !== "" && isValid;
+  //   }
+
+  //   if (rules.minLength) {
+  //     isValid = value.length >= rules.minLength && isValid;
+  //   }
+
+  //   if (rules.maxLength) {
+  //     isValid = value.length <= rules.maxLength && isValid;
+  //   }
+
+  //   if (rules.isEmail) {
+  //     const pattern =
+  //       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+  //     isValid = pattern.test(value) && isValid;
+  //   }
+
+  //   if (rules.isNumeric) {
+  //     const pattern = /^\d+$/;
+  //     isValid = pattern.test(value) && isValid;
+  //   }
+
+  //   return isValid;
+  // }
 
   createPostHandler = (event) => {
     event.preventDefault();
     if (this.props.isAuthenticated) {
-      this.setState({ visibility: true });
+      this.setState({ modalVisibility: true });
     } else {
-      this.props.dispatchBody(this.state.inputElements.body.value);
       this.props.history.push("/login");
     }
   };
@@ -153,27 +156,30 @@ class WritingZone extends Component {
       title: this.state.inputElements.title.value,
       excerpt: this.state.inputElements.excerpt.value,
       body: this.state.inputElements.body.value,
-      tags: this.state.inputElements.tags.value.split(","),
+      tags: this.state.inputElements.tags.value
+        .split(",")
+        .map((tag) => tag.trim()),
       isPrivate: this.state.inputElements.isPrivate.value,
-      user: {
-        userId: this.props.userId,
+      creator: {
+        _id: this.props.userId,
         userName: this.props.userName,
         firstName: this.props.firstName,
         lastName: this.props.lastName,
       },
-      date: new Date(),
     };
-    let URL = null;
-    if (this.state.inputElements.isPrivate.value) {
-      URL = `/privatePosts.json?auth=${this.props.idToken}`;
-    } else {
-      URL = `/publicPosts.json?auth=${this.props.idToken}`;
-    }
     axios
-      .post(URL, post)
+      .post("http://localhost:8000/post/create", post, {
+        headers: {
+          Authorization: `Bearer ${this.props.authToken}`,
+        },
+      })
       .then((response) => {
-        this.props.dispatchBody(null);
-        this.setState({ serverBusy: false });
+        this.setState({
+          inputElements: {
+            ...this.state.inputElements,
+            body: { ...this.state.inputElements.body, value: null },
+          },
+        });
         this.props.history.push("/posts");
       })
       .catch((err) => {
@@ -190,10 +196,6 @@ class WritingZone extends Component {
       name = "body";
       value = event;
     }
-    if (name === "isPrivate") {
-      value = !this.state.inputElements.isPrivate.value;
-    }
-    // console.log(value, name);
     const updatedInputElements = {
       ...this.state.inputElements,
       [name]: {
@@ -201,25 +203,23 @@ class WritingZone extends Component {
         value: value,
       },
     };
-    this.setState({ inputElements: updatedInputElements }, () => {
-      // console.log(this.state);
-    });
+    this.setState({ inputElements: updatedInputElements });
   };
 
   backdropToggler = () => {
-    this.setState({ visibility: false });
+    this.setState({ modalVisibility: false });
     this.setState({ localError: null });
   };
 
   cancelBtnHandler = () => {
-    this.setState({ visibility: false });
+    this.setState({ modalVisibility: false });
   };
 
   render() {
     return (
       <div>
         <Modal
-          visibility={this.state.visibility}
+          visibility={this.state.modalVisibility}
           clicked={this.backdropToggler}
         >
           {this.state.serverBusy ? (
@@ -268,13 +268,13 @@ class WritingZone extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    isAuthenticated: state.isAuthenticated,
-    userId: state.userId,
-    idToken: state.idToken,
     body: state.body,
+    isAuthenticated: state.isAuthenticated,
+    authToken: state.authToken,
+    userId: state.userId,
+    userName: state.userName,
     firstName: state.firstName,
     lastName: state.lastName,
-    userName: state.userName,
   };
 };
 

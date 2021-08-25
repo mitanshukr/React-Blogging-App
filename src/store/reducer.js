@@ -13,13 +13,14 @@ const initialState = {
     serverBusy: false,
     backgroundImage: null,
     isUserIconSelected: false,
+    message: null,
 }
 
 const reducer = (state = initialState, action) => {
     if(action.type === 'loginSuccess'){
         return {
             ...state,
-            authToken: action.userData.token,
+            authToken: action.userData.authToken,
             userId: action.userData.userId,
             expiryTime: (Date.now() + 3600 * 1000),
             firstName: action.userData.firstName,
@@ -33,7 +34,7 @@ const reducer = (state = initialState, action) => {
     } else if(action.type === 'signupSuccess'){
         return {
             ...state,
-            error: "Signup Successful! Please Login to Continue..."
+            message: "Signup Successful! Please Login to Continue..."
         }
     } else if(action.type === 'logoutSuccess'){
         return {

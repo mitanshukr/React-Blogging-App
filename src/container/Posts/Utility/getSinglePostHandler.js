@@ -1,9 +1,9 @@
 const getSinglePostHandler = (e, props, postId, isPrivate) => {
     e.stopPropagation();
     if(isPrivate){
-      props.history.push("/posts/private/" + postId);
+      props.history.push("/post/private/" + postId);
   } else {
-      props.history.push("/posts/" + postId);  
+      props.history.push("/post/" + postId);  
     }
 }
 

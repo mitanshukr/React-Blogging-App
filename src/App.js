@@ -37,11 +37,24 @@ class App extends Component {
               <Route path="/feed" exact component={Feed} />
               <Route path="/logout" component={Logout} />
               {/* <Route path="/login" component={Login} /> */}
-              <Route style={{backgroundColor: 'red'}} path="/posts" exact component={GetPosts} />
-              <Route path="/posts/edit/:postId" exact component={EditPost} />
-              <Route path="/posts/private/edit/:postId" exact component={EditPost} />
-              <Route path="/posts/:postId" exact component={GetSinglePost} />
-              <Route path="/posts/private/:postId" exact component={GetSinglePost} />
+              <Route
+                style={{ backgroundColor: "red" }}
+                path="/posts"
+                exact
+                component={GetPosts}
+              />
+              <Route path="/post/edit/:postId" exact component={EditPost} />
+              <Route
+                path="/post/private/edit/:postId"
+                exact
+                component={EditPost}
+              />
+              <Route path="/post/:postId" exact component={GetSinglePost} />
+              <Route
+                path="/post/private/:postId"
+                exact
+                component={GetSinglePost}
+              />
               <Route path="/user/profile" component={Profile} />
               <Route path="/user/account" component={Account} />
               <Redirect to="/" />
@@ -53,15 +66,17 @@ class App extends Component {
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
               {/* <Route path="/posts" exact component={GetPosts} /> */}
-              <Route path="/posts/:postId" exact component={GetSinglePost} />
-              <Route from="/posts/private/:postId" exact component={GetSinglePost} />
+              <Route path="/post/:postId" exact component={GetSinglePost} />
+              {/* <Route from="/post/private/:postId" exact>
+                <Redirect to="/login" />
+              </Route> */}
               {/* <Redirect to="/" /> */}
             </Switch>
           )}
         </Layout>
       </div>
     );
-    
+
     if (this.props.serverBusy) {
       app = <Spinner />;
     }

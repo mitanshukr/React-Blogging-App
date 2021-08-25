@@ -7,10 +7,9 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../../hoc/withErrorHandler";
 import classes from "./GetPosts.module.css";
 
-import getPostShareHandler from '../../../Utility/getPostShareHandler';
-import editPostHandler from '../Utility/editPostHandler';
-import getSinglePostHandler from '../Utility/getSinglePostHandler';
-import getPostsAPIHandler from "../Utility/getPostsAPIHandler";
+import getSinglePostHandler from "../Utility/getSinglePostHandler";
+import getPostShareHandler from "../../../Utility/getPostShareHandler";
+import editPostHandler from "../Utility/editPostHandler";
 import deletePostHandler from "../Utility/deletePostHandler";
 
 class GetPosts extends Component {
@@ -37,18 +36,23 @@ class GetPosts extends Component {
   };
 
   componentDidMount() {
-    this.setState({serverBusy: true});
-    getPostsAPIHandler("USER_ALL", this.props.idToken, this.props.userId)
-      .then((postsArray) => {
-        const postsArr = [...postsArray[0], ...postsArray[1]];
-        const posts = postsArr.sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    this.setState({ serverBusy: true });
+    axios
+      .get(`http://localhost:8000/post/all/${this.props.userId}?private=true`, {
+        headers: {
+          Authorization: `Bearer ${this.props.authToken}`,
+        },
+      })
+      .then((response) => {
+        const posts = response.data.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
-        this.setState({ posts: posts, serverBusy: false});
+        this.setState({ posts: posts, serverBusy: false });
       })
       .catch((err) => {
         console.log(err);
-        this.setState({serverBusy: false});
+        this.setState({ serverBusy: false });
       });
   }
 
@@ -61,19 +65,30 @@ class GetPosts extends Component {
             this.state.posts.map((post) => {
               return (
                 <GetPost
-                  key={post.postId}
+                  key={post._id}
                   title={post.title}
                   excerpt={post.excerpt}
-                  date={post.date}
-                  firstName={post.user?.firstName}
-                  lastName={post.user?.lastName}
-                  userName={post.user?.userName}
+                  date={post.createdAt}
+                  firstName={post.creator?.firstName}
+                  lastName={post.creator?.lastName}
+                  userName={post.creator?.userName}
                   isPrivate={post.isPrivate}
-                  isCurrentUser={post.user?.userId === this.props.userId}
-                  clicked={(e) => getSinglePostHandler(e, this.props, post.postId, post.isPrivate)}
-                  edit={(e) => editPostHandler(e, this.props, post.postId, post.isPrivate)}
-                  delete={(e) => this.singlePostDeletion(e, post.postId, post.isPrivate)}
-                  share={(e) => getPostShareHandler(e, post.postId)}
+                  isCurrentUser={post.creator?._id === this.props.userId}
+                  clicked={(e) =>
+                    getSinglePostHandler(
+                      e,
+                      this.props,
+                      post._id,
+                      post.isPrivate
+                    )
+                  }
+                  edit={(e) =>
+                    editPostHandler(e, this.props, post._id, post.isPrivate)
+                  }
+                  delete={(e) =>
+                    this.singlePostDeletion(e, post._id, post.isPrivate)
+                  }
+                  share={(e) => getPostShareHandler(e, post._id)}
                 />
               );
             })
@@ -96,7 +111,7 @@ class GetPosts extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    idToken: state.idToken,
+    authToken: state.authToken,
     userId: state.userId,
     isAuthenticated: state.isAuthenticated,
   };

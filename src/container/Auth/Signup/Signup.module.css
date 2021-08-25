@@ -1,36 +1,43 @@
 .Signup {
-    background-color: #fff;
-    display: inline-block;
-    padding: 40px;
-    padding-bottom: 45px;
-    border-radius: 4px;
-    margin-top: 3%;
-    opacity: .9;
-    height: auto;
-    width: 400px;
+  background-color: #fff;
+  display: inline-block;
+  padding: 40px;
+  padding-bottom: 45px;
+  border-radius: 4px;
+  margin-top: 3%;
+  opacity: 0.9;
+  height: auto;
+  width: 400px;
 }
 
 .Signup h2 {
-    margin: 0;
-    margin-bottom: 2rem;
+  margin: 0;
+  margin-bottom: 2rem;
 }
 
 .Signup button {
-    margin-top: 40px;
+  margin-top: 40px;
 }
 
-.Signup .Error {
-    display: inline-block;
-    width: 290px;
-    background-color: rgba(255, 28, 28, 0.575);
-    color: #2C2926;
-    padding: 15px;
-    margin: 0;
-    text-align: left;
+.Signup .message {
+  display: inline-block;
+  width: 290px;
+  color: #2c2926;
+  padding: 15px;
+  margin: 0;
+  text-align: left;
 }
 
-.Signup .Error:empty {
-    padding: 0;
-    border: none;
-    display: none;
+.Signup .message:empty {
+  padding: 0;
+  border: none;
+  display: none;
+}
+
+.Signup .error {
+  background-color: rgba(255, 28, 28, 0.575);
+}
+
+.Signup .success {
+  background-color: #4afa338e;
 }

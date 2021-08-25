@@ -1,6 +1,6 @@
 const postShareHandler = (e, postId) => {
   e.stopPropagation();
-  const link = window.location.origin + "/posts/" + postId;
+  const link = window.location.origin + "/post/" + postId;
   if (!navigator.clipboard) {
     alert(`Clipboard API not available.\n${link}`);
     return;
