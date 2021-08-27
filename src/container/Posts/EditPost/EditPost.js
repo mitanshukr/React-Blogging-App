@@ -9,17 +9,15 @@ import { Editor } from "@tinymce/tinymce-react";
 import Input from "../../../components/UI/Input/Input";
 
 import classes from "./EditPost.module.css";
+import Modal from "../../../components/UI/Modal/Modal";
 
 class EditPost extends Component {
   state = {
-    postId: "",
     title: "",
     excerpt: "",
     body: "",
     tags: "",
-    date: null,
     isPrivate: null,
-    initialIsPrivate: null,
     postRendered: false,
     accessDenied: false,
     serverBusy: false,
@@ -29,35 +27,38 @@ class EditPost extends Component {
   componentDidMount() {
     let URI = null;
     const isPrivate = this.props.match.path.split("/")[2] === "private";
-    const postId = this.props.match.params.postId;
+    this.postId = this.props.match.params.postId;
     if (isPrivate) {
-      URI = `/privatePosts.json?auth=${this.props.idToken}&orderBy="$key"&equalTo="${postId}"`;
+      URI = `http://localhost:8000/post/private/${this.postId}`;
     } else {
-      URI = `/publicPosts.json?orderBy="$key"&equalTo="${postId}"`;
+      URI = `http://localhost:8000/post/${this.postId}`;
     }
 
     axios
-      .get(URI)
+      .get(URI, {
+        headers: {
+          Authorization: `Bearer ${this.props.authToken}`,
+        },
+      })
       .then((response) => {
-        if (response.data[postId].user.userId === this.props.userId) {
-          this.setState(
-            {
-              postRendered: true,
-              postId: postId,
-              title: response.data[postId].title,
-              excerpt: response.data[postId].excerpt,
-              body: response.data[postId].body,
-              tags: response.data[postId].tags.join(","),
-              date: response.data[postId].date,
-              isPrivate: response.data[postId].isPrivate,
-              initialIsPrivate: response.data[postId].isPrivate,
-            },
-            () => {
-              console.log(this.state);
-            }
-          );
+        if (
+          !response?.data ||
+          response.data.creator._id !== this.props.userId
+        ) {
+          this.setState({
+            accessDenied: true,
+            localError: "Error 403: Bad Request",
+          });
         } else {
-          this.setState({ accessDenied: true });
+          this.setState({
+            postRendered: true,
+            title: response.data.title,
+            excerpt: response.data.excerpt,
+            body: response.data.body,
+            tags: response.data.tags.join(","),
+            date: response.data.createdAt,
+            isPrivate: response.data.isPrivate,
+          });
         }
       })
       .catch((err) => {
@@ -74,218 +75,273 @@ class EditPost extends Component {
   updatePostHandler = (e) => {
     e.preventDefault();
     this.setState({ serverBusy: true });
-    if (this.state.isPrivate !== this.state.initialIsPrivate) {
-      const updatedPost = {
-        title: this.state.title,
-        excerpt: this.state.excerpt,
-        body: this.state.body,
-        date: this.state.date,
-        isPrivate: this.state.isPrivate,
-        edited: true,
-        editDate: new Date(),
-        tags: this.state.tags.split(","),
-        userId: this.props.userId,
-      };
-      let newPostId = null;
-      if (this.state.isPrivate) {
-        axios
-          .post(`/privatePosts.json?auth=${this.props.idToken}`, updatedPost)
-          .then((response) => {
-            console.log("happy:::");
-            console.log(response);
-            newPostId = response.data.name;
-            console.log(newPostId);
-            return axios.delete(
-              `/publicPosts/${this.state.postId}.json?auth=${this.props.idToken}`
-            );
-          })
-          .then((response) => {
-            // console.log(response);
-            this.setState({ serverBusy: false });
-            this.setState({ postId: newPostId });
-            this.setState({ initialIsPrivate: this.state.isPrivate });
-          })
-          .catch((err) => {
-            // this.setState({localError: err});
-            this.setState({ serverBusy: false });
-            console.log(err);
-          });
-      } else {
-        axios
-          .post(`/publicPosts.json?auth=${this.props.idToken}`, updatedPost)
-          .then((response) => {
-            console.log("happy:::");
-            console.log(response);
-            newPostId = response.data.name;
-            console.log(newPostId);
-            return axios.delete(
-              `/privatePosts/${this.state.postId}.json?auth=${this.props.idToken}`
-            );
-          })
-          .then((response) => {
-            // console.log(response);
-            this.setState({ serverBusy: false });
-            this.setState({ postId: newPostId });
-            this.setState({ initialIsPrivate: this.state.isPrivate });
-          })
-          .catch((err) => {
-            this.setState({ serverBusy: false });
-            console.log(err);
-          });
-      }
-    } else {
-      const updatedPost = {
-        title: this.state.title,
-        excerpt: this.state.excerpt,
-        body: this.state.body,
-        edited: true,
-        editDate: new Date(),
-        tags: this.state.tags.split(","),
-        userId: this.props.userId,
-      };
-
-      let URI = null;
-      if (this.state.isPrivate) {
-        URI = `/privatePosts/${this.state.postId}.json?auth=${this.props.idToken}`;
-      } else {
-        URI = `/publicPosts/${this.state.postId}.json?auth=${this.props.idToken}`;
-      }
-
-      axios
-        .patch(URI, updatedPost)
-        .then((response) => {
-          console.log("happy:::");
-            console.log(response);
-          this.setState({ serverBusy: false });
-        })
-        .catch((err) => {
-          console.log(err);
-          this.setState({ serverBusy: false });
-        });
-    }
+    const updatedPost = {
+      title: this.state.title,
+      excerpt: this.state.excerpt,
+      body: this.state.body,
+      isPrivate: this.state.isPrivate,
+      tags: this.state.tags.split(",").map((tag) => tag.trim()),
+    };
+    axios
+      .patch(`http://localhost:8000/post/edit/${this.postId}`, updatedPost, {
+        headers: {
+          Authorization: `Bearer ${this.props.authToken}`,
+        },
+      })
+      .then((response) => {
+        console.log(response?.data);
+        this.setState({ serverBusy: false });
+        alert("Posted Updated Successfully!");
+      })
+      .catch((err) => {
+        this.setState({ serverBusy: false, localError: err?.message });
+        console.log(err);
+      });
   };
 
   inputHandler = (event) => {
     if (event.target.name === "title") {
-      this.setState({ ...this.state, title: event.target.value });
+      this.setState({ title: event.target.value });
     } else if (event.target.name === "excerpt") {
-      this.setState({ ...this.state, excerpt: event.target.value });
+      this.setState({ excerpt: event.target.value });
     } else if (event.target.name === "isPrivate") {
-      this.setState({ ...this.state, isPrivate: event.target.checked });
+      this.setState({ isPrivate: event.target.checked });
     } else if (event.target.name === "tags") {
-      this.setState({ ...this.state, tags: event.target.value });
+      this.setState({ tags: event.target.value });
     }
   };
 
   editorChangeHandler = (data) => {
-    this.setState({ ...this.state, body: data });
+    this.setState({ body: data });
   };
 
   render() {
-    let post = <Spinner />;
-    if (this.state.accessDenied) {
-      post = (
-        <div>
-          <h2>Access Denied!</h2>
-          <p>Private posts can be viewed only by its original creators.</p>
-        </div>
-      );
-    } else if (this.state.serverBusy) {
-      post = <Spinner />;
-    } else if (this.state.postRendered) {
-      const elementConfig = {
-        name: "title",
-        type: "text",
-        placeholder: "Title",
-        autoComplete: "off",
-      };
-      post = (
-        <div className={classes.EditPost}>
-          <div>
-            <p>Edit Post</p>
-            <Input
-              elementType="input"
-              elementConfig={elementConfig}
-              value={this.state.title}
-              onChange={this.inputHandler}
-            ></Input>
-            <Editor
-              apiKey={process.env.REACT_APP_TINYMCE_API}
-              value={this.state.body}
-              init={{
-                placeholder: "Content Body",
-                height: "75vh",
-                width: "100%",
-                // content_css: "./WritingZone.css",
-                menubar: false,
-                branding: false,
-                plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table paste code help wordcount",
-                ],
-                toolbar:
-                  "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
-              }}
-              onEditorChange={this.editorChangeHandler}
-            />
+    return (
+      <>
+        <Modal
+          visibility={this.state.serverBusy || !!this.state.localError}
+          // clicked={this.backdropToggler}
+        >
+          {this.state.serverBusy ? (
+            <Spinner />
+          ) : this.state.localError ? (
+            <p>{this.state.localError.toString()}</p>
+          ) : (
+            ""
+          )}
+        </Modal>
+        {this.state.accessDenied ? (
+          <div className={classes.error403}>
+            <h2>403: Forbidden</h2>
+            <p>Access Denied! Unauthorzied Access.</p>
           </div>
-          <div>
-            <div>
-              <Button onClick={this.updatePostHandler}>Update</Button>
-              <Button onClick={this.cancelUpdateHandler}>Cancel</Button>
+        ) : (
+          <div className={classes.EditPost}>
+            <div className={classes.EditPost__col1}>
+              <p>Edit Post</p>
+              <Input
+                elementType="input"
+                elementConfig={{
+                  name: "title",
+                  type: "text",
+                  placeholder: "Title",
+                  autoComplete: "off",
+                }}
+                value={this.state.title}
+                onChange={this.inputHandler}
+              />
+
+              <div className={classes.EditPost__editor}>
+                <Editor
+                  apiKey={process.env.REACT_APP_TINYMCE_API}
+                  value={this.state.body}
+                  init={{
+                    placeholder: "Content Body",
+                    height: "75vh",
+                    width: "100%",
+                    menubar: false,
+                    branding: false,
+                    plugins: [
+                      "advlist autolink lists link image charmap print preview anchor",
+                      "searchreplace visualblocks code fullscreen",
+                      "insertdatetime media table paste code help wordcount",
+                    ],
+                    toolbar:
+                      "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
+                  }}
+                  onEditorChange={this.editorChangeHandler}
+                />
+              </div>
             </div>
-            <p>Excerpt</p>
-            <Input
-              onChange={this.inputHandler}
-              elementType="textarea"
-              elementConfig={{
-                name: "excerpt",
-                type: "textarea",
-                placeholder: "Add a Brief Summary",
-                autoComplete: "off",
-              }}
-              value={this.state.excerpt}
-            />
-            <input type="hidden" />
-            <p>Tags</p>
-            <Input
-              onChange={this.inputHandler}
-              value={this.state.tags}
-              elementType="input"
-              elementConfig={{
-                name: "tags",
-                type: "text",
-                placeholder: "Add Tags separated with commas",
-                autoComplete: "off",
-              }}
-            />
-            <label htmlFor="isPrivate">Private Post?</label>
-            <input
-              onChange={this.inputHandler}
-              type="checkbox"
-              id="isPrivate"
-              name="isPrivate"
-              checked={this.state.isPrivate}
-            />
+            <div className={classes.EditPost__col2}>
+              <div className={classes.EditPost__actions}>
+                <Button onClick={this.cancelUpdateHandler}>Cancel</Button>
+                <Button onClick={this.updatePostHandler}>Update</Button>
+              </div>
+              <div className={classes.EditPost__excerpt}>
+                <label htmlFor="editExcerpt">Excerpt</label>
+                <Input
+                  onChange={this.inputHandler}
+                  elementType="textarea"
+                  elementConfig={{
+                    name: "excerpt",
+                    type: "textarea",
+                    id: "editExcerpt",
+                    placeholder: "Add a Brief Summary",
+                    autoComplete: "off",
+                  }}
+                  value={this.state.excerpt}
+                />
+              </div>
+              <div className={classes.EditPost__tags}>
+                <label htmlFor="editTags">
+                  Tags <small>(Separated with Comma)</small>
+                </label>
+                <Input
+                  onChange={this.inputHandler}
+                  value={this.state.tags}
+                  elementType="input"
+                  elementConfig={{
+                    name: "tags",
+                    id: "editTags",
+                    type: "text",
+                    placeholder: "Add Tags separated with commas",
+                    autoComplete: "off",
+                  }}
+                />
+              </div>
+              <div className={classes.EditPost__isPrivate}>
+                <input
+                  onChange={this.inputHandler}
+                  type="checkbox"
+                  id="isPrivate"
+                  name="isPrivate"
+                  checked={this.state.isPrivate}
+                />
+                <label htmlFor="isPrivate">Private Post?</label>
+              </div>
+            </div>
           </div>
-        </div>
-      );
-    } else if (this.state.localError) {
-      post = (
-        <div>
-          <p>{this.state.localError}</p>
-          <Spinner />
-        </div>
-      );
-    }
-    return post;
+        )}
+        ;
+      </>
+    );
+    //   let post = <Spinner />;
+    //
+    //   } else if (this.state.serverBusy) {
+    //     post = <Spinner />;
+    //   } else if (this.state.postRendered) {
+    //     const elementConfig = {
+    //       name: "title",
+    //       type: "text",
+    //       placeholder: "Title",
+    //       autoComplete: "off",
+    //     };
+    //     post = (
+    //       <>
+    //       {/* <Modal
+    //         visibility={this.state.modalVisibility}
+    //         clicked={this.backdropToggler}
+    //       >
+    //         {this.state.serverBusy ? (
+    //           <Spinner />
+    //         ) : this.state.localError ? (
+    //           <p>{this.state.localError.toString()}</p>
+    //         )}
+    //       </Modal> */}
+    //       <div className={classes.EditPost}>
+    //         <div>
+    //           <p>Edit Post</p>
+    //           <Input
+    //             elementType="input"
+    //             elementConfig={elementConfig}
+    //             value={this.state.title}
+    //             onChange={this.inputHandler}
+    //           ></Input>
+    //           <small className={classes.editorLoading}>
+    //             Loading... Please Wait
+    //           </small>
+    //           <Editor
+    //             apiKey={process.env.REACT_APP_TINYMCE_API}
+    //             value={this.state.body}
+    //             init={{
+    //               placeholder: "Content Body",
+    //               height: "75vh",
+    //               width: "100%",
+    //               // content_css: "./WritingZone.css",
+    //               menubar: false,
+    //               branding: false,
+    //               plugins: [
+    //                 "advlist autolink lists link image charmap print preview anchor",
+    //                 "searchreplace visualblocks code fullscreen",
+    //                 "insertdatetime media table paste code help wordcount",
+    //               ],
+    //               toolbar:
+    //                 "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
+    //             }}
+    //             onEditorChange={this.editorChangeHandler}
+    //           />
+    //         </div>
+    //         <div>
+    //           <div>
+    //             <Button onClick={this.updatePostHandler}>Update</Button>
+    //             <Button onClick={this.cancelUpdateHandler}>Cancel</Button>
+    //           </div>
+    //           <p>Excerpt</p>
+    //           <Input
+    //             onChange={this.inputHandler}
+    //             elementType="textarea"
+    //             elementConfig={{
+    //               name: "excerpt",
+    //               type: "textarea",
+    //               placeholder: "Add a Brief Summary",
+    //               autoComplete: "off",
+    //             }}
+    //             value={this.state.excerpt}
+    //           />
+    //           <input type="hidden" />
+    //           <p>Tags</p>
+    //           <Input
+    //             onChange={this.inputHandler}
+    //             value={this.state.tags}
+    //             elementType="input"
+    //             elementConfig={{
+    //               name: "tags",
+    //               type: "text",
+    //               placeholder: "Add Tags separated with commas",
+    //               autoComplete: "off",
+    //             }}
+    //           />
+    //           <div>
+    //             <label htmlFor="isPrivate">Private Post?</label>
+    //             <input
+    //               onChange={this.inputHandler}
+    //               type="checkbox"
+    //               id="isPrivate"
+    //               name="isPrivate"
+    //               checked={this.state.isPrivate}
+    //             />
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //     </>
+    //     );
+    //   } else if (this.state.localError) {
+    //     post = (
+    //       <div>
+    //         <p>{this.state.localError}</p>
+    //         <Spinner />
+    //       </div>
+    //     );
+    //   }
+    //   return post;
   }
 }
 
 const mapStateToprops = (state) => {
   return {
-    idToken: state.idToken,
+    authToken: state.authToken,
     userId: state.userId,
     isAuthenticated: state.isAuthenticated,
   };

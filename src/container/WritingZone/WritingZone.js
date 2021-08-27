@@ -236,27 +236,29 @@ class WritingZone extends Component {
           )}
         </Modal>
         <form onSubmit={this.createPostHandler} className="WritingZone">
-          <Editor
-            apiKey={process.env.REACT_APP_TINYMCE_API}
-            value={this.state.inputElements.body.value}
-            init={{
-              placeholder:
-                "What's in your mind right now?\nThe rule is simple...\nDon't think, just write.",
-              height: "70vh",
-              width: "80vw",
-              content_css: "./WritingZone.css",
-              menubar: false,
-              branding: false,
-              plugins: [
-                "advlist autolink lists link image charmap print preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table paste code help wordcount",
-              ],
-              toolbar:
-                "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
-            }}
-            onEditorChange={this.inputHandler}
-          />
+          <div className="homeEditor">
+            <Editor
+              apiKey={process.env.REACT_APP_TINYMCE_API}
+              value={this.state.inputElements.body.value}
+              init={{
+                placeholder:
+                  "What's in your mind right now?\nThe rule is simple...\nDon't think, just write.",
+                height: "70vh",
+                width: "80vw",
+                content_css: "./WritingZone.css",
+                menubar: false,
+                branding: false,
+                plugins: [
+                  "advlist autolink lists link image charmap print preview anchor",
+                  "searchreplace visualblocks code fullscreen",
+                  "insertdatetime media table paste code help wordcount",
+                ],
+                toolbar:
+                  "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
+              }}
+              onEditorChange={this.inputHandler}
+            />
+          </div>
           <Button btntype="Submit">
             {this.props.isAuthenticated ? "Save" : "Login to Save"}
           </Button>

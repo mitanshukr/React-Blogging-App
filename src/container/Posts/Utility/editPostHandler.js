@@ -1,9 +1,9 @@
 const editPostHandler = (e, props, postId, isPrivate) => {
     e.stopPropagation();
     if(isPrivate){
-      props.history.push("/posts/private/edit/" + postId);
+      props.history.push("/post/private/edit/" + postId);
   } else {
-      props.history.push("/posts/edit/" + postId);
+      props.history.push("/post/edit/" + postId);
     }
 }
 
