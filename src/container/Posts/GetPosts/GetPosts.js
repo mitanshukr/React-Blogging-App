@@ -8,9 +8,10 @@ import withErrorHandler from "../../../hoc/withErrorHandler";
 import classes from "./GetPosts.module.css";
 
 import getSinglePostHandler from "../Utility/getSinglePostHandler";
-import getPostShareHandler from "../../../Utility/getPostShareHandler";
+import copyToClipboard from "../../../Utility/copyToClipboardHandler";
 import editPostHandler from "../Utility/editPostHandler";
 import deletePostHandler from "../Utility/deletePostHandler";
+import { showNotification } from "../../../store/actions";
 
 class GetPosts extends Component {
   state = {
@@ -34,6 +35,19 @@ class GetPosts extends Component {
         console.log(err);
       });
   };
+
+  sharePostHandler = (e, postId) => {
+    e.stopPropagation();
+    this.props.showNotif("Link Copied to Clipboard!", true);
+    copyToClipboard(e, postId);
+    this.notifTimer = setTimeout(() => {
+      this.props.showNotif("Link Copied to Clipboard!", false);
+    }, 2000);
+  };
+
+  componentWillUnmount() {
+    clearTimeout(this.notifTimer);
+  }
 
   componentDidMount() {
     this.setState({ serverBusy: true });
@@ -88,7 +102,7 @@ class GetPosts extends Component {
                   delete={(e) =>
                     this.singlePostDeletion(e, post._id, post.isPrivate)
                   }
-                  share={(e) => getPostShareHandler(e, post._id)}
+                  share={(e) => this.sharePostHandler(e, post._id)}
                 />
               );
             })
@@ -117,4 +131,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(withErrorHandler(GetPosts, axios));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showNotif: (message, visibility) =>
+      dispatch(showNotification(message, visibility)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(GetPosts, axios));

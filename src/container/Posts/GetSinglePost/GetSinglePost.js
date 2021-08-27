@@ -9,7 +9,7 @@ import classes from "./GetSinglePost.module.css";
 import getDateFormat from "../../../Utility/getDateFormat";
 import ProfileIcon from "../../../components/User/ProfileIcon/ProfileIcon";
 import { BiShare, BiLockAlt, BiDotsVerticalRounded } from "react-icons/bi";
-import getPostShareHandler from "../../../Utility/getPostShareHandler";
+import getPostShareHandler from "../../../Utility/copyToClipboardHandler";
 
 class GetSinglePost extends Component {
   state = {

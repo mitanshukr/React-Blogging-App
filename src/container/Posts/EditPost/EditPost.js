@@ -10,6 +10,7 @@ import Input from "../../../components/UI/Input/Input";
 
 import classes from "./EditPost.module.css";
 import Modal from "../../../components/UI/Modal/Modal";
+import { showNotification } from "../../../store/actions";
 
 class EditPost extends Component {
   state = {
@@ -18,11 +19,14 @@ class EditPost extends Component {
     body: "",
     tags: "",
     isPrivate: null,
-    postRendered: false,
     accessDenied: false,
     serverBusy: false,
     localError: null,
   };
+
+  componentWillUnmount() {
+    clearTimeout(this.notifTimer);
+  }
 
   componentDidMount() {
     let URI = null;
@@ -91,7 +95,10 @@ class EditPost extends Component {
       .then((response) => {
         console.log(response?.data);
         this.setState({ serverBusy: false });
-        alert("Posted Updated Successfully!");
+        this.props.showNotif("Post updated Successfully!", true);
+        this.notifTimer = setTimeout(() => {
+          this.props.showNotif("Post updated Successfully!", false);
+        }, 2000);
       })
       .catch((err) => {
         this.setState({ serverBusy: false, localError: err?.message });
@@ -347,4 +354,14 @@ const mapStateToprops = (state) => {
   };
 };
 
-export default connect(mapStateToprops)(withErrorHandler(EditPost, axios));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showNotif: (message, visibility) =>
+      dispatch(showNotification(message, visibility)),
+  };
+};
+
+export default connect(
+  mapStateToprops,
+  mapDispatchToProps
+)(withErrorHandler(EditPost, axios));

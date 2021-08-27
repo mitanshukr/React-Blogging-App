@@ -16,6 +16,7 @@ import EditPost from "./container/Posts/EditPost/EditPost";
 import Account from "./container/User/Account";
 import Spinner from "./components/UI/Spinner/Spinner";
 import Profile from "./container/User/Profile/Profile";
+import Notification from "./components/UI/Notification/Notification";
 
 class App extends Component {
   constructor(props) {
@@ -30,6 +31,10 @@ class App extends Component {
   render() {
     let app = (
       <div className="App">
+        <Notification
+          show={this.props.notifVisibility}
+          message={this.props.notifMessage}
+        />
         <Layout isAuthenticated={this.props.isAuthenticated}>
           {this.props.isAuthenticated ? (
             <Switch>
@@ -88,6 +93,8 @@ const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.isAuthenticated,
     serverBusy: state.serverBusy,
+    notifVisibility: state.notifVisibility,
+    notifMessage: state.notifMessage,
   };
 };
 
