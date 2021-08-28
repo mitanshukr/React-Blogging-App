@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import axios from "../../../axios-instance";
-import GetPost from "../../../components/Posts/GetPost/GetPost";
+import GetPost from "../GetPost/GetPost";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../../hoc/withErrorHandler";
 import classes from "./Feed.module.css";
@@ -47,9 +47,9 @@ class Feed extends Component {
     }, 2000);
   };
 
-  componentWillUnmount() {
-    clearTimeout(this.notifTimer);
-  }
+  // componentWillUnmount() {
+  //   clearTimeout(this.notifTimer);
+  // }
 
   componentDidMount() {
     this.setState({ serverBusy: true });
@@ -87,6 +87,7 @@ class Feed extends Component {
                   userName={post.creator?.userName}
                   likeCount={post.likes.length}
                   viewCount={post.viewCount}
+                  postId={post._id}
                   isCurrentUser={post.creator?._id === this.props.userId}
                   clicked={(e) =>
                     getSinglePostHandler(

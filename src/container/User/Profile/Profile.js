@@ -3,7 +3,7 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import axios from "../../../axios-instance";
 
-import GetPost from "../../../components/Posts/GetPost/GetPost";
+import GetPost from "../../Posts/GetPost/GetPost";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../../hoc/withErrorHandler";
 import ProfileIcon from "../../../components/User/ProfileIcon/ProfileIcon";

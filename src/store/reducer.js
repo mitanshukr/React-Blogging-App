@@ -7,6 +7,7 @@ const initialState = {
   firstName: null,
   lastName: null,
   // about: null,
+  savedPosts: [],
   expiryTime: null,
   isAuthenticated: false,
   error: null,
@@ -29,6 +30,7 @@ const reducer = (state = initialState, action) => {
       lastName: action.userData.lastName,
       userName: action.userData.userName,
       email: action.userData.email,
+      savedPosts: action.userData.savedPosts,
       isAuthenticated: true,
       isSignupSuccess: null,
       error: null,
@@ -49,6 +51,8 @@ const reducer = (state = initialState, action) => {
       firstName: null,
       lastName: null,
       userName: null,
+      email: null,
+      savedPosts: [],
     };
   } else if (action.type === "error") {
     if (action.error?.message === "INVALID_PASSWORD") {
@@ -84,6 +88,18 @@ const reducer = (state = initialState, action) => {
       ...state,
       notifMessage: action.message,
       notifVisibility: action.visibility,
+    };
+  } else if (action.type === "updateSavedItems") {
+    const savedPosts = [...state.savedPosts];
+    if (action.status === "ADD") {
+      savedPosts.push(action.postId);
+    } else {
+      const postIndex = savedPosts.findIndex((id) => id === action.postId);
+      savedPosts.splice(postIndex, 1);
+    }
+    return {
+      ...state,
+      savedPosts: savedPosts,
     };
   }
   return state;

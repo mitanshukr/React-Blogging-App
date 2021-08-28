@@ -55,18 +55,20 @@ class GetSinglePost extends Component {
           likeCount: response?.data.likes.length,
           viewCount: +response?.data.viewCount,
         });
-        this.viewTimer = setTimeout(() => {
-          axios
-            .get(`http://localhost:8000/post/addview/${response?.data?._id}`)
-            .then((response) => {
-              this.setState((prevState) => {
-                return { viewCount: prevState.viewCount + 1 };
+        if (!response?.data?.isPrivate) {
+          this.viewTimer = setTimeout(() => {
+            axios
+              .get(`http://localhost:8000/post/addview/${response?.data?._id}`)
+              .then((response) => {
+                this.setState((prevState) => {
+                  return { viewCount: prevState.viewCount + 1 };
+                });
+              })
+              .catch((err) => {
+                console.log(err);
               });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }, 8000);
+          }, 8000);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -84,7 +86,7 @@ class GetSinglePost extends Component {
   };
 
   componentWillUnmount() {
-    clearTimeout(this.notifTimer);
+    // clearTimeout(this.notifTimer);
     clearTimeout(this.likeTimer);
     clearTimeout(this.viewTimer);
   }
@@ -198,11 +200,15 @@ class GetSinglePost extends Component {
                 {this.state.likeCount <= 1 ? "like" : "likes"}
               </p>
             </div>
-            <div title="Views Count" className={classes.GetSinglePost__views}>
-              <p>
-                {this.state.viewCount}{" "}
-                {this.state.viewCount === 1 ? "View" : "Views"}
-              </p>
+            <div className={classes.GetSinglePost__views}>
+              {this.state.post.isPrivate ? (
+                <p>Secret</p>
+              ) : (
+                <p title="Views Count">
+                  {this.state.viewCount}{" "}
+                  {this.state.viewCount === 1 ? "View" : "Views"}
+                </p>
+              )}
             </div>
           </div>
           <div>

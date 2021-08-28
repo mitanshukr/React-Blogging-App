@@ -24,9 +24,9 @@ class EditPost extends Component {
     localError: null,
   };
 
-  componentWillUnmount() {
-    clearTimeout(this.notifTimer);
-  }
+  // componentWillUnmount() {
+  //   clearTimeout(this.notifTimer);
+  // }
 
   componentDidMount() {
     let URI = null;
@@ -98,7 +98,7 @@ class EditPost extends Component {
         this.props.showNotif("Post updated Successfully!", true);
         this.notifTimer = setTimeout(() => {
           this.props.showNotif("Post updated Successfully!", false);
-        }, 2000);
+        }, 1500);
       })
       .catch((err) => {
         this.setState({ serverBusy: false, localError: err?.message });
