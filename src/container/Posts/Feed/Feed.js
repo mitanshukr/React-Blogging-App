@@ -85,6 +85,8 @@ class Feed extends Component {
                   firstName={post.creator?.firstName}
                   lastName={post.creator?.lastName}
                   userName={post.creator?.userName}
+                  likeCount={post.likes.length}
+                  viewCount={post.viewCount}
                   isCurrentUser={post.creator?._id === this.props.userId}
                   clicked={(e) =>
                     getSinglePostHandler(

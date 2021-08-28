@@ -1,69 +1,106 @@
 .GetPost {
-    border: 1px solid white;
-    background-color: #fff;
-    padding: 30px 20px 10px 20px;
-    margin: 20px auto;
-    max-width: 650px;
-    text-align: left;
-    transition: border 0.5s;
+  border: 1px solid white;
+  background-color: #fff;
+  padding: 30px 20px 10px 20px;
+  margin: 20px auto;
+  max-width: 650px;
+  text-align: left;
+  transition: border 0.5s;
+  position: relative;
 }
 
 .GetPost:hover {
-    /* animation-name: borderAnimation;
+  /* animation-name: borderAnimation;
     animation-duration: 4s; */
-    border: 1px solid rgb(228, 228, 228);
-}
-
-.GetPost h2 {
-    margin: 0;
-    cursor: pointer;
-    display: inline-block;
-}
-.GetPost p {
-    margin: 0;
-    color: grey;
-}
-
-.GetPost > div:first-child small {
-    margin-left: 5px;
-}
-
-.GetPost > div:nth-of-type(2) {
-    display: inline-block;
-    background-color: tomato;
-    padding: 5px 10px;
-    margin: 15px 0 10px;
-    border-radius: 2px;
-    color: #fff;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color .3s;
-}
-
-.GetPost > div:nth-of-type(2):hover {
-    background-color: rgb(255, 54, 19);
-}
-
-.GetPost > div:last-child {
-    color: grey;
-}
-
-.GetPost > div:last-child > small:nth-of-type(2):hover {
-    color: blueviolet;
-    cursor: pointer;
-}
-
-.GetPost > div:last-child > small:nth-of-type(3):hover {
-    color: saddlebrown;
-    cursor: pointer;
-}
-
-.GetPost > div:last-child > small:nth-of-type(4):hover {
-    color: red;
-    cursor: pointer;
+  border: 1px solid rgb(228, 228, 228);
 }
 
 /* @keyframes borderAnimation {
     from {border: 1px solid white;}
     to {border: 1px solid rgb(204, 62, 62);}
   } */
+
+.GetPost__head {
+  display: flex;
+  justify-content: space-between;
+}
+
+.GetPost__head small {
+  margin-left: 5px;
+}
+
+.GetPost__head > section:last-of-type {
+  color: rgb(94, 94, 94);
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.GetPost:hover .GetPost__head > section:last-of-type {
+  visibility: visible;
+  opacity: 1;
+}
+
+.GetPost__head > section:last-of-type > * {
+  margin: 0;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.GetPost__main h2 {
+  margin: 0;
+  cursor: pointer;
+  display: inline-block;
+}
+.GetPost__main p {
+  margin: 0;
+  color: grey;
+}
+
+.GetPost__main > div {
+  display: inline-block;
+  background-color: tomato;
+  padding: 5px 10px;
+  margin: 15px 0 10px;
+  border-radius: 2px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.GetPost__main > div:hover {
+  background-color: rgb(255, 54, 19);
+}
+
+.GetPost__info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.GetPost__info small {
+  color: grey;
+}
+
+.GetPost__info--share,
+.GetPost__info--edit,
+.GetPost__info--delete {
+  cursor: pointer;
+}
+
+.GetPost__info--share:hover {
+  color: blueviolet;
+}
+
+.GetPost__info--edit:hover {
+  color: saddlebrown;
+}
+
+.GetPost__info--delete:hover {
+  color: red;
+}

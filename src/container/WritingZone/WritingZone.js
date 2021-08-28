@@ -11,6 +11,7 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import { dispatchBodyHandler } from "../../store/actions";
 
 import "./WritingZone.css";
+import HomePopup from "../../components/HomePopup/HomePopup";
 
 class WritingZone extends Component {
   // constructor(props) {
@@ -217,7 +218,8 @@ class WritingZone extends Component {
 
   render() {
     return (
-      <div>
+      <>
+      {/* <HomePopup /> */}
         <Modal
           visibility={this.state.modalVisibility}
           clicked={this.backdropToggler}
@@ -263,7 +265,7 @@ class WritingZone extends Component {
             {this.props.isAuthenticated ? "Save" : "Login to Save"}
           </Button>
         </form>
-      </div>
+      </>
     );
   }
 }
