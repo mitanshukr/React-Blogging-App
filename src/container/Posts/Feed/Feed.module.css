@@ -5,6 +5,26 @@
     margin: 0;
     margin-bottom: 20px;
     padding: 20px 0;
+    box-sizing: border-box;
     text-align: center;
     width: 100%;
 }
+
+.Feed__banner {
+    height: 200px;
+    background-color: tomato;
+    text-align: center;
+    padding: 30px;
+    box-sizing: border-box;
+    color: white;
+    background: url("../../../assets/Images/2.png") no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Feed__banner > * {
+    margin: 5px 0;
+}
+

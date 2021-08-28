@@ -66,6 +66,7 @@ class UserMenu extends Component {
             <small>@{this.props.userName}</small>
           </NavigationItem>
           <NavigationItem onClick={this.linkClicked} link="/user/account">Account</NavigationItem>
+          <NavigationItem onClick={this.linkClicked} link="/user/saved-items">Saved Items</NavigationItem>
           <NavigationItem onClick={this.linkClicked} link="/feedback">Feedback</NavigationItem>
           <NavigationItem onClick={this.linkClicked} link="/logout">Logout</NavigationItem>
       </div>

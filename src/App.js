@@ -61,6 +61,7 @@ class App extends Component {
                 component={GetSinglePost}
               />
               <Route path="/user/profile" component={Profile} />
+              <Route path="/user/saved-items" component={Account} />
               <Route path="/user/account" component={Account} />
               <Redirect to="/" />
             </Switch>

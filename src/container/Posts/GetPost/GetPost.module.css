@@ -29,6 +29,10 @@
   margin-left: 5px;
 }
 
+.GetPost__head svg:hover {
+  color: tomato;
+}
+
 .GetPost__head > section:last-of-type {
   color: rgb(94, 94, 94);
   display: flex;

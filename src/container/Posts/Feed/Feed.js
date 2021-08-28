@@ -72,7 +72,7 @@ class Feed extends Component {
     let posts = null;
     if (this.state.posts) {
       posts = (
-        <div className={classes.GetPosts}>
+        <div className={classes.Feed}>
           {this.state.posts.length !== 0 ? (
             this.state.posts.map((post) => {
               return (
@@ -121,7 +121,15 @@ class Feed extends Component {
       posts = <Spinner />;
     }
 
-    return posts;
+    return (
+      <>
+        <div className={classes.Feed__banner}>
+          <h1>Public Feed</h1>
+          <p>Check what others have to Share with us!😍🎉</p>
+        </div>
+        {posts}
+      </>
+    );
   }
 }
 

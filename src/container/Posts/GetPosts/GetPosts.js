@@ -122,7 +122,15 @@ class GetPosts extends Component {
     if (this.state.serverBusy) {
       posts = <Spinner />;
     }
-    return posts;
+    return (
+      <>
+        <div className={classes.GetPosts__banner}>
+          <h1>Your Posts</h1>
+          <p>Here's some masterpiece carved by you.🤟🔥</p>
+        </div>
+        {posts}
+      </>
+    );
   }
 }
 
