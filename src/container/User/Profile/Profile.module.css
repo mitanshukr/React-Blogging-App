@@ -1,24 +1,95 @@
 .Profile {
-    background-color: #fff;
-    padding: 10px 100px;
-    height: 100vh;
-    border: 1px solid red;
-    position: relative;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 100px;
 }
 
-.Profile > div:first-child {
-    width: 300px;
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    border: 1px solid grey;
+.Profile__col1 {
+  flex-basis: 300px;
+  padding-top: 30px;
+  height: 200px;
+  position: sticky;
+  top: 0px;
 }
 
-.Profile > div:last-child {
-    position: absolute;
-    left: 450px;
-    width: 600px;
-    border: 1px solid blue;
+.Profile__col2 {
+  flex: 1;
+  /* border: 1px solid rgb(224, 224, 224); */
+}
+
+.Profile__icon {
+  width: 8.5rem;
+  height: 8.5rem;
+  background-color: grey;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.Profile__icon > p {
+  font-size: 3rem;
+  font-weight: bold;
+  color: rgb(228, 228, 228);
+  padding: 0;
+  margin: 0;
+}
+
+.Profile__icon svg {
+  font-size: 4.5rem;
+  color: rgb(228, 228, 228);
+}
+
+/* .Profile__name {
+} */
+
+.Profile__name h3 {
+  margin: 8px 0 2px 0;
+  font-size: 26px;
+}
+
+.Profile__about {
+  color: grey;
+}
+
+.Profile__edit {
+  padding: 7px;
+  margin: 10px 0;
+  color: white;
+  width: 60px;
+  text-align: center;
+  background-color: tomato;
+  border-radius: 200px;
+  display: inline-block;
+}
+
+.Profile__action {
+  margin-top: 20px;
+}
+
+.Profile__action ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.Profile__action li {
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 18px;
+  border: 1px solid rgb(231, 231, 231);
+  border-left: 0;
+  border-right: 0;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.Profile__action li:not(:last-child) {
+  border-bottom: 0;
+}
+
+.Profile__action li:hover {
+  background-color: rgb(253, 232, 232);
 }

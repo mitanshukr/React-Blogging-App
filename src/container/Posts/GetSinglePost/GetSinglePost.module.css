@@ -1,55 +1,72 @@
 .GetSinglePost {
-    background-color: #fff;
-    text-align: left;
-    max-width: 650px;
-    padding: 50px 0;
-    margin: 0 auto;
+  background-color: #fff;
+  text-align: left;
+  max-width: 650px;
+  padding: 50px 0;
+  margin: 0 auto;
 }
 
 .GetSinglePost h1 {
-    font-size: 50px;
-    margin-bottom: 20px;
+  font-size: 50px;
+  margin-bottom: 20px;
 }
 
-.GetSinglePost > div:nth-of-type(1){
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    color: rgb(47, 47, 47);
+.GetSinglePost > div:nth-of-type(1) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  color: rgb(47, 47, 47);
 }
 
 .GetSinglePost small:first-of-type {
-    margin-left: 5px;
+  margin-left: 6px;
+}
+
+.postDate {
+  color: grey;
+}
+
+.editLink {
+  cursor: pointer;
+  color: grey;
+}
+
+.editLink:hover {
+  color: saddlebrown;
+  text-decoration: underline;
 }
 
 .GetSinglePost svg:hover {
-    color: tomato;
-    cursor: pointer;
+  color: tomato;
+  cursor: pointer;
 }
 
+.bookmarkIcons {
+  margin-left: 8px;
+}
 .GetSinglePost__stats {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
 }
 
 .GetSinglePost__likes {
-    display: flex;
-    align-items: center;
-    margin: 20px 0;
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
 }
 .GetSinglePost__likes > p {
-    margin: 0;
-    margin-left: 10px;
-    margin-top: -4px;
+  margin: 0;
+  margin-left: 10px;
+  margin-top: -4px;
 }
 
 .GetSinglePost__views > p {
-    margin: 0;
-    color: grey;
-    font-style: italic;
-    margin-top: -8px;
+  margin: 0;
+  color: grey;
+  font-style: italic;
+  margin-top: -8px;
 }

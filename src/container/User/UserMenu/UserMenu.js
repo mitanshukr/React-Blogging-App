@@ -64,10 +64,13 @@ class UserMenu extends Component {
     } else {
       style = { display: "none" };
     }
-
+    
     return (
       <div className={classes.UserMenu} style={style} ref={this.wrapperRef}>
-        <NavigationItem onClick={this.linkClicked} link="/user/profile">
+        <NavigationItem
+          onClick={this.linkClicked}
+          link={`/profile/@${this.props.userName}`}
+        >
           <span>
             <span>
               {this.props.firstName}&nbsp;{this.props.lastName}
@@ -79,13 +82,13 @@ class UserMenu extends Component {
           <FaRegBookmark /> Saved Items
         </NavigationItem>
         <NavigationItem onClick={this.linkClicked} link="/user/account">
-          <FaRegUser/> Account
+          <FaRegUser /> Account
         </NavigationItem>
         <NavigationItem onClick={this.linkClicked} link="/feedback">
-          <FaRocketchat/> Feedback
+          <FaRocketchat /> Feedback
         </NavigationItem>
         <NavigationItem onClick={this.linkClicked} link="/logout">
-          <FaKey/> Logout
+          <FaKey /> Logout
         </NavigationItem>
       </div>
     );

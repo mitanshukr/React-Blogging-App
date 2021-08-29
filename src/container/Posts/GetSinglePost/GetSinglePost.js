@@ -8,12 +8,14 @@ import withErrorHandler from "../../../hoc/withErrorHandler";
 import classes from "./GetSinglePost.module.css";
 import getDateFormat from "../../../Utility/getDateFormat";
 import ProfileIcon from "../../../components/User/ProfileIcon/ProfileIcon";
-import getPostShareHandler from "../../../Utility/copyToClipboardHandler";
 import copyToClipboard from "../../../Utility/copyToClipboardHandler";
+import editPostHandler from "../Utility/editPostHandler";
+import { postSaveToggler, showNotification } from "../../../store/actions";
 
-import { BiShare, BiLockAlt, BiDotsVerticalRounded } from "react-icons/bi";
+// import { BiShare, BiLockAlt, BiDotsVerticalRounded } from "react-icons/bi";
+import { FiShare, FiLock } from "react-icons/fi";
+import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
-import { showNotification } from "../../../store/actions";
 
 class GetSinglePost extends Component {
   state = {
@@ -91,6 +93,10 @@ class GetSinglePost extends Component {
     clearTimeout(this.viewTimer);
   }
 
+  savePostToggler(status, postId) {
+    this.props.savePostDispatcher(status, postId, this.props.authToken);
+  }
+
   likeToggleHandler = () => {
     if (this.likeStatusQueued) {
       return;
@@ -130,6 +136,9 @@ class GetSinglePost extends Component {
   };
 
   render() {
+    const isPostSaved = !!this.props.savedPosts.find(
+      (postId) => postId === this.postId
+    );
     let post = <Spinner />;
     if (this.state.accessDenied) {
       post = (
@@ -153,12 +162,32 @@ class GetSinglePost extends Component {
                 {this.state.post.creator.firstName}&nbsp;
                 {this.state.post.creator.lastName}
               </small>
-              <small>&nbsp;&#183;&nbsp;{postDate}</small>
+              <small className={classes.postDate}>&nbsp;&#183;&nbsp;{postDate}</small>
+              {this.state.post.creator._id === this.props.userId ? (
+                <small>
+                  &nbsp;&#183;&nbsp;
+                  <span
+                    className={classes.editLink}
+                    onClick={(e) =>
+                      editPostHandler(
+                        e,
+                        this.props,
+                        this.state.post._id,
+                        this.state.post.isPrivate
+                      )
+                    }
+                  >
+                    Edit
+                  </span>
+                </small>
+              ) : (
+                ""
+              )}
             </span>
             <span>
               {this.state.post.isPrivate ? (
                 <small>
-                  <BiLockAlt
+                  <FiLock
                     title="Private Post"
                     size={20}
                     style={{ cursor: "auto", color: "inherit" }}
@@ -168,12 +197,40 @@ class GetSinglePost extends Component {
                 <small
                   onClick={(e) => this.sharePostHandler(e, this.state.post._id)}
                 >
-                  <BiShare title="Share this Post" size={20} />
+                  <FiShare title="Share this Post" size={20} />
                 </small>
               )}
-              <small>
-                &nbsp;
-                <BiDotsVerticalRounded size={20} />
+              <small className={classes.bookmarkIcons}>
+                {this.props.isAuthenticated ? (
+                  isPostSaved ? (
+                    <BsBookmarkFill
+                      size={20}
+                      onClick={this.savePostToggler.bind(
+                        this,
+                        "REMOVE",
+                        this.state.post._id
+                      )}
+                      title="Remove from Saved Items"
+                    />
+                  ) : (
+                    <BsBookmarkPlus
+                      size={20}
+                      onClick={this.savePostToggler.bind(
+                        this,
+                        "ADD",
+                        this.state.post._id
+                      )}
+                      title="Save"
+                    />
+                  )
+                ) : (
+                  ""
+                )}
+                {/* <BiDotsVerticalRounded
+              size={20}
+              style={{ cursor: "auto" }}
+              title="Actions"
+            /> */}
               </small>
             </span>
           </div>
@@ -237,6 +294,7 @@ const mapStateToprops = (state) => {
     authToken: state.authToken,
     userId: state.userId,
     isAuthenticated: state.isAuthenticated,
+    savedPosts: state.savedPosts,
   };
 };
 
@@ -244,6 +302,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showNotif: (message, visibility) =>
       dispatch(showNotification(message, visibility)),
+    savePostDispatcher: (status, postId, authToken) =>
+      dispatch(postSaveToggler(status, postId, authToken)),
   };
 };
 

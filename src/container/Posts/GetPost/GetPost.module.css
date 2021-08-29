@@ -29,6 +29,10 @@
   margin-left: 5px;
 }
 
+.GetPost__head svg {
+  font-size: 22px;
+}
+
 .GetPost__head svg:hover {
   color: tomato;
 }
@@ -38,8 +42,8 @@
   display: flex;
   align-items: center;
   position: absolute;
-  top: 12px;
-  right: 10px;
+  top: 18px;
+  right: 18px;
   visibility: hidden;
   opacity: 0;
   transition: all 0.3s ease-in-out;
@@ -66,7 +70,7 @@
   color: grey;
 }
 
-.GetPost__main > div {
+.GetPost__main--read {
   display: inline-block;
   background-color: tomato;
   padding: 5px 10px;
@@ -78,8 +82,21 @@
   transition: background-color 0.3s;
 }
 
-.GetPost__main > div:hover {
+.GetPost__main--read:hover {
   background-color: rgb(255, 54, 19);
+}
+
+.GetPost__main--readLight {
+  background-color: #fff !important;
+  border-radius: none !important;
+  color: tomato !important;
+  padding-left: 0 !important;
+  margin: 5px 0 !important;
+}
+
+.GetPost__main--readLight:hover {
+  background-color: none !important;
+  color: rgb(255, 54, 19) !important;
 }
 
 .GetPost__info {

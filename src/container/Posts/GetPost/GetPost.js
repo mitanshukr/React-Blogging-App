@@ -4,8 +4,8 @@ import Aux from "../../../hoc/Auxiliary";
 import getDateFormat from "../../../Utility/getDateFormat";
 import classes from "./GetPost.module.css";
 
-import { FaRegBookmark, FaBookmark } from "react-icons/fa";
-import { BiDotsVerticalRounded } from "react-icons/bi";
+// import { FaRegBookmark, FaBookmark } from "react-icons/fa";
+import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { connect } from "react-redux";
 import { postSaveToggler } from "../../../store/actions";
 
@@ -23,18 +23,24 @@ class GetPost extends React.Component {
       <div className={classes.GetPost}>
         <div className={classes.GetPost__head}>
           <section>
-            <ProfileIcon
-              firstLetter={this.props.firstName?.split("")[0]}
-              lastLetter={this.props.lastName?.split("")[0]}
-            />
-            <small>
-              {this.props.firstName}&nbsp;{this.props.lastName}
-            </small>
+            {this.props.profilePage ? (
+              ""
+            ) : (
+              <>
+                <ProfileIcon
+                  firstLetter={this.props.firstName?.split("")[0]}
+                  lastLetter={this.props.lastName?.split("")[0]}
+                />
+                <small>
+                  {this.props.firstName}&nbsp;{this.props.lastName}
+                </small>
+              </>
+            )}
           </section>
           <section>
             {this.props.isAuthenticated ? (
               isPostSaved ? (
-                <FaBookmark
+                <BsBookmarkFill
                   onClick={this.savePostToggler.bind(
                     this,
                     "REMOVE",
@@ -43,7 +49,7 @@ class GetPost extends React.Component {
                   title="Remove from Saved Items"
                 />
               ) : (
-                <FaRegBookmark
+                <BsBookmarkPlus
                   onClick={this.savePostToggler.bind(
                     this,
                     "ADD",
@@ -55,17 +61,24 @@ class GetPost extends React.Component {
             ) : (
               ""
             )}
-            <BiDotsVerticalRounded
+            {/* <BiDotsVerticalRounded
               size={20}
               style={{ cursor: "auto" }}
               title="Actions"
-            />
+            /> */}
           </section>
         </div>
         <div className={classes.GetPost__main}>
           <h2 onClick={this.props.clicked}>{this.props.title}</h2>
           <p>{this.props.excerpt}</p>
-          <div onClick={this.props.clicked}>Read</div>
+          <div
+            onClick={this.props.clicked}
+            className={`${classes[`GetPost__main--read`]} ${
+              this.props.profilePage ? classes[`GetPost__main--readLight`] : ""
+            }`}
+          >
+            Read
+          </div>
         </div>
         <div className={classes.GetPost__info}>
           <section>

@@ -1,169 +1,123 @@
-import classes from "./Profile.module.css";
-import { Component } from "react";
-import { connect } from "react-redux";
-import axios from "../../../axios-instance";
-
-import GetPost from "../../Posts/GetPost/GetPost";
+import axios from "axios";
+import React from "react";
+import { FaRegUser } from "react-icons/fa";
+import { Redirect, Route } from "react-router-dom";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import withErrorHandler from "../../../hoc/withErrorHandler";
-import ProfileIcon from "../../../components/User/ProfileIcon/ProfileIcon";
+import GetPost from "../../Posts/GetPost/GetPost";
+import editPostHandler from "../../Posts/Utility/editPostHandler";
+import getSinglePostHandler from "../../Posts/Utility/getSinglePostHandler";
 
-class Profile extends Component {
-  state = {
-    posts: null,
-    serverBusy: false,
-  };
+import classes from "./Profile.module.css";
 
-  singlePostHandler = (postId, isPrivate) => {
-      if(isPrivate){
-        this.props.history.push("/posts/private/" + postId);
-    } else {
-        this.props.history.push("/posts/" + postId);  
-      }
-  };
-
-  singlePostShareHandler = (e, postId) => {
-    e.stopPropagation();
-    const link = window.location.origin + "/posts/" + postId;
-    if (!navigator.clipboard) {
-      alert(`Clipboard API not available.\n${link}`);
-      return;
-    }
-    navigator.clipboard.writeText(link)
-    .then(() => {
-      alert(`Link copied to Clipboard.\n${link}`);
-    }).catch(err => {
-      alert("Failed to Copy, Please Try again! Error: ", err);
-    })
-  }
-
-  singlePostDeletion = (e, postId, isPrivate) => {
-    e.stopPropagation();
-    this.setState({serverBusy: true});
-    let URI;
-    if (isPrivate) {
-      URI = `/privatePosts/${postId}.json?auth=${this.props.idToken}`;
-    } else {
-      URI = `/publicPosts/${postId}.json?auth=${this.props.idToken}`;
-    }
-    axios.delete(URI)
-    .then(response => {
-      console.log(response);
-      const posts = [...this.state.posts];
-      const deletedPostIndex = posts.findIndex(post => post.key === postId);
-      posts.splice(deletedPostIndex, 1);
-      this.setState({posts: posts});
-      this.setState({serverBusy: false});
-    }).catch(err => {
-      console.log(err);
-      this.setState({serverBusy: false});
-    });
-}
-
-  singlePostEditor = (e, postId, isPrivate) => {
-      e.stopPropagation();
-      if(isPrivate){
-        this.props.history.push("/posts/private/edit/" + postId);
-    } else {
-        this.props.history.push("/posts/edit/" + postId);
-      }
+class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      posts: null,
+      serverBusy: false,
+    };
   }
 
   componentDidMount() {
-    // if (this.props.isAuthenticated && !this.state.posts) {
-    const postsArr = [];
-    const authParam = "?auth=" + this.props.idToken;
-    const queryParams = '&orderBy="userId"&equalTo="' + this.props.userId + '"';
-    axios.get("/privatePosts.json" + authParam + queryParams)
+    this.setState({ serverBusy: true });
+    axios
+      .get("http://localhost:8000/post/feed/all")
       .then((response) => {
-        for (let postId in response.data) {
-          const postObj = {
-            ...response.data[postId],
-            postId: postId,
-          };
-          postsArr.push(postObj);
-        }
-        return axios.get("/publicPosts.json" + authParam + queryParams);
-      })
-      .then((response) => {
-        for (let postId in response.data) {
-          const postObj = {
-            ...response.data[postId],
-            postId: postId,
-          };
-          postsArr.push(postObj);
-        }
-      })
-      .then(() => {
-        const posts = postsArr.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-          .map((post) => {
-            return (
-              <GetPost
-                key={post.postId}
-                title={post.title}
-                excerpt={post.excerpt}
-                date={new Date(post.date).toLocaleString()}
-                isPrivate={post.isPrivate}
-                clicked={this.singlePostHandler.bind(this, post.postId, post.isPrivate)}
-                edit={(e) => this.singlePostEditor(e, post.postId, post.isPrivate)}
-                delete={(e) => this.singlePostDeletion(e, post.postId, post.isPrivate)}
-                share={(e) => this.singlePostShareHandler(e, post.postId)}
-              />
-            );
-          });
-
-        this.setState({ posts: posts });
+        const posts = response.data.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        this.setState({ posts: posts, serverBusy: false });
       })
       .catch((err) => {
         console.log(err);
+        this.setState({ serverBusy: false });
       });
-    // }
   }
 
   render() {
     let posts = null;
-    if(this.state.serverBusy){
-      posts = <Spinner />
-    } else {
+    if (this.state.posts) {
       posts = (
-          <div className={classes.Profile}>
-            <div>
-                <ProfileIcon />
-                <h2>{this.props.firstName}&nbsp;{this.props.lastName}</h2>
-                <small>@{this.props.userName}</small>
-                <textarea>About...</textarea>
-                <button>Edit</button>
-             </div>
-       <div>
-          {this.state.posts ? (
-            this.state.posts.length !== 0 ? (
-              this.state.posts
-            ) : (
-              <div>
-                <h1>No Posts!</h1>
-                <p>Your write-ups will appear here!</p>
-              </div>
-            )
+        <div className={classes.Feed}>
+          {this.state.posts.length !== 0 ? (
+            this.state.posts.map((post) => {
+              return (
+                <GetPost
+                  key={post._id}
+                  title={post.title}
+                  excerpt={post.excerpt}
+                  date={post.createdAt}
+                  isPrivate={post.isPrivate}
+                  firstName={post.creator?.firstName}
+                  lastName={post.creator?.lastName}
+                  userName={post.creator?.userName}
+                  likeCount={post.likes.length}
+                  viewCount={post.viewCount}
+                  postId={post._id}
+                  isCurrentUser={post.creator?._id === this.props.userId}
+                  profilePage={true}
+                  clicked={(e) =>
+                    getSinglePostHandler(
+                      e,
+                      this.props,
+                      post._id,
+                      post.isPrivate
+                    )
+                  }
+                  edit={(e) =>
+                    editPostHandler(e, this.props, post._id, post.isPrivate)
+                  }
+                  // delete={(e) =>
+                  //   this.singlePostDeletion(e, post._id, post.isPrivate)
+                  // }
+                  // share={(e) => this.sharePostHandler(e, post._id)}
+                />
+              );
+            })
           ) : (
-            <Spinner />
+            <div>
+              <h2>No Posts here!</h2>
+              <p>Be the first one to create Post!</p>
+            </div>
           )}
-          </div>
         </div>
       );
     }
-    return posts;
+
+    if (this.state.serverBusy) {
+      posts = <Spinner />;
+    }
+
+    return (
+      <div className={classes.Profile}>
+        <Route path="/profile/:username">
+          <Redirect to="/profile/@username?feed=posts" />
+        </Route>
+        <div className={classes.Profile__col1}>
+          <div className={classes.Profile__icon}>
+            <FaRegUser title="MK" />
+          </div>
+          <div className={classes.Profile__name}>
+            <h3>Mitanshu Kumar</h3>
+          </div>
+          <div className={classes.Profile__about}>
+            About me lorem epsum is the widest known dummy text that you should
+            also use in your developement to show dummy data.
+          </div>
+          <div className={classes.Profile__edit}>Edit</div>
+          <div className={classes.Profile__action}>
+            <ul>
+              <li>Public Posts</li>
+              <li>Private Posts</li>
+              <li>Liked Posts</li>
+            </ul>
+          </div>
+        </div>
+        <div className={classes.Profile__col2}>{posts}</div>
+      </div>
+    );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    idToken: state.idToken,
-    userId: state.userId,
-    isAuthenticated: state.isAuthenticated,
-    firstName: state.firstName,
-    lastName: state.lastName,
-    userName: state.userName
-  };
-};
-
-export default connect(mapStateToProps)(withErrorHandler(Profile, axios));
+export default Profile;
