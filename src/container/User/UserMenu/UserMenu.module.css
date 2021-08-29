@@ -36,6 +36,8 @@
 
 .UserMenu a {
     color: black !important;
+    display: flex;
+    align-items: center;
 }
 
 .UserMenu a:hover,
@@ -57,4 +59,8 @@
 
 .UserMenu li a:hover small {
     text-decoration: underline;
+}
+
+.UserMenu svg {
+    margin-right: 8px;
 }

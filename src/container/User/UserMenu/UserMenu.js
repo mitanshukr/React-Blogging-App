@@ -2,7 +2,8 @@ import { connect } from "react-redux";
 import classes from "./UserMenu.module.css";
 import NavigationItem from "../../../components/Toolbar/NavigationItems/NavigationItem/NavigationItem";
 import React, { Component } from "react";
-import { userIconStatusHandler } from '../../../store/actions';
+import { userIconStatusHandler } from "../../../store/actions";
+import { FaRegBookmark, FaRegUser, FaRocketchat, FaKey } from "react-icons/fa";
 
 class UserMenu extends Component {
   // constructor(props){
@@ -31,8 +32,8 @@ class UserMenu extends Component {
   }
 
   componentDidMount() {
-    this.userIcon = document.getElementById('user-icon');
-    this.userImg = document.getElementById('user-img');
+    this.userIcon = document.getElementById("user-icon");
+    this.userImg = document.getElementById("user-img");
     document.addEventListener("mousedown", this.handleClickOutside);
   }
 
@@ -42,7 +43,12 @@ class UserMenu extends Component {
 
   handleClickOutside(event) {
     //clicked outside the userIcon and userMenu.
-    if (this.props.isSelected && !this.wrapperRef.current.contains(event.target) && event.target !== this.userIcon && event.target !== this.userImg) {
+    if (
+      this.props.isSelected &&
+      !this.wrapperRef.current.contains(event.target) &&
+      event.target !== this.userIcon &&
+      event.target !== this.userImg
+    ) {
       this.linkClicked();
     }
   }
@@ -53,22 +59,34 @@ class UserMenu extends Component {
 
   render() {
     let style = null;
-    if(this.props.isSelected){
-      style={display: 'block'}
+    if (this.props.isSelected) {
+      style = { display: "block" };
     } else {
-      style={display: 'none'}
+      style = { display: "none" };
     }
 
     return (
       <div className={classes.UserMenu} style={style} ref={this.wrapperRef}>
-          <NavigationItem onClick={this.linkClicked} link="/user/profile">
-            <span>{this.props.firstName}&nbsp;{this.props.lastName}</span>
+        <NavigationItem onClick={this.linkClicked} link="/user/profile">
+          <span>
+            <span>
+              {this.props.firstName}&nbsp;{this.props.lastName}
+            </span>
             <small>@{this.props.userName}</small>
-          </NavigationItem>
-          <NavigationItem onClick={this.linkClicked} link="/user/account">Account</NavigationItem>
-          <NavigationItem onClick={this.linkClicked} link="/user/saved-items">Saved Items</NavigationItem>
-          <NavigationItem onClick={this.linkClicked} link="/feedback">Feedback</NavigationItem>
-          <NavigationItem onClick={this.linkClicked} link="/logout">Logout</NavigationItem>
+          </span>
+        </NavigationItem>
+        <NavigationItem onClick={this.linkClicked} link="/user/saved-items">
+          <FaRegBookmark /> Saved Items
+        </NavigationItem>
+        <NavigationItem onClick={this.linkClicked} link="/user/account">
+          <FaRegUser/> Account
+        </NavigationItem>
+        <NavigationItem onClick={this.linkClicked} link="/feedback">
+          <FaRocketchat/> Feedback
+        </NavigationItem>
+        <NavigationItem onClick={this.linkClicked} link="/logout">
+          <FaKey/> Logout
+        </NavigationItem>
       </div>
     );
   }
@@ -85,7 +103,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    isUserIconSelected: (status) => dispatch(userIconStatusHandler(status))
+    isUserIconSelected: (status) => dispatch(userIconStatusHandler(status)),
   };
 };
 

@@ -32,7 +32,7 @@ class GetSinglePost extends Component {
     if (isPrivate) {
       URI = `http://localhost:8000/post/private/${this.postId}`;
     } else {
-      URI = `http://localhost:8000/post/${this.postId}`;
+      URI = `http://localhost:8000/post/public/${this.postId}`;
     }
 
     axios

@@ -111,7 +111,7 @@ class GetPosts extends Component {
             })
           ) : (
             <div>
-              <h1>No Posts!</h1>
+              <h2>No Posts!</h2>
               <p>Your write-ups will appear here!</p>
             </div>
           )}

@@ -17,6 +17,7 @@ import Account from "./container/User/Account";
 import Spinner from "./components/UI/Spinner/Spinner";
 import Profile from "./container/User/Profile/Profile";
 import Notification from "./components/UI/Notification/Notification";
+import SavedItems from "./container/Posts/SavedItems/SavedItems";
 
 class App extends Component {
   constructor(props) {
@@ -61,7 +62,7 @@ class App extends Component {
                 component={GetSinglePost}
               />
               <Route path="/user/profile" component={Profile} />
-              <Route path="/user/saved-items" component={Account} />
+              <Route path="/user/saved-items" component={SavedItems} />
               <Route path="/user/account" component={Account} />
               <Redirect to="/" />
             </Switch>

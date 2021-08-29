@@ -47,10 +47,6 @@ class Feed extends Component {
     }, 2000);
   };
 
-  // componentWillUnmount() {
-  //   clearTimeout(this.notifTimer);
-  // }
-
   componentDidMount() {
     this.setState({ serverBusy: true });
     axios
@@ -109,7 +105,7 @@ class Feed extends Component {
             })
           ) : (
             <div>
-              <h1>No Posts here!</h1>
+              <h2>No Posts here!</h2>
               <p>Be the first one to create Post!</p>
             </div>
           )}
