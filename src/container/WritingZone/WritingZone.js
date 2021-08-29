@@ -12,6 +12,7 @@ import { dispatchBodyHandler } from "../../store/actions";
 
 import "./WritingZone.css";
 import HomePopup from "../../components/HomePopup/HomePopup";
+import { getStringToTagsArray } from "../Posts/Utility/tagsHandler";
 
 class WritingZone extends Component {
   // constructor(props) {
@@ -157,9 +158,7 @@ class WritingZone extends Component {
       title: this.state.inputElements.title.value,
       excerpt: this.state.inputElements.excerpt.value,
       body: this.state.inputElements.body.value,
-      tags: this.state.inputElements.tags.value
-        .split(",")
-        .map((tag) => tag.trim()),
+      tags: getStringToTagsArray(this.state.inputElements.tags.value),
       isPrivate: this.state.inputElements.isPrivate.value,
       creator: {
         _id: this.props.userId,
@@ -219,7 +218,7 @@ class WritingZone extends Component {
   render() {
     return (
       <>
-      {/* <HomePopup /> */}
+        {/* <HomePopup /> */}
         <Modal
           visibility={this.state.modalVisibility}
           clicked={this.backdropToggler}

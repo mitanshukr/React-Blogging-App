@@ -1,0 +1,26 @@
+.Tag {
+  display: inline-block;
+  background-color: rgba(177, 238, 255, 0.514);
+  padding: 1px 5px;
+  letter-spacing: 0.2px;
+  margin: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  position: relative;
+  cursor: pointer;
+  color: saddlebrown;
+}
+
+.Tag::after {
+  content: "";
+  width: 100%;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  background-color: tomato;
+  height: 3.5px;
+}
+
+.Tag:hover {
+  box-shadow: inset 1px 1px 10px 1px rgb(106, 250, 236);
+}

@@ -16,6 +16,7 @@ import { postSaveToggler, showNotification } from "../../../store/actions";
 import { FiShare, FiLock } from "react-icons/fi";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
+import Tag from "../../../components/UI/TagStyler/Tag";
 
 class GetSinglePost extends Component {
   state = {
@@ -162,7 +163,9 @@ class GetSinglePost extends Component {
                 {this.state.post.creator.firstName}&nbsp;
                 {this.state.post.creator.lastName}
               </small>
-              <small className={classes.postDate}>&nbsp;&#183;&nbsp;{postDate}</small>
+              <small className={classes.postDate}>
+                &nbsp;&#183;&nbsp;{postDate}
+              </small>
               {this.state.post.creator._id === this.props.userId ? (
                 <small>
                   &nbsp;&#183;&nbsp;
@@ -269,7 +272,9 @@ class GetSinglePost extends Component {
             </div>
           </div>
           <div>
-            <small>{this.state.post.tags}</small>
+            {this.state.post.tags.map((tag) => (
+              <Tag key={Math.random()}>{tag}</Tag>
+            ))}
           </div>
         </div>
       );

@@ -11,6 +11,10 @@ import Input from "../../../components/UI/Input/Input";
 import classes from "./EditPost.module.css";
 import Modal from "../../../components/UI/Modal/Modal";
 import { showNotification } from "../../../store/actions";
+import {
+  getStringToTagsArray,
+  getTagArrayToString,
+} from "../Utility/tagsHandler";
 
 class EditPost extends Component {
   state = {
@@ -59,7 +63,7 @@ class EditPost extends Component {
             title: response.data.title,
             excerpt: response.data.excerpt,
             body: response.data.body,
-            tags: response.data.tags.join(","),
+            tags: getTagArrayToString(response.data.tags),
             date: response.data.createdAt,
             isPrivate: response.data.isPrivate,
           });
@@ -84,7 +88,7 @@ class EditPost extends Component {
       excerpt: this.state.excerpt,
       body: this.state.body,
       isPrivate: this.state.isPrivate,
-      tags: this.state.tags.split(",").map((tag) => tag.trim()),
+      tags: getStringToTagsArray(this.state.tags),
     };
     axios
       .patch(`http://localhost:8000/post/edit/${this.postId}`, updatedPost, {
