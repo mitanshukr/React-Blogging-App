@@ -6,12 +6,17 @@
   margin: 0 auto;
 }
 
-.GetSinglePost h1 {
+.GetSinglePost__title h1 {
   font-size: 50px;
   margin-bottom: 20px;
 }
 
-.GetSinglePost > div:nth-of-type(1) {
+.GetSinglePost__excerpt p {
+  margin: -15px 0 20px 0;
+  color: rgba(128, 128, 128, 0.8);
+}
+
+.GetSinglePost > div:nth-of-type(3) {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

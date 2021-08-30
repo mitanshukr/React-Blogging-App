@@ -1,0 +1,53 @@
+.DeletePost {
+  background-color: rgba(214, 214, 214, 0.95);
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 100;
+}
+
+.DeletePost p {
+  color: rgb(253, 54, 54);
+  font-weight: bold;
+}
+
+.DeletePost p small {
+  color: initial;
+  font-weight: normal;
+}
+
+.DeletePost__actions span {
+  border: 1px solid black;
+  border-radius: 500px;
+  display: inline-block;
+  /* width: 80px; */
+  min-width: max-content;
+  padding: 5px 25px;
+  margin: 5px 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.DeletePost__actions span:first-of-type:hover {
+  background-color: white;
+}
+
+.DeletePost__actions span:last-of-type:hover {
+  background-color: rgb(253, 46, 46);
+  color: white;
+}
+
+.deleteBtnActive {
+  background-color: rgb(253, 46, 46);
+  color: white;
+  pointer-events: none;
+}

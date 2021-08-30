@@ -90,12 +90,14 @@ const reducer = (state = initialState, action) => {
       notifVisibility: action.visibility,
     };
   } else if (action.type === "updateSavedItems") {
-    const savedPosts = [...state.savedPosts];
+    let savedPosts = [...state.savedPosts];
     if (action.status === "ADD") {
       savedPosts.push(action.postId);
-    } else {
+    } else if (action.status === "REMOVE") {
       const postIndex = savedPosts.findIndex((id) => id === action.postId);
       savedPosts.splice(postIndex, 1);
+    } else if (action.status === "UPDATE") {
+      savedPosts = action.savedItemsArray || [];
     }
     return {
       ...state,

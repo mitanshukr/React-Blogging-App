@@ -2,13 +2,14 @@ import axios from "axios";
 import React from "react";
 import { connect } from "react-redux";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import { showNotification } from "../../../store/actions";
+import { postSaveToggler, showNotification } from "../../../store/actions";
 import GetPost from "../GetPost/GetPost";
 import editPostHandler from "../Utility/editPostHandler";
 import getSinglePostHandler from "../Utility/getSinglePostHandler";
 import copyToClipboard from "../../../Utility/copyToClipboardHandler";
 
 import classes from "./SavedItems.module.css";
+import deletePostHandler from "../Utility/deletePostHandler";
 
 class SavedItems extends React.Component {
   constructor(props) {
@@ -33,12 +34,34 @@ class SavedItems extends React.Component {
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
         this.setState({ posts: posts, serverBusy: false });
+
+        const postIdArr = posts.map((post) => post?._id);
+        this.props.savePostDispatcher("UPDATE", null, null, postIdArr);
       })
       .catch((err) => {
         console.log(err);
         this.setState({ serverBusy: false });
       });
   }
+
+  singlePostDeletion = (e, postId) => {
+    e.stopPropagation();
+    const postsArr = [...this.state.posts];
+    const deletedPostIndex = postsArr.findIndex((post) => post._id === postId);
+    postsArr.splice(deletedPostIndex, 1);
+    this.setState({ posts: postsArr });
+
+    deletePostHandler(this.props.authToken, postId)
+      .then((status) => {
+        this.props.showNotif("Post deleted Successfully!", true);
+        setTimeout(() => {
+          this.props.showNotif("Post deleted Successfully!", false);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   sharePostHandler = (e, postId) => {
     e.stopPropagation();
@@ -54,9 +77,9 @@ class SavedItems extends React.Component {
     if (this.state.posts) {
       posts = (
         <div className={classes.SavedItems}>
-          {this.props.savedPosts.length !== 0 ? (
-            this.props.savedPosts.map((postId) => {
-              const post = this.state.posts.find((post) => post._id === postId);
+          {this.props.savedPosts.map((postId) => {
+            const post = this.state.posts.find((post) => post._id === postId);
+            if (post)
               return (
                 <GetPost
                   key={post._id}
@@ -82,23 +105,23 @@ class SavedItems extends React.Component {
                   edit={(e) =>
                     editPostHandler(e, this.props, post._id, post.isPrivate)
                   }
-                  //   delete={(e) =>
-                  //     this.singlePostDeletion(e, post._id, post.isPrivate)
-                  //   }
+                  delete={(e) => this.singlePostDeletion(e, post._id)}
                   share={(e) => this.sharePostHandler(e, post._id)}
                 />
               );
-            })
-          ) : (
-            <div>
-              <h2>Nothing here!</h2>
-              <p>Your Saved Posts will appear here.</p>
-            </div>
-          )}
+          })}
         </div>
       );
     }
 
+    if (this.props.savedPosts.length === 0) {
+      posts = (
+        <div className={classes.SavedItems}>
+          <h2>Nothing here!</h2>
+          <p>Your Saved Posts will appear here.</p>
+        </div>
+      );
+    }
     if (this.state.serverBusy) {
       posts = <Spinner />;
     }
@@ -127,6 +150,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showNotif: (message, visibility) =>
       dispatch(showNotification(message, visibility)),
+    savePostDispatcher: (status, postId, authToken, updatedSavedItemsArr) =>
+      dispatch(
+        postSaveToggler(status, postId, authToken, updatedSavedItemsArr)
+      ),
   };
 };
 

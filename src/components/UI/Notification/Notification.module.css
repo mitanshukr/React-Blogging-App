@@ -3,8 +3,8 @@
   top: -100px;
   left: 50%;
   transform: translateX(-50%);
-  width: auto;
-  max-width: 50%;
+  width: max-content;
+  /* max-width: 60%; */
   height: 50px;
   padding: 20px 40px;
   box-sizing: border-box;

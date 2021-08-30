@@ -8,11 +8,42 @@ import classes from "./GetPost.module.css";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { connect } from "react-redux";
 import { postSaveToggler } from "../../../store/actions";
+import DeletePost from "../../../components/UI/DeletePost/DeletePost";
 
 class GetPost extends React.Component {
+  state = {
+    deletePost: false,
+    deleteCount: null,
+  };
+
   savePostToggler(status, postId) {
     this.props.savePostDispatcher(status, postId, this.props.authToken);
   }
+
+  initDeleteHandler = (e) => {
+    this.setState({ deletePost: true });
+  };
+
+  cancelDeleteHandler = (e) => {
+    this.setState({ deletePost: false, deleteCount: null });
+    clearInterval(this.deleteCountdown);
+    clearTimeout(this.deleteTimer);
+  };
+
+  deletePostHandler = (e) => {
+    this.setState({ deleteCount: 5 });
+    this.deleteCountdown = setInterval(() => {
+      this.setState((prevState) => {
+        return { deleteCount: prevState.deleteCount - 1 };
+      });
+    }, 1000);
+
+    this.deleteTimer = setTimeout(() => {
+      this.props.delete(e);
+      clearInterval(this.deleteCountdown);
+      this.setState({ deletePost: false, deleteCount: null });
+    }, 5000);
+  };
 
   render() {
     const postDate = getDateFormat(this.props.date);
@@ -21,6 +52,15 @@ class GetPost extends React.Component {
     );
     return (
       <div className={classes.GetPost}>
+        {this.state.deletePost ? (
+          <DeletePost
+            deleteCount={this.state.deleteCount}
+            onDelete={this.deletePostHandler}
+            onCancel={this.cancelDeleteHandler}
+          />
+        ) : (
+          ""
+        )}
         <div className={classes.GetPost__head}>
           <section>
             {this.props.profilePage ? (
@@ -71,14 +111,14 @@ class GetPost extends React.Component {
         <div className={classes.GetPost__main}>
           <h2 onClick={this.props.clicked}>{this.props.title}</h2>
           <p>{this.props.excerpt}</p>
-          <div
+          <button
             onClick={this.props.clicked}
             className={`${classes[`GetPost__main--read`]} ${
               this.props.profilePage ? classes[`GetPost__main--readLight`] : ""
             }`}
           >
             Read
-          </div>
+          </button>
         </div>
         <div className={classes.GetPost__info}>
           <section>
@@ -107,7 +147,8 @@ class GetPost extends React.Component {
                 </small>
                 <small
                   title="Delete"
-                  onClick={this.props.delete}
+                  // onClick={this.props.delete}
+                  onClick={this.initDeleteHandler}
                   className={classes[`GetPost__info--delete`]}
                 >
                   Delete

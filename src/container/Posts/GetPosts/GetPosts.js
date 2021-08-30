@@ -19,17 +19,19 @@ class GetPosts extends Component {
     serverBusy: false,
   };
 
-  singlePostDeletion = (e, postId, isPrivate) => {
-    deletePostHandler(
-      e,
-      this.props.idToken,
-      postId,
-      this.state.posts,
-      isPrivate
-    )
-      .then((updatedPosts) => {
-        console.log("here I ,,,,,,,,,,,,,,,,,");
-        this.setState({ posts: updatedPosts });
+  singlePostDeletion = (e, postId) => {
+    e.stopPropagation();
+    const postsArr = [...this.state.posts];
+    const deletedPostIndex = postsArr.findIndex((post) => post._id === postId);
+    postsArr.splice(deletedPostIndex, 1);
+    this.setState({ posts: postsArr });
+
+    deletePostHandler(this.props.authToken, postId)
+      .then((status) => {
+        this.props.showNotif("Post deleted Successfully!", true);
+        setTimeout(() => {
+          this.props.showNotif("Post deleted Successfully!", false);
+        }, 1500);
       })
       .catch((err) => {
         console.log(err);
@@ -44,10 +46,6 @@ class GetPosts extends Component {
       this.props.showNotif("Link Copied to Clipboard!", false);
     }, 2000);
   };
-
-  // componentWillUnmount() {
-  //   clearTimeout(this.notifTimer);
-  // }
 
   componentDidMount() {
     this.setState({ serverBusy: true });
@@ -102,9 +100,7 @@ class GetPosts extends Component {
                   edit={(e) =>
                     editPostHandler(e, this.props, post._id, post.isPrivate)
                   }
-                  delete={(e) =>
-                    this.singlePostDeletion(e, post._id, post.isPrivate)
-                  }
+                  delete={(e) => this.singlePostDeletion(e, post._id)}
                   share={(e) => this.sharePostHandler(e, post._id)}
                 />
               );

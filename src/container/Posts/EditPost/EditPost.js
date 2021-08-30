@@ -14,7 +14,7 @@ import { showNotification } from "../../../store/actions";
 import {
   getStringToTagsArray,
   getTagArrayToString,
-} from "../Utility/tagsHandler";
+} from "../Utility/tagsFormatHandler";
 
 class EditPost extends Component {
   state = {
@@ -27,10 +27,6 @@ class EditPost extends Component {
     serverBusy: false,
     localError: null,
   };
-
-  // componentWillUnmount() {
-  //   clearTimeout(this.notifTimer);
-  // }
 
   componentDidMount() {
     let URI = null;

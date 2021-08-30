@@ -12,7 +12,7 @@ import { dispatchBodyHandler } from "../../store/actions";
 
 import "./WritingZone.css";
 import HomePopup from "../../components/HomePopup/HomePopup";
-import { getStringToTagsArray } from "../Posts/Utility/tagsHandler";
+import { getStringToTagsArray } from "../Posts/Utility/tagsFormatHandler";
 
 class WritingZone extends Component {
   // constructor(props) {

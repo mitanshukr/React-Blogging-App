@@ -58,7 +58,7 @@ class GetSinglePost extends Component {
           likeCount: response?.data.likes.length,
           viewCount: +response?.data.viewCount,
         });
-        if (!response?.data?.isPrivate) {
+        if (response?.data && !response?.data?.isPrivate) {
           this.viewTimer = setTimeout(() => {
             axios
               .get(`http://localhost:8000/post/addview/${response?.data?._id}`)
@@ -152,7 +152,12 @@ class GetSinglePost extends Component {
       const postDate = getDateFormat(this.state.post.createdAt);
       post = (
         <div className={classes.GetSinglePost}>
-          <h1>{this.state.post.title}</h1>
+          <div className={classes.GetSinglePost__title}>
+            <h1>{this.state.post.title}</h1>
+          </div>
+          <div className={classes.GetSinglePost__excerpt}>
+            <p>{this.state.post.excerpt}</p>
+          </div>
           <div>
             <span>
               <ProfileIcon

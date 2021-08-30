@@ -159,24 +159,31 @@ const showNotification = (message, visibility) => {
   };
 };
 
-const postSaveToggler = (status, postId, authToken) => {
+const postSaveToggler = (status, postId, authToken, savedItemsArray = []) => {
   return (dispatch) => {
-    dispatch({ type: "updateSavedItems", status: status, postId: postId });
-    axios
-      .get(`http://localhost:8000/post/togglesave/${postId}`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      })
-      .then((response) => {
-        dispatch(showNotification(response.data.message, true));
-        setTimeout(() => {
-          dispatch(showNotification(response.data.message, false));
-        }, 1500);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch({
+      type: "updateSavedItems",
+      status: status,
+      postId: postId,
+      savedItemsArray: savedItemsArray,
+    });
+    if (status !== "UPDATE") {
+      axios
+        .get(`http://localhost:8000/post/togglesave/${postId}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        })
+        .then((response) => {
+          dispatch(showNotification(response.data.message, true));
+          setTimeout(() => {
+            dispatch(showNotification(response.data.message, false));
+          }, 1500);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 };
 
