@@ -61,9 +61,9 @@ class App extends Component {
                 exact
                 component={GetSinglePost}
               />
-              <Route path="/profile/:username" component={Profile} />
               <Route path="/user/saved-items" component={SavedItems} />
               <Route path="/user/account" component={Account} />
+              <Route path="/profile/:username" component={Profile} />
               <Redirect to="/" />
             </Switch>
           ) : (
@@ -74,6 +74,7 @@ class App extends Component {
               <Route path="/signup" component={Signup} />
               {/* <Route path="/posts" exact component={GetPosts} /> */}
               <Route path="/post/:postId" exact component={GetSinglePost} />
+              <Route path="/profile/:username" component={Profile} />
               {/* <Route from="/post/private/:postId" exact>
                 <Redirect to="/login" />
               </Route> */}
