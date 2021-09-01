@@ -1,0 +1,91 @@
+.ProfileSection__icon {
+  width: 8.5rem;
+  height: 8.5rem;
+  background-color: grey;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ProfileSection__icon > p {
+  font-size: 3rem;
+  font-weight: bold;
+  color: rgb(228, 228, 228);
+  padding: 0;
+  margin: 0;
+}
+
+.ProfileSection__icon svg {
+  font-size: 4.5rem;
+  color: rgb(228, 228, 228);
+}
+
+.ProfileSection__name {
+  margin: 8px 0 5px 0;
+}
+
+.ProfileSection__name h3 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.ProfileSection__name small {
+  color: tomato;
+}
+
+.ProfileSection__about {
+  color: grey;
+}
+
+.ProfileSection__edit {
+  padding: 7px;
+  margin: 10px 0;
+  color: white;
+  width: 60px;
+  text-align: center;
+  background-color: tomato;
+  border-radius: 200px;
+  display: inline-block;
+}
+
+.ProfileSection__action {
+  margin-top: 20px;
+}
+
+.ProfileSection__action ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ProfileSection__action a,
+.ProfileSection__action a:visited,
+.ProfileSection__action a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+.ProfileSection__action li {
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 16px;
+  border: 1px solid rgb(231, 231, 231);
+  border-left: 0;
+  border-right: 0;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.ProfileSection__action a:first-of-type li {
+  border-bottom: 0;
+}
+
+.ProfileSection__action li:hover {
+  background-color: rgb(253, 232, 232);
+}
+
+.activeNav {
+  color: tomato !important;
+}

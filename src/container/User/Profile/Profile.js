@@ -1,8 +1,7 @@
 import axios from "axios";
 import React from "react";
-import { FaRegUser } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
 
+import ProfileSection from "../../../components/User/ProfileSection/ProfileSection";
 import GetPosts from "../../Posts/GetPosts/GetPosts";
 import classes from "./Profile.module.css";
 
@@ -63,41 +62,12 @@ class Profile extends React.Component {
     return (
       <div key={this.state.username} className={classes.Profile}>
         <div className={classes.Profile__col1}>
-          <div className={classes.Profile__icon}>
-            <FaRegUser title="Profile Picture" />
-          </div>
-          <div className={classes.Profile__name}>
-            <h3>
-              {this.state.firstName}&nbsp;{this.state.lastName}
-            </h3>
-            <small>{this.state.username}</small>
-          </div>
-          <div className={classes.Profile__about}>
-            About me lorem epsum is the widest known dummy text that you should
-            also use in your developement to show dummy data.
-          </div>
-          <div className={classes.Profile__edit}>Edit</div>
-          <div className={classes.Profile__action}>
-            <ul>
-              <NavLink
-                to={`/profile/${this.state.username}?feed=posts`}
-                className={
-                  this.state.feedQuery !== "likes" ? classes.activeNav : ""
-                }
-              >
-                <li>Public Posts</li>
-              </NavLink>
-
-              <NavLink
-                to={`/profile/${this.state.username}?feed=likes`}
-                className={
-                  this.state.feedQuery === "likes" ? classes.activeNav : ""
-                }
-              >
-                <li>Liked Posts</li>
-              </NavLink>
-            </ul>
-          </div>
+          <ProfileSection
+            firstName={this.state.firstName}
+            lastName={this.state.lastName}
+            username={this.state.username}
+            feedQuery={this.state.feedQuery}
+          />
         </div>
         <div key={this.state.feedQuery} className={classes.Profile__col2}>
           {this.state.feedQuery === "likes" ? (
@@ -133,9 +103,9 @@ class Profile extends React.Component {
 
               <GetPosts type="PROFILE_POSTS" userName={this.state.username}>
                 <div className={classes.LikedPosts__emptyMsg}>
-                  <h2>Nothing here!</h2>
+                  <h2>No Posts yet!</h2>
                   <p style={{ fontStyle: "italic", color: "grey" }}>
-                    Whatever you can't let go, goes Stale!
+                    Parallel Lines do intersect, and they intersect beautifully.
                     <br />
                     <small>@mitanshukr</small>
                   </p>
