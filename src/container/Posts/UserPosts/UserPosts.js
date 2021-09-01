@@ -11,7 +11,12 @@ class UserPosts extends Component {
           <h1>Your Posts</h1>
           <p>Here's some masterpiece carved by you.🤟🔥</p>
         </div>
-        <GetPosts type="USER_POSTS" />
+        <GetPosts type="USER_POSTS">
+          <div>
+            <h2>No Posts!</h2>
+            <p>Your write-ups will appear here!</p>
+          </div>
+        </GetPosts>
       </>
     );
   }

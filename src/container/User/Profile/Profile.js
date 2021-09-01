@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import { FaRegUser } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
@@ -8,24 +9,54 @@ import classes from "./Profile.module.css";
 class Profile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      username: this.props.match.params.username,
-      feedQuery: new URLSearchParams(this.props.history.location.search).get(
+    this.getQueryParam = () => {
+      return new URLSearchParams(this.props.history.location.search).get(
         "feed"
-      ),
+      );
     };
+    this.state = {
+      userId: null,
+      firstName: null,
+      lastName: null,
+      email: null,
+      about: null,
+      username: this.props.match.params.username,
+      feedQuery: this.getQueryParam(),
+    };
+  }
+
+  getUserInfo = (username) => {
+    axios
+      .get(`http://localhost:8000/user/public/${username}`)
+      .then((response) => {
+        this.setState({
+          username: username,
+          userId: response.data?.userId,
+          firstName: response.data?.firstName,
+          lastName: response.data?.lastName,
+          email: response.data?.email,
+          about: response.data?.about,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  componentDidMount() {
+    this.getUserInfo(this.state.username);
   }
 
   componentDidUpdate() {
     const username = this.props.match.params.username;
-    const feedQuery = new URLSearchParams(
-      this.props.history.location.search
-    ).get("feed");
+    const feedQuery = this.getQueryParam();
 
-    if (this.state.username !== username) this.setState({ username: username });
-
-    if (this.state.feedQuery !== feedQuery)
+    if (this.state.username !== username) {
+      this.getUserInfo(username);
+    }
+    if (this.state.feedQuery !== feedQuery) {
       this.setState({ feedQuery: feedQuery });
+    }
   }
 
   render() {
@@ -33,10 +64,12 @@ class Profile extends React.Component {
       <div key={this.state.username} className={classes.Profile}>
         <div className={classes.Profile__col1}>
           <div className={classes.Profile__icon}>
-            <FaRegUser title="MK" />
+            <FaRegUser title="Profile Picture" />
           </div>
           <div className={classes.Profile__name}>
-            <h3>Mitanshu Kumar</h3>
+            <h3>
+              {this.state.firstName}&nbsp;{this.state.lastName}
+            </h3>
             <small>{this.state.username}</small>
           </div>
           <div className={classes.Profile__about}>
@@ -74,7 +107,7 @@ class Profile extends React.Component {
                   classes.bg_like
                 }`}
               >
-                <h2>Posts liked by Mitanshu</h2>
+                <h2>Posts liked by {this.state.firstName} &#128077;</h2>
               </div>
 
               <GetPosts type="LIKED_POSTS" userName={this.state.username}>
@@ -95,7 +128,7 @@ class Profile extends React.Component {
                   classes.bg_post
                 }`}
               >
-                <h2>Mitanshu's Blog&#10084;&#65039;</h2>
+                <h2>{this.state.firstName}'s Blog&#10084;&#65039;</h2>
               </div>
 
               <GetPosts type="PROFILE_POSTS" userName={this.state.username}>
