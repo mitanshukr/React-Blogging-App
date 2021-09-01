@@ -29,6 +29,18 @@
   margin-left: 6px;
 }
 
+.GetSinglePost small:first-of-type a,
+.GetSinglePost small:first-of-type a:visited,
+.GetSinglePost small:first-of-type a:active {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.GetSinglePost small:first-of-type a:hover {
+  color: tomato;
+}
+
 .postDate {
   color: grey;
 }

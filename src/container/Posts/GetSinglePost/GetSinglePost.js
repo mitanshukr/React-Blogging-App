@@ -17,6 +17,7 @@ import { FiShare, FiLock } from "react-icons/fi";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import Tag from "../../../components/UI/TagStyler/Tag";
+import { Link } from "react-router-dom";
 
 class GetSinglePost extends Component {
   state = {
@@ -165,8 +166,13 @@ class GetSinglePost extends Component {
                 lastLetter={this.state.post.creator.lastName?.split("")[0]}
               />
               <small>
-                {this.state.post.creator.firstName}&nbsp;
-                {this.state.post.creator.lastName}
+                <Link
+                  title="Visit Profile"
+                  to={`/profile/@${this.state.post.creator.userName}`}
+                >
+                  {this.state.post.creator.firstName}&nbsp;
+                  {this.state.post.creator.lastName}
+                </Link>
               </small>
               <small className={classes.postDate}>
                 &nbsp;&#183;&nbsp;{postDate}

@@ -114,10 +114,11 @@ class GetPosts extends Component {
                     isPrivate={post.isPrivate}
                     firstName={post.creator?.firstName}
                     lastName={post.creator?.lastName}
-                    userName={post.creator?.userName}
+                    userName={`@${post.creator?.userName}`}
                     likeCount={post.likes.length}
                     viewCount={post.viewCount}
                     isCurrentUser={post.creator?._id === this.props.userId}
+                    isProfilePost={this.props.type === "PROFILE_POSTS"}
                     savePostToggler={this.savePostToggler}
                     onClick={(e) =>
                       getSinglePostHandler(

@@ -30,6 +30,17 @@
   margin-left: 5px;
 }
 
+.GetPost__head small a,
+.GetPost__head small a:visited,
+.GetPost__head small a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+.GetPost__head small a:hover {
+  color: tomato;
+}
+
 .GetPost__head svg {
   font-size: 22px;
 }
@@ -65,7 +76,9 @@
   margin: 0;
   cursor: pointer;
   display: inline-block;
+  transition: all 0.2s ease-in-out;
 }
+
 .GetPost__main p {
   margin: 0;
   color: grey;
