@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import "./App.css";
 import Layout from "./components/Layout/Layout";
-import GetPosts from "./container/Posts/GetPosts/GetPosts";
+import UserPosts from "./container/Posts/UserPosts/UserPosts";
 import GetSinglePost from "./container/Posts/GetSinglePost/GetSinglePost";
 import Feed from "./container/Posts/Feed/Feed";
 import WritingZone from "./container/WritingZone/WritingZone";
@@ -47,7 +47,7 @@ class App extends Component {
                 style={{ backgroundColor: "red" }}
                 path="/posts"
                 exact
-                component={GetPosts}
+                component={UserPosts}
               />
               <Route path="/post/edit/:postId" exact component={EditPost} />
               <Route
@@ -72,7 +72,7 @@ class App extends Component {
               <Route path="/feed" exact component={Feed} />
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
-              {/* <Route path="/posts" exact component={GetPosts} /> */}
+              {/* <Route path="/posts" exact component={UserPosts} /> */}
               <Route path="/post/:postId" exact component={GetSinglePost} />
               <Route path="/profile/:username" component={Profile} />
               {/* <Route from="/post/private/:postId" exact>

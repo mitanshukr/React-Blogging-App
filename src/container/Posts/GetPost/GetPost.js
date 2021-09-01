@@ -1,24 +1,19 @@
 import React from "react";
-import ProfileIcon from "../../../components/User/ProfileIcon/ProfileIcon";
+import { connect } from "react-redux";
+
 import Aux from "../../../hoc/Auxiliary";
 import getDateFormat from "../../../Utility/getDateFormat";
-import classes from "./GetPost.module.css";
-
+import ProfileIcon from "../../../components/User/ProfileIcon/ProfileIcon";
+import DeletePost from "../../../components/Posts/DeletePost/DeletePost";
 // import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
-import { connect } from "react-redux";
-import { postSaveToggler } from "../../../store/actions";
-import DeletePost from "../../../components/UI/DeletePost/DeletePost";
+import classes from "./GetPost.module.css";
 
 class GetPost extends React.Component {
   state = {
     deletePost: false,
     deleteCount: null,
   };
-
-  savePostToggler(status, postId) {
-    this.props.savePostDispatcher(status, postId, this.props.authToken);
-  }
 
   initDeleteHandler = (e) => {
     this.setState({ deletePost: true });
@@ -81,7 +76,7 @@ class GetPost extends React.Component {
             {this.props.isAuthenticated ? (
               isPostSaved ? (
                 <BsBookmarkFill
-                  onClick={this.savePostToggler.bind(
+                  onClick={this.props.savePostToggler.bind(
                     this,
                     "REMOVE",
                     this.props.postId
@@ -90,7 +85,7 @@ class GetPost extends React.Component {
                 />
               ) : (
                 <BsBookmarkPlus
-                  onClick={this.savePostToggler.bind(
+                  onClick={this.props.savePostToggler.bind(
                     this,
                     "ADD",
                     this.props.postId
@@ -109,10 +104,10 @@ class GetPost extends React.Component {
           </section>
         </div>
         <div className={classes.GetPost__main}>
-          <h2 onClick={this.props.clicked}>{this.props.title}</h2>
+          <h2 onClick={this.props.onClick}>{this.props.title}</h2>
           <p>{this.props.excerpt}</p>
           <button
-            onClick={this.props.clicked}
+            onClick={this.props.onClick}
             className={`${classes[`GetPost__main--read`]} ${
               this.props.profilePage ? classes[`GetPost__main--readLight`] : ""
             }`}
@@ -147,7 +142,6 @@ class GetPost extends React.Component {
                 </small>
                 <small
                   title="Delete"
-                  // onClick={this.props.delete}
                   onClick={this.initDeleteHandler}
                   className={classes[`GetPost__info--delete`]}
                 >
@@ -185,11 +179,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    savePostDispatcher: (status, postId, authToken) =>
-      dispatch(postSaveToggler(status, postId, authToken)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(GetPost);
+export default connect(mapStateToProps)(GetPost);
