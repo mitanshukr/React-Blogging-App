@@ -1,5 +1,5 @@
 import axios from "axios";
-import myAxios from "../axios-instance";
+// import axios from "../axios-instance";
 
 const localStorageHandler = (
   option,

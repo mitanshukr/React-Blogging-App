@@ -1,0 +1,23 @@
+.AuthCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+  min-height: 350px;
+  box-sizing: border-box;
+  padding: 40px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.AuthCard h2 {
+  margin: 0;
+  margin-bottom: 3rem;
+}
+
+.AuthCard button {
+  margin-top: 20px;
+}

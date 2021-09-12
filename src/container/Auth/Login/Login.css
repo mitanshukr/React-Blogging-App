@@ -1,38 +1,40 @@
-.Login {
-    width: 100%;
-    box-sizing: border-box;
-    text-align: center;
-    background-color: #fff;
-    display: inline-block;
-    padding: 40px;
-    padding-bottom: 45px;
-    border-radius: 4px;
-    margin-top: 5%;
-    opacity: .9;
-    height: auto;
+.Login__inputDiv {
+  display: flex;
+  flex-direction: column;
 }
 
-.Login h2 {
-    margin: 0;
-    margin-bottom: 2rem;
+.Login__inputDiv input {
+  margin-bottom: 3px;
 }
 
-.Login button {
-    margin-top: 20px;
+.Login__inputDiv small {
+  align-self: flex-end;
+}
+
+.Login__inputDiv small a,
+.Login__inputDiv small a:active,
+.Login__inputDiv small a:focus {
+  color: inherit;
+  text-decoration: none;
+}
+
+.Login__inputDiv small a:hover {
+  text-decoration: underline;
+  color: tomato;
 }
 
 .Error {
-    display: inline-block;
-    width: 290px;
-    background-color: rgba(255, 28, 28, 0.575);
-    color: #2C2926;
-    padding: 15px;
-    margin: 0;
-    text-align: left;
+  display: inline-block;
+  width: 290px;
+  background-color: rgba(255, 28, 28, 0.575);
+  color: #2c2926;
+  padding: 15px;
+  margin: 0;
+  text-align: left;
 }
 
 .Error:empty {
-    padding: 0;
-    border: none;
-    display: none;
+  padding: 0;
+  border: none;
+  display: none;
 }

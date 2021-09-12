@@ -1,4 +1,4 @@
-.Signup {
+/* .Signup {
   width: 100%;
   box-sizing: border-box;
   text-align: center;
@@ -19,7 +19,7 @@
 
 .Signup button {
   margin-top: 40px;
-}
+} */
 
 .Signup .message {
   display: inline-block;
@@ -41,5 +41,5 @@
 }
 
 .Signup .success {
-  background-color: #4afa338e;
+  background-color: #17a7048e;
 }

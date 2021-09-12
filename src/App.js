@@ -18,6 +18,8 @@ import Spinner from "./components/UI/Spinner/Spinner";
 import Profile from "./container/User/Profile/Profile";
 import Notification from "./components/UI/Notification/Notification";
 import SavedItems from "./container/Posts/SavedItems/SavedItems";
+import ForgotPassword from "./container/Auth/PasswordChange/ForgotPassword";
+import ResetPassword from "./container/Auth/PasswordChange/ResetPassword";
 
 class App extends Component {
   constructor(props) {
@@ -71,6 +73,8 @@ class App extends Component {
               <Route path="/" exact component={WritingZone} />
               <Route path="/feed" exact component={Feed} />
               <Route path="/login" component={Login} />
+              <Route path="/forgot-password" component={ForgotPassword} />
+              <Route path="/reset-password/:userId/:resetToken" component={ResetPassword} />
               <Route path="/signup" component={Signup} />
               {/* <Route path="/posts" exact component={UserPosts} /> */}
               <Route path="/post/:postId" exact component={GetSinglePost} />

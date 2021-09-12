@@ -8,7 +8,6 @@ import DeletePost from "../../../components/Posts/DeletePost/DeletePost";
 // import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import classes from "./GetPost.module.css";
-import { Link } from "react-router-dom";
 
 class GetPost extends React.Component {
   state = {
@@ -68,12 +67,12 @@ class GetPost extends React.Component {
                   lastLetter={this.props.lastName?.split("")[0]}
                 />
                 <small>
-                  <Link
+                  <a
                     title="Visit Profile"
-                    to={`/profile/${this.props.userName}`}
+                    href={`/profile/${this.props.userName}`}
                   >
                     {this.props.firstName}&nbsp;{this.props.lastName}
-                  </Link>
+                  </a>
                 </small>
               </>
             )}

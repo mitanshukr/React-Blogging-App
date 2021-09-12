@@ -6,6 +6,8 @@ import Input from "../../../components/UI/Input/Input";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./Signup.module.css";
 import { errorHandler, signupActionHandler } from "../../../store/actions";
+import AuthLayout from "../../../components/Layout/AuthLayout";
+import AuthCard from "../../../components/UI/AuthCard/AuthCard";
 
 class Signup extends Component {
   state = {
@@ -96,7 +98,9 @@ class Signup extends Component {
     ));
 
     let signupPage = (
-      <div className={classes.Signup}>
+      <AuthLayout>
+        <AuthCard>
+      {/* <div className={classes.Signup}> */}
         <form onSubmit={this.signupHandler}>
           <h2>Signup Form</h2>
           <p className={`${classes.message} ${classes.error}`}>
@@ -108,7 +112,9 @@ class Signup extends Component {
           {formElements}
           <Button>Register</Button>
         </form>
-      </div>
+      {/* </div> */}
+     </AuthCard>
+      </AuthLayout>
     );
 
     if (this.props.serverBusy) {
