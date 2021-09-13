@@ -22,6 +22,9 @@ class ForgotPassword extends React.Component {
         validation: {},
       },
     },
+    resetEmailSent: false,
+    serverBusy: false,
+    localError: null,
   };
 
   inputChangeHandler = (e) => {
@@ -31,15 +34,29 @@ class ForgotPassword extends React.Component {
   };
 
   forgotPassSubmitHandler = (e) => {
+    if (this.state.inputElements.email.value.length === 0) {
+      alert("Please provide a valid email");
+      return;
+    }
+    if (this.state.serverBusy) {
+      return;
+    }
+    this.setState({ serverBusy: true });
     axios
       .post("http://localhost:8000/auth/forgot-password", {
         email: this.state.inputElements.email.value,
       })
       .then((response) => {
         console.log(response.data);
+        if (response.data.emailStatus === "success") {
+          this.setState({ resetEmailSent: true });
+        }
+        this.setState({ serverBusy: false });
       })
       .catch((err) => {
         console.log(err.response);
+        this.setState({ serverBusy: false });
+        //this.setState({localError: ...})
       });
   };
 
@@ -47,23 +64,37 @@ class ForgotPassword extends React.Component {
     return (
       <AuthLayout>
         <AuthCard>
-          <div style={{ marginBottom: "20px" }}>
-            <h2 style={{ marginBottom: "0px" }}>Get Password Reset Link</h2>
-            <small style={{ color: "tomato", lineHeight: "1px" }}>
-              Enter your Registered Email Address to get the Password Reset Link
-              in your Inbox.
-            </small>
-          </div>
-          <Input
-            key="email"
-            elementType={this.state.inputElements.email.elementType}
-            onChange={(e) => this.inputChangeHandler(e)}
-            elementConfig={this.state.inputElements.email.elementConfig}
-            value={this.state.inputElements.email.value}
-          />
-          <Button type="submit" onClick={this.forgotPassSubmitHandler}>
-            Submit
-          </Button>
+          {this.state.resetEmailSent ? (
+            <>
+              <h3>Reset Link Sent Successfully!</h3>
+              <p>Please find the reset link sent to your inbox.</p>
+              <small>Valid for 1hr.</small>
+            </>
+          ) : (
+            <>
+              <div style={{ marginBottom: "20px" }}>
+                <h2 style={{ marginBottom: "0px" }}>Get Password Reset Link</h2>
+                <small style={{ color: "tomato", lineHeight: "1px" }}>
+                  Enter your Registered Email Address to get the Password Reset
+                  Link in your Inbox.
+                </small>
+              </div>
+              <Input
+                key="email"
+                elementType={this.state.inputElements.email.elementType}
+                onChange={(e) => this.inputChangeHandler(e)}
+                elementConfig={this.state.inputElements.email.elementConfig}
+                value={this.state.inputElements.email.value}
+              />
+              <Button
+                type="submit"
+                onClick={this.forgotPassSubmitHandler}
+                disabled={this.state.serverBusy ? true : false}
+              >
+                {this.state.serverBusy ? "Please wait..." : "Submit"}
+              </Button>
+            </>
+          )}
         </AuthCard>
       </AuthLayout>
     );

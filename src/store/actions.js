@@ -133,7 +133,7 @@ const signupActionHandler = (email, password, firstName, lastName) => {
         dispatch({ type: "serverStatus", serverBusy: false });
       })
       .catch((error) => {
-        console.log(error.message);
+        console.log(error.response);
         dispatch(errorHandler(error.message || error));
         dispatch({ type: "serverStatus", serverBusy: false });
       });
