@@ -20,6 +20,7 @@ import Notification from "./components/UI/Notification/Notification";
 import SavedItems from "./container/Posts/SavedItems/SavedItems";
 import ForgotPassword from "./container/Auth/PasswordChange/ForgotPassword";
 import ResetPassword from "./container/Auth/PasswordChange/ResetPassword";
+import EmailVerification from "./container/Auth/EmailVerification/EmailVerification";
 
 class App extends Component {
   constructor(props) {
@@ -75,6 +76,7 @@ class App extends Component {
               <Route path="/login" component={Login} />
               <Route path="/forgot-password" component={ForgotPassword} />
               <Route path="/reset-password/:userId/:resetToken" component={ResetPassword} />
+              <Route path="/verify-email/:userId/:verificationToken" component={EmailVerification} />
               <Route path="/signup" component={Signup} />
               {/* <Route path="/posts" exact component={UserPosts} /> */}
               <Route path="/post/:postId" exact component={GetSinglePost} />

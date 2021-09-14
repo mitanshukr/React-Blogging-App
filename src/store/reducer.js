@@ -35,11 +35,6 @@ const reducer = (state = initialState, action) => {
       isSignupSuccess: null,
       error: null,
     };
-  } else if (action.type === "signupSuccess") {
-    return {
-      ...state,
-      message: "Signup Successful! Please Login to Continue...",
-    };
   } else if (action.type === "logoutSuccess") {
     return {
       ...state,

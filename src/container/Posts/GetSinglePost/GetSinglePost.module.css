@@ -11,6 +11,11 @@
   margin-bottom: 20px;
 }
 
+.GetSinglePost h2 {
+  font-weight: 350;
+  font-size: 30px;
+}
+
 .GetSinglePost__excerpt p {
   margin: -15px 0 20px 0;
   color: rgba(128, 128, 128, 0.8);

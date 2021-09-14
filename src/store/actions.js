@@ -83,60 +83,16 @@ const sessionRefresher = () => {
   };
 };
 
-const loginActionHandler = (email, password) => {
-  const userCred = {
-    email: email,
-    password: password,
-  };
+const loginActionHandler = (userData) => {
   return (dispatch) => {
-    dispatch({ type: "serverStatus", serverBusy: true });
-    return axios
-      .post(`http://localhost:8000/auth/login`, userCred)
-      .then((response) => {
-        localStorageHandler(
-          "SET_ITEM",
-          response.data.authToken,
-          response.data.userId,
-          Date.now() + response.data.expiresIn * 1000
-        );
-        dispatch(sessionTimeout(response.data.expiresIn * 1000));
-        dispatch({ type: "loginSuccess", userData: response.data });
-        dispatch({ type: "serverStatus", serverBusy: false });
-      })
-      .catch((err) => {
-        console.log(err.message);
-        dispatch({ type: "serverStatus", serverBusy: false });
-        dispatch(errorHandler(err.message || err));
-      });
-  };
-};
-
-function capitalize(s) {
-  return s[0].toUpperCase() + s.slice(1).toLowerCase();
-}
-
-const signupActionHandler = (email, password, firstName, lastName) => {
-  const userData = {
-    email: email,
-    password: password,
-    firstName: capitalize(firstName),
-    lastName: capitalize(lastName),
-  };
-
-  return (dispatch) => {
-    dispatch({ type: "serverStatus", serverBusy: true });
-    axios
-      .post("http://localhost:8000/auth/signup", userData)
-      .then((response) => {
-        console.log(response.data);
-        dispatch({ type: "signupSuccess" });
-        dispatch({ type: "serverStatus", serverBusy: false });
-      })
-      .catch((error) => {
-        console.log(error.response);
-        dispatch(errorHandler(error.message || error));
-        dispatch({ type: "serverStatus", serverBusy: false });
-      });
+    localStorageHandler(
+      "SET_ITEM",
+      userData.authToken,
+      userData.userId,
+      Date.now() + userData.expiresIn * 1000
+    );
+    dispatch(sessionTimeout(userData.expiresIn * 1000));
+    dispatch({ type: "loginSuccess", userData: userData });
   };
 };
 
@@ -192,7 +148,6 @@ export {
   errorHandler,
   sessionRefresher,
   loginActionHandler,
-  signupActionHandler,
   logoutActionHandler,
   dispatchBodyHandler,
   showNotification,

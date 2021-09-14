@@ -2,22 +2,22 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import { logoutActionHandler } from '../../store/actions';
+import { logoutActionHandler } from "../../store/actions";
 
 class Logout extends Component {
-    componentWillUnmount() {
-        this.props.logoutDispatchHandler();
-    }
+  componentWillUnmount() {
+    this.props.logoutDispatchHandler();
+  }
 
-    render() {
-        return <Redirect to="/" />
-    }
+  render() {
+    return <Redirect to="/" />;
+  }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        logoutDispatchHandler: () => dispatch(logoutActionHandler()),
-    }
-}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logoutDispatchHandler: () => dispatch(logoutActionHandler()),
+  };
+};
 
 export default connect(null, mapDispatchToProps)(Logout);

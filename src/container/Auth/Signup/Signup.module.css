@@ -21,25 +21,25 @@
   margin-top: 40px;
 } */
 
-.Signup .message {
+.message {
   display: inline-block;
   width: 290px;
-  color: #2c2926;
+  color: white;
   padding: 15px;
   margin: 0;
   text-align: left;
 }
 
-.Signup .message:empty {
+.message:empty {
   padding: 0;
   border: none;
   display: none;
 }
 
-.Signup .error {
+.error {
   background-color: rgba(255, 28, 28, 0.575);
 }
 
-.Signup .success {
-  background-color: #17a7048e;
+.success {
+  background-color: rgb(1, 151, 1);
 }

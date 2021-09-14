@@ -1,0 +1,23 @@
+.EmailVerif {
+  text-align: center;
+  box-sizing: border-box;
+  padding: 20px;
+  margin: 5%;
+}
+
+.EmailVerif h2 {
+  font-weight: lighter;
+  font-size: 30px;
+}
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
+}
+
+.email {
+  color: rgb(0, 0, 119);
+}

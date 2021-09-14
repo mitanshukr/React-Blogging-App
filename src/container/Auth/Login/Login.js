@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
@@ -35,11 +36,9 @@ class Login extends Component {
         validation: {},
       },
     },
+    serverBusy: false,
+    localError: null,
   };
-
-  componentWillUnmount() {
-    this.props.errorNullifyHandler();
-  }
 
   inputChangeHandler = (e, stateName) => {
     const updatedInputElements = { ...this.state.inputElements };
@@ -50,68 +49,73 @@ class Login extends Component {
 
   loginHandler = (e) => {
     e.preventDefault();
-    this.props.loginDispatchHandler(
-      this.state.inputElements.email.value,
-      this.state.inputElements.password.value
-    );
-    // console.log(this.props.history.action);
+    if (this.state.serverBusy) return;
+    this.setState({ serverBusy: true });
+    const userCred = {
+      email: this.state.inputElements.email.value,
+      password: this.state.inputElements.password.value,
+    };
+    axios
+      .post(`http://localhost:8000/auth/login`, userCred)
+      .then((response) => {
+        if (response?.data) {
+          this.props.loginDispatchHandler(response.data);
+          this.props.history.push("/");
+        } else {
+          throw new Error("Something went wrong :(");
+        }
+      })
+      .catch((err) => {
+        //local.err....
+        console.log(err.response);
+        this.setState({ serverBusy: false });
+      });
     // this.props.history.goBack();
   };
 
   render() {
     let formElements = Object.keys(this.state.inputElements).map((element) => (
-      <div className="Login__inputDiv">
+      <div className="Login__inputDiv" key={element}>
         <Input
-          key={element}
           elementType={this.state.inputElements[element].elementType}
           onChange={(e) => this.inputChangeHandler(e, element)}
           elementConfig={this.state.inputElements[element].elementConfig}
           value={this.state.inputElements[element].value}
         />
-        {element==="password" ? <small><Link to="/forgot-password">Forgot Password?</Link></small> : ""}
+        {element === "password" ? (
+          <small>
+            <Link to="/forgot-password">Forgot Password?</Link>
+          </small>
+        ) : null}
       </div>
     ));
 
-    let loginPage = (
+    return (
       <AuthLayout>
-      <AuthCard>
-        <form onSubmit={this.loginHandler}>
-          <h2>Welcome Back!</h2>
-          <p className="Error">{this.props.errorMsg}</p>
-          {formElements}
-          <Button type="submit">Login</Button>
-        </form>
+        <AuthCard>
+          <form onSubmit={this.loginHandler}>
+            <h2>Welcome Back!</h2>
+            <p className="Error">{this.props.errorMsg}</p>
+            {formElements}
+            <Button
+              type="submit"
+              disabled={this.state.serverBusy ? true : false}
+            >
+              {this.state.serverBusy ? "Logging in..." : "Login"}
+            </Button>
+          </form>
         </AuthCard>
       </AuthLayout>
     );
-
-    if (this.props.serverBusy) {
-      loginPage = <Spinner />;
-    } else if (this.props.isAuthenticated) {
-      loginPage = <Redirect to="/" />;
-    }
-
-    return loginPage;
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    serverBusy: state.serverBusy,
-    isAuthenticated: state.isAuthenticated,
-    errorMsg: state.error,
-  };
-};
-
 const mapDispatchToProps = (dispatch) => {
   return {
-    loginDispatchHandler: (email, password) => {
-      dispatch(loginActionHandler(email, password));
-    },
-    errorNullifyHandler: () => {
-      dispatch(errorHandler(null));
+    loginDispatchHandler: (userData) => {
+      dispatch(loginActionHandler(userData));
     },
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Login);

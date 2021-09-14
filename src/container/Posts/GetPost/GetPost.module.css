@@ -77,6 +77,8 @@
   cursor: pointer;
   display: inline-block;
   transition: all 0.2s ease-in-out;
+  font-weight: 600;
+  font-size: 28px;
 }
 
 .GetPost__main p {
