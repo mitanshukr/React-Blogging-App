@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import Aux from "../../../hoc/Auxiliary";
-import getDateFormat from "../../../Utility/getDateFormat";
-import ProfileIcon from "../../../components/User/ProfileIcon/ProfileIcon";
-import DeletePost from "../../../components/Posts/DeletePost/DeletePost";
+import Aux from "../../../../hoc/Auxiliary";
+import getDateFormat from "../../../../Utility/getDateFormat";
+import ProfileIcon from "../../../../components/User/Profile/ProfileIcon";
+import DeletePost from "../../../../components/Posts/DeletePost/DeletePost";
 // import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import classes from "./GetPost.module.css";

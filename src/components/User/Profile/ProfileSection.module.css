@@ -1,27 +1,3 @@
-.ProfileSection__icon {
-  width: 8.5rem;
-  height: 8.5rem;
-  background-color: grey;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.ProfileSection__icon > p {
-  font-size: 3rem;
-  font-weight: bold;
-  color: rgb(228, 228, 228);
-  padding: 0;
-  margin: 0;
-}
-
-.ProfileSection__icon svg {
-  font-size: 4.5rem;
-  color: rgb(228, 228, 228);
-}
-
 .ProfileSection__name {
   margin: 8px 0 5px 0;
 }

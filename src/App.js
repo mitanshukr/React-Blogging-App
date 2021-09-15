@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import "./App.css";
 import Layout from "./components/Layout/Layout";
-import UserPosts from "./container/Posts/UserPosts/UserPosts";
+import UserPosts from "./container/Posts/MyPosts/MyPosts";
 import GetSinglePost from "./container/Posts/GetSinglePost/GetSinglePost";
 import Feed from "./container/Posts/Feed/Feed";
 import WritingZone from "./container/WritingZone/WritingZone";
@@ -13,7 +13,7 @@ import Signup from "./container/Auth/Signup/Signup";
 import { sessionRefresher } from "./store/actions";
 import { Component } from "react";
 import EditPost from "./container/Posts/EditPost/EditPost";
-import Account from "./container/User/Account";
+import Account from "./container/User/Account/Account";
 import Spinner from "./components/UI/Spinner/Spinner";
 import Profile from "./container/User/Profile/Profile";
 import Notification from "./components/UI/Notification/Notification";

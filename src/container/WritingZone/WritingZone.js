@@ -11,8 +11,7 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import { dispatchBodyHandler } from "../../store/actions";
 
 import "./WritingZone.css";
-import HomePopup from "../../components/HomePopup/HomePopup";
-import { getStringToTagsArray } from "../Posts/Utility/tagsFormatHandler";
+import { getStringToTagsArray } from "../Posts/utils/tagsFormatHandler";
 
 class WritingZone extends Component {
   // constructor(props) {

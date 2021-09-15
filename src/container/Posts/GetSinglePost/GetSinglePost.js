@@ -7,9 +7,9 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../../hoc/withErrorHandler";
 import classes from "./GetSinglePost.module.css";
 import getDateFormat from "../../../Utility/getDateFormat";
-import ProfileIcon from "../../../components/User/ProfileIcon/ProfileIcon";
+import ProfileIcon from "../../../components/User/Profile/ProfileIcon";
 import copyToClipboard from "../../../Utility/copyToClipboardHandler";
-import editPostHandler from "../Utility/editPostHandler";
+import editPostHandler from "../utils/editPostHandler";
 import { postSaveToggler, showNotification } from "../../../store/actions";
 
 // import { BiShare, BiLockAlt, BiDotsVerticalRounded } from "react-icons/bi";

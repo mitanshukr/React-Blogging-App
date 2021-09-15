@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 
-import ProfileSection from "../../../components/User/ProfileSection/ProfileSection";
+import ProfileSection from "../../../components/User/Profile/ProfileSection";
 import GetPosts from "../../Posts/GetPosts/GetPosts";
 import classes from "./Profile.module.css";
 

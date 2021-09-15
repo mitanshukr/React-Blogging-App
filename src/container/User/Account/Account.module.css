@@ -1,0 +1,42 @@
+.Account {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 0 20%;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+}
+.Account h2 {
+    width: 100%;
+    padding: 0 10px;
+}
+
+.Account__profile {
+    flex-basis: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    background-color: seashell;
+}
+
+.Account__profile p {
+    font-weight: bold;
+    color: tomato;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.Account__main {
+    flex: 1;
+    height: 70vh;
+}
+
+.Account__main-name {
+    display: flex;
+    justify-content: center;
+}
+
+.Account > * {
+    border: 1px solid black;
+}

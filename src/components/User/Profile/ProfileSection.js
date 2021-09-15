@@ -1,14 +1,13 @@
 import { FaRegUser } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import ProfilePicture from "./ProfilePicture";
 
 import classes from "./ProfileSection.module.css";
 
 const ProfileSection = (props) => {
   return (
     <>
-      <div className={classes.ProfileSection__icon}>
-        <FaRegUser title="Profile Picture" />
-      </div>
+      <ProfilePicture />
       <div className={classes.ProfileSection__name}>
         <h3>
           {props.firstName}&nbsp;{props.lastName}

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import GetPosts from "../GetPosts/GetPosts";
 
-import classes from "./UserPosts.module.css";
+import classes from "./MyPosts.module.css";
 
 class UserPosts extends Component {
   render() {

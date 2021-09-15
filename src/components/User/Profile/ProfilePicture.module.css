@@ -1,0 +1,23 @@
+.ProfilePicture {
+  width: 8.5rem;
+  height: 8.5rem;
+  background-color: grey;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ProfilePicture svg {
+  font-size: 4.5rem;
+  color: rgb(228, 228, 228);
+}
+
+/* .ProfilePicture > p {
+  font-size: 3rem;
+  font-weight: bold;
+  color: rgb(228, 228, 228);
+  padding: 0;
+  margin: 0;
+} */

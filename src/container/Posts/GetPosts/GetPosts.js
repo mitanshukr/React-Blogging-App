@@ -2,17 +2,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import axios from "../../../axios-instance";
-import GetPost from "../GetPost/GetPost";
+import GetPost from "./GetPost/GetPost";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../../hoc/withErrorHandler";
 import classes from "./GetPosts.module.css";
 
 import copyToClipboard from "../../../Utility/copyToClipboardHandler";
-import editPostHandler from "../Utility/editPostHandler";
-import getSinglePostHandler from "../Utility/getSinglePostHandler";
-import deletePostHandler from "../Utility/deletePostHandler";
+import editPostHandler from "../utils/editPostHandler";
+import getSinglePostHandler from "../utils/getSinglePostHandler";
+import deletePostHandler from "../utils/deletePostHandler";
 import { postSaveToggler, showNotification } from "../../../store/actions";
-import getPostURI from "../Utility/getPostsURIHandler";
+import getPostURI from "../utils/getPostsURIHandler";
 import { withRouter } from "react-router-dom";
 
 class GetPosts extends Component {

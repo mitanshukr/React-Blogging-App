@@ -5,7 +5,7 @@ import './Toolbar.css';
 const toolbar = props => {
     return (
         <header className="Header">
-            <div><NavLink to="/" exact>Logo</NavLink></div>
+            <div><NavLink to="/" exact>Immune Ink</NavLink></div>
             <nav>
                 <NavigationItems isAuthenticated={props.isAuthenticated}/>
             </nav>

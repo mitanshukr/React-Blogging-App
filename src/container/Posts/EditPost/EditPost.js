@@ -14,7 +14,7 @@ import { showNotification } from "../../../store/actions";
 import {
   getStringToTagsArray,
   getTagArrayToString,
-} from "../Utility/tagsFormatHandler";
+} from "../utils/tagsFormatHandler";
 
 class EditPost extends Component {
   state = {
