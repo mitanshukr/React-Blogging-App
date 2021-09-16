@@ -15,7 +15,7 @@ class AuthRoute extends React.Component {
             <Redirect
               to={{
                 pathname: "/login",
-                from: location,
+                state: { from: location },
               }}
             />
           )

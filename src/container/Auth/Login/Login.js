@@ -49,7 +49,7 @@ class Login extends Component {
   }
 
   authCheck() {
-    this.from = this.props.location.from || { pathname: "/" };
+    this.from = this.props.location.state.from || { pathname: "/" };
     if (this.props.isAuthenticated) {
       this.props.history.replace(this.from);
     }
