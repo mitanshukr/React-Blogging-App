@@ -103,10 +103,6 @@ const dispatchBodyHandler = (body) => {
   };
 };
 
-const userIconStatusHandler = (status) => {
-  return { type: "userIcon", status: status };
-};
-
 const showNotification = (message, visibility) => {
   return {
     type: "handleNotification",
@@ -144,7 +140,6 @@ const postSaveToggler = (status, postId, authToken, savedItemsArray = []) => {
 };
 
 export {
-  userIconStatusHandler,
   errorHandler,
   sessionRefresher,
   loginActionHandler,

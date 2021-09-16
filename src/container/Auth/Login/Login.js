@@ -9,36 +9,51 @@ import AuthCard from "../../../components/UI/AuthCard/AuthCard";
 import Button from "../../../components/UI/Button/Button";
 import Input from "../../../components/UI/Input/Input";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import { errorHandler, loginActionHandler } from "../../../store/actions";
+import {
+  errorHandler,
+  loginActionHandler,
+  redirectPathHandler,
+} from "../../../store/actions";
 import "./Login.css";
 
 class Login extends Component {
-  state = {
-    inputElements: {
-      email: {
-        elementType: "input",
-        elementConfig: {
-          name: "username",
-          type: "text",
-          placeholder: "Your Email Id",
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputElements: {
+        email: {
+          elementType: "input",
+          elementConfig: {
+            name: "username",
+            type: "text",
+            placeholder: "Your Email Id",
+          },
+          value: "",
+          validation: {},
         },
-        value: "",
-        validation: {},
-      },
-      password: {
-        elementType: "input",
-        elementConfig: {
-          name: "password",
-          type: "password",
-          placeholder: "Your Password",
+        password: {
+          elementType: "input",
+          elementConfig: {
+            name: "password",
+            type: "password",
+            placeholder: "Your Password",
+          },
+          value: "",
+          validation: {},
         },
-        value: "",
-        validation: {},
       },
-    },
-    serverBusy: false,
-    localError: null,
-  };
+      serverBusy: false,
+      localError: null,
+    };
+    this.authCheck();
+  }
+
+  authCheck() {
+    this.from = this.props.location.from || { pathname: "/" };
+    if (this.props.isAuthenticated) {
+      this.props.history.replace(this.from);
+    }
+  }
 
   inputChangeHandler = (e, stateName) => {
     const updatedInputElements = { ...this.state.inputElements };
@@ -60,7 +75,7 @@ class Login extends Component {
       .then((response) => {
         if (response?.data) {
           this.props.loginDispatchHandler(response.data);
-          this.props.history.push("/");
+          this.props.history.replace(this.from);
         } else {
           throw new Error("Something went wrong :(");
         }
@@ -94,14 +109,18 @@ class Login extends Component {
       <AuthLayout>
         <AuthCard>
           <form onSubmit={this.loginHandler}>
-            <h2>Welcome Back!</h2>
+            {this.props.redirectPath ? (
+              <h2>Please Login to Continue!</h2>
+            ) : (
+              <h2>Welcome Back!</h2>
+            )}
             <p className="Error">{this.props.errorMsg}</p>
             {formElements}
             <Button
               type="submit"
               disabled={this.state.serverBusy ? true : false}
             >
-              {this.state.serverBusy ? "Logging in..." : "Login"}
+              {this.state.serverBusy ? "Logging in... Please wait" : "Login"}
             </Button>
           </form>
         </AuthCard>
@@ -109,6 +128,12 @@ class Login extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.isAuthenticated,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -118,4 +143,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

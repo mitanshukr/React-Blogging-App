@@ -1,96 +1,47 @@
+import React from "react";
 import { connect } from "react-redux";
+
+import MenuList from "./MenuList/MenuList";
 import classes from "./UserMenu.module.css";
-import NavigationItem from "../../../components/Toolbar/NavigationItems/NavigationItem/NavigationItem";
-import React, { Component } from "react";
-import { userIconStatusHandler } from "../../../store/actions";
-import { FaRegBookmark, FaRegUser, FaRocketchat, FaKey } from "react-icons/fa";
 
-class UserMenu extends Component {
-  // constructor(props){
-  // super(props);
-  // this.clickFunction = (e) => {
-  //   e.stopPropagation();
-  //   if(document.getElementById('user-icon').checked){
-  //     const menuDiv = document.getElementById('userMenu');
-  //     const rect = menuDiv.getBoundingClientRect();
-  //     console.log(rect);
-  //     if(e.clientX < rect.x || e.clientX > (rect.x + rect.width) || e.clientY < rect.y || e.clientY > (rect.y + rect.height)){
-  //       this.linkClicked();
-  //       console.log("xyxxxxxxxxxxxxxxxxxxxxxxxxxx", e.clientX, e.clientY);
-  //     }
-  //   } else {
-  //     return;
-  //   }
-  // };
-  // window.addEventListener('click', (e) => this.clickFunction(e));
-  // }
+class MenuIcon extends React.Component {
+  state = {
+    isMenuActive: false,
+  };
 
-  constructor(props) {
-    super(props);
-    this.wrapperRef = React.createRef();
-    this.handleClickOutside = this.handleClickOutside.bind(this);
-  }
-
-  componentDidMount() {
-    this.userIcon = document.getElementById("user-icon");
-    this.userImg = document.getElementById("user-img");
-    document.addEventListener("mousedown", this.handleClickOutside);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener("mousedown", this.handleClickOutside);
-  }
-
-  handleClickOutside(event) {
-    //clicked outside the userIcon and userMenu.
-    if (
-      this.props.isSelected &&
-      !this.wrapperRef.current.contains(event.target) &&
-      event.target !== this.userIcon &&
-      event.target !== this.userImg
-    ) {
-      this.linkClicked();
-    }
-  }
-
-  linkClicked = () => {
-    this.props.isUserIconSelected(false);
+  userMenuToggler = (e) => {
+    this.setState((prevState) => {
+      return { isMenuActive: !prevState.isMenuActive };
+    });
   };
 
   render() {
-    let style = null;
-    if (this.props.isSelected) {
-      style = { display: "block" };
-    } else {
-      style = { display: "none" };
-    }
-    
     return (
-      <div className={classes.UserMenu} style={style} ref={this.wrapperRef}>
-        <NavigationItem
-          onClick={this.linkClicked}
-          link={`/profile/@${this.props.userName}`}
+      <>
+        <div
+          className={classes.MenuIcon}
+          id="user-icon-01"
+          onClick={this.userMenuToggler}
+          title={this.props.firstName}
         >
-          <span>
-            <span>
-              {this.props.firstName}&nbsp;{this.props.lastName}
-            </span>
-            <small>@{this.props.userName}</small>
-          </span>
-        </NavigationItem>
-        <NavigationItem onClick={this.linkClicked} link="/user/saved-items">
-          <FaRegBookmark /> Saved Items
-        </NavigationItem>
-        <NavigationItem onClick={this.linkClicked} link="/user/account">
-          <FaRegUser /> Account
-        </NavigationItem>
-        <NavigationItem onClick={this.linkClicked} link="/feedback">
-          <FaRocketchat /> Feedback
-        </NavigationItem>
-        <NavigationItem onClick={this.linkClicked} link="/logout">
-          <FaKey /> Logout
-        </NavigationItem>
-      </div>
+          <p id="user-img-01">
+            {this.props.firstName?.slice(0, 1)}
+            {this.props.lastName?.slice(0, 1)}
+          </p>
+        </div>
+        {this.state.isMenuActive ? (
+          <MenuList
+            userMenuToggler={this.userMenuToggler}
+            firstName={this.props.firstName}
+            lastName={this.props.lastName}
+            userName={this.props.userName}
+            iconId={{
+              selfId: "user-icon-01",
+              childId: "user-img-01",
+            }}
+          />
+        ) : null}
+      </>
     );
   }
 }
@@ -100,14 +51,7 @@ const mapStateToProps = (state) => {
     firstName: state.firstName,
     lastName: state.lastName,
     userName: state.userName,
-    isSelected: state.isUserIconSelected,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    isUserIconSelected: (status) => dispatch(userIconStatusHandler(status)),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserMenu);
+export default connect(mapStateToProps)(MenuIcon);

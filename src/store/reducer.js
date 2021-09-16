@@ -10,13 +10,12 @@ const initialState = {
   savedPosts: [],
   expiryTime: null,
   isAuthenticated: false,
-  error: null,
   serverBusy: false,
-  backgroundImage: null,
-  isUserIconSelected: false,
-  message: null,
   notifVisibility: false,
   notifMessage: null,
+  error: null,
+  backgroundImage: null,
+  message: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -72,11 +71,6 @@ const reducer = (state = initialState, action) => {
     return {
       ...state,
       body: action.body,
-    };
-  } else if (action.type === "userIcon") {
-    return {
-      ...state,
-      isUserIconSelected: action.status,
     };
   } else if (action.type === "handleNotification") {
     return {

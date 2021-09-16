@@ -3,7 +3,7 @@ import GetPosts from "../GetPosts/GetPosts";
 
 import classes from "./MyPosts.module.css";
 
-class UserPosts extends Component {
+class MyPosts extends Component {
   render() {
     return (
       <>
@@ -22,4 +22,4 @@ class UserPosts extends Component {
   }
 }
 
-export default UserPosts;
+export default MyPosts;

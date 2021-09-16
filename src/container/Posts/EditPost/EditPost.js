@@ -15,6 +15,7 @@ import {
   getStringToTagsArray,
   getTagArrayToString,
 } from "../utils/tagsFormatHandler";
+import { withRouter } from "react-router";
 
 class EditPost extends Component {
   state = {
@@ -364,4 +365,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToprops,
   mapDispatchToProps
-)(withErrorHandler(EditPost, axios));
+)(withRouter(withErrorHandler(EditPost, axios)));

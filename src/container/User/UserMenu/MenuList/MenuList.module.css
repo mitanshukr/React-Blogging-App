@@ -1,0 +1,67 @@
+.UserMenu {
+  position: absolute;
+  text-align: left;
+  top: 60px;
+  right: 25px;
+  background-color: white;
+  padding: 10px 0;
+  z-index: 100;
+  box-shadow: -1px 1px 8px 0.1px rgba(0, 0, 0, 0.5);
+  max-width: 220px;
+}
+
+.UserMenu::before {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: -18px;
+  right: 20px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid white;
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+}
+
+.UserMenu li {
+  padding: 10px 30px !important;
+}
+
+.UserMenu li:not(:last-child) {
+  border-bottom: 1px solid rgba(235, 235, 235, 0.8);
+}
+
+.UserMenu li:hover {
+  background-color: rgba(235, 235, 235, 0.5);
+}
+
+.UserMenu a {
+  color: black !important;
+  display: flex;
+  align-items: center;
+}
+
+.UserMenu a:hover,
+.UserMenu a.active {
+  color: tomato !important;
+}
+
+.UserMenu li a span {
+  margin: 0;
+  display: block;
+}
+
+.UserMenu li a small {
+  display: block;
+  text-align: left;
+  color: #505050;
+  font-size: 13px;
+}
+
+.UserMenu li a:hover small {
+  text-decoration: underline;
+}
+
+.UserMenu svg {
+  margin-right: 8px;
+}

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import "./App.css";
 import Layout from "./components/Layout/Layout";
-import UserPosts from "./container/Posts/MyPosts/MyPosts";
+import MyPosts from "./container/Posts/MyPosts/MyPosts";
 import GetSinglePost from "./container/Posts/GetSinglePost/GetSinglePost";
 import Feed from "./container/Posts/Feed/Feed";
 import WritingZone from "./container/WritingZone/WritingZone";
@@ -21,6 +21,7 @@ import SavedItems from "./container/Posts/SavedItems/SavedItems";
 import ForgotPassword from "./container/Auth/PasswordChange/ForgotPassword";
 import ResetPassword from "./container/Auth/PasswordChange/ResetPassword";
 import EmailVerification from "./container/Auth/EmailVerification/EmailVerification";
+import AuthRoute from "./hoc/AuthRoute";
 
 class App extends Component {
   constructor(props) {
@@ -39,54 +40,52 @@ class App extends Component {
           show={this.props.notifVisibility}
           message={this.props.notifMessage}
         />
+        <Route
+          path="/verify-email/:userId/:verificationToken"
+          component={EmailVerification}
+        />
+        <Route path="/forgot-password" component={ForgotPassword} />
+        <Route
+          path="/reset-password/:userId/:resetToken"
+          component={ResetPassword}
+        />
         <Layout isAuthenticated={this.props.isAuthenticated}>
-          {this.props.isAuthenticated ? (
-            <Switch>
-              <Route path="/" exact component={WritingZone} />
-              <Route path="/feed" exact component={Feed} />
-              <Route path="/logout" component={Logout} />
-              {/* <Route path="/login" component={Login} /> */}
-              <Route
-                style={{ backgroundColor: "red" }}
-                path="/posts"
-                exact
-                component={UserPosts}
-              />
-              <Route path="/post/edit/:postId" exact component={EditPost} />
-              <Route
-                path="/post/private/edit/:postId"
-                exact
-                component={EditPost}
-              />
-              <Route path="/post/:postId" exact component={GetSinglePost} />
-              <Route
-                path="/post/private/:postId"
-                exact
-                component={GetSinglePost}
-              />
-              <Route path="/user/saved-items" component={SavedItems} />
-              <Route path="/user/account" component={Account} />
-              <Route path="/profile/:username" component={Profile} />
-              <Redirect to="/" />
-            </Switch>
-          ) : (
-            <Switch>
-              <Route path="/" exact component={WritingZone} />
-              <Route path="/feed" exact component={Feed} />
-              <Route path="/login" component={Login} />
-              <Route path="/forgot-password" component={ForgotPassword} />
-              <Route path="/reset-password/:userId/:resetToken" component={ResetPassword} />
-              <Route path="/verify-email/:userId/:verificationToken" component={EmailVerification} />
-              <Route path="/signup" component={Signup} />
-              {/* <Route path="/posts" exact component={UserPosts} /> */}
-              <Route path="/post/:postId" exact component={GetSinglePost} />
-              <Route path="/profile/:username" component={Profile} />
-              {/* <Route from="/post/private/:postId" exact>
-                <Redirect to="/login" />
-              </Route> */}
-              {/* <Redirect to="/" /> */}
-            </Switch>
-          )}
+          <Switch>
+           
+               
+          
+            <Route path="/" exact component={WritingZone} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/feed" exact component={Feed} />
+            <Route path="/post/:postId" exact component={GetSinglePost} />
+            <Route path="/profile/:username" component={Profile} />
+            <AuthRoute path="/user/account">
+              <Account />
+            </AuthRoute>
+            <AuthRoute path="/user/saved-items">
+              <SavedItems />
+            </AuthRoute>
+            <AuthRoute path="/posts" exact>
+              <MyPosts />
+            </AuthRoute>
+            <AuthRoute path="/post/private/:postId" exact>
+              <GetSinglePost />
+            </AuthRoute>
+
+            <AuthRoute path="/post/edit/:postId" exact>
+              <EditPost />
+            </AuthRoute>
+
+            <AuthRoute path="/post/private/edit/:postId" exact>
+              <EditPost />
+            </AuthRoute>
+            <AuthRoute path="/logout">
+              <Logout />
+            </AuthRoute>
+
+            <Redirect to="/404" />
+          </Switch>
         </Layout>
       </div>
     );

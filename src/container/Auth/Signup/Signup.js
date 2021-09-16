@@ -6,64 +6,75 @@ import Input from "../../../components/UI/Input/Input";
 import classes from "./Signup.module.css";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 import AuthCard from "../../../components/UI/AuthCard/AuthCard";
+import { connect } from "react-redux";
 
 class Signup extends Component {
-  state = {
-    inputElements: {
-      firstName: {
-        elementType: "input",
-        elementConfig: {
-          name: "firstName",
-          type: "text",
-          placeholder: "Your First Name",
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputElements: {
+        firstName: {
+          elementType: "input",
+          elementConfig: {
+            name: "firstName",
+            type: "text",
+            placeholder: "Your First Name",
+          },
+          value: "",
+          validation: {},
         },
-        value: "",
-        validation: {},
-      },
-      lastName: {
-        elementType: "input",
-        elementConfig: {
-          name: "lastName",
-          type: "text",
-          placeholder: "Your Last Name",
+        lastName: {
+          elementType: "input",
+          elementConfig: {
+            name: "lastName",
+            type: "text",
+            placeholder: "Your Last Name",
+          },
+          value: "",
+          validation: {},
         },
-        value: "",
-        validation: {},
-      },
-      email: {
-        elementType: "input",
-        elementConfig: {
-          name: "username",
-          type: "text",
-          placeholder: "Your Email Id",
+        email: {
+          elementType: "input",
+          elementConfig: {
+            name: "username",
+            type: "text",
+            placeholder: "Your Email Id",
+          },
+          value: "",
+          validation: {},
         },
-        value: "",
-        validation: {},
-      },
-      password: {
-        elementType: "input",
-        elementConfig: {
-          name: "password",
-          type: "password",
-          placeholder: "Enter a Password",
+        password: {
+          elementType: "input",
+          elementConfig: {
+            name: "password",
+            type: "password",
+            placeholder: "Enter a Password",
+          },
+          value: "",
+          validation: {},
         },
-        value: "",
-        validation: {},
-      },
-      password2: {
-        elementType: "input",
-        elementConfig: {
-          name: "password",
-          type: "password",
-          placeholder: "Re-enter the Password",
+        password2: {
+          elementType: "input",
+          elementConfig: {
+            name: "password",
+            type: "password",
+            placeholder: "Re-enter the Password",
+          },
+          value: "",
+          validation: {},
         },
-        value: "",
-        validation: {},
       },
-    },
-    serverBusy: false,
-    successMsg: null,
-    localError: null,
+      serverBusy: false,
+      successMsg: null,
+      localError: null,
+    };
+    this.authCheck();
+  }
+
+  authCheck = () => {
+    if (this.props.isAuthenticated) {
+      this.props.history.replace("/");
+    }
   };
 
   inputChangeHandler = (e, stateName) => {
@@ -135,4 +146,10 @@ class Signup extends Component {
   }
 }
 
-export default Signup;
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.isAuthenticated,
+  };
+};
+
+export default connect(mapStateToProps)(Signup);

@@ -1,7 +1,7 @@
 .InputText {
     display: block;
     margin: 12px auto;
-    max-width: 300px;
+    width: 300px;
     padding: 8px;
 }
 

@@ -17,7 +17,7 @@ import { FiShare, FiLock } from "react-icons/fi";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import Tag from "../../../components/UI/TagStyler/Tag";
-import { Link } from "react-router-dom";
+import { Link, withRouter} from "react-router-dom";
 
 class GetSinglePost extends Component {
   state = {
@@ -31,6 +31,7 @@ class GetSinglePost extends Component {
 
   componentDidMount() {
     let URI = null;
+    console.log(this.props.match);
     this.postId = this.props.match.params.postId;
     const isPrivate = this.props.match.path.split("/")[2] === "private";
     if (isPrivate) {
@@ -100,6 +101,10 @@ class GetSinglePost extends Component {
   }
 
   likeToggleHandler = () => {
+    // if(!this.props.isAuthenticated){
+    //   this.props.saveRedirectPath(window.location.pathname);
+    //   this.props.history.push("/login");
+    // }
     if (this.likeStatusQueued) {
       return;
     }
@@ -320,10 +325,11 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(showNotification(message, visibility)),
     savePostDispatcher: (status, postId, authToken) =>
       dispatch(postSaveToggler(status, postId, authToken)),
+    // saveRedirectPath: (path) => dispatch(redirectPathHandler(path)),
   };
 };
 
 export default connect(
   mapStateToprops,
   mapDispatchToProps
-)(withErrorHandler(GetSinglePost, axios));
+)(withRouter(GetSinglePost));
