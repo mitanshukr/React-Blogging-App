@@ -49,7 +49,7 @@ class Login extends Component {
   }
 
   authCheck() {
-    this.from = this.props.location.state.from || { pathname: "/" };
+    this.from = this.props.location?.state?.from || { pathname: "/" };
     if (this.props.isAuthenticated) {
       this.props.history.replace(this.from);
     }
@@ -109,7 +109,7 @@ class Login extends Component {
       <AuthLayout>
         <AuthCard>
           <form onSubmit={this.loginHandler}>
-            {this.props.redirectPath ? (
+            {this.from.pathname !== "/" ? (
               <h2>Please Login to Continue!</h2>
             ) : (
               <h2>Welcome Back!</h2>

@@ -40,53 +40,53 @@ class App extends Component {
           show={this.props.notifVisibility}
           message={this.props.notifMessage}
         />
-        <Route
-          path="/verify-email/:userId/:verificationToken"
-          component={EmailVerification}
-        />
-        <Route path="/forgot-password" component={ForgotPassword} />
-        <Route
-          path="/reset-password/:userId/:resetToken"
-          component={ResetPassword}
-        />
-        <Layout isAuthenticated={this.props.isAuthenticated}>
-          <Switch>
-           
-               
-          
-            <Route path="/" exact component={WritingZone} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/feed" exact component={Feed} />
-            <Route path="/post/:postId" exact component={GetSinglePost} />
-            <Route path="/profile/:username" component={Profile} />
-            <AuthRoute path="/user/account">
-              <Account />
-            </AuthRoute>
-            <AuthRoute path="/user/saved-items">
-              <SavedItems />
-            </AuthRoute>
-            <AuthRoute path="/posts" exact>
-              <MyPosts />
-            </AuthRoute>
-            <AuthRoute path="/post/private/:postId" exact>
-              <GetSinglePost />
-            </AuthRoute>
+        <Switch>
+          <Route
+            path="/verify-email/:userId/:verificationToken"
+            component={EmailVerification}
+          />
+          <Route path="/forgot-password" component={ForgotPassword} />
+          <Route
+            path="/reset-password/:userId/:resetToken"
+            component={ResetPassword}
+          />
+          <Layout isAuthenticated={this.props.isAuthenticated}>
+            <Switch>
+              <Route path="/" exact component={WritingZone} />
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/feed" exact component={Feed} />
+              <Route path="/post/:postId" exact component={GetSinglePost} />
+              <Route path="/profile/:username(@\w+)" component={Profile} />
+              {/* Regex Search in the above path - should start with @ */}
+              <AuthRoute path="/user/account">
+                <Account />
+              </AuthRoute>
+              <AuthRoute path="/user/saved-items">
+                <SavedItems />
+              </AuthRoute>
+              <AuthRoute path="/posts" exact>
+                <MyPosts />
+              </AuthRoute>
+              <AuthRoute path="/post/private/:postId" exact>
+                <GetSinglePost />
+              </AuthRoute>
 
-            <AuthRoute path="/post/edit/:postId" exact>
-              <EditPost />
-            </AuthRoute>
+              <AuthRoute path="/post/edit/:postId" exact>
+                <EditPost />
+              </AuthRoute>
 
-            <AuthRoute path="/post/private/edit/:postId" exact>
-              <EditPost />
-            </AuthRoute>
-            <AuthRoute path="/logout">
-              <Logout />
-            </AuthRoute>
+              <AuthRoute path="/post/private/edit/:postId" exact>
+                <EditPost />
+              </AuthRoute>
+              <AuthRoute path="/logout">
+                <Logout />
+              </AuthRoute>
 
-            <Redirect to="/404" />
-          </Switch>
-        </Layout>
+              <Route render={() => <h1>Not Found</h1>} />
+            </Switch>
+          </Layout>
+        </Switch>
       </div>
     );
 

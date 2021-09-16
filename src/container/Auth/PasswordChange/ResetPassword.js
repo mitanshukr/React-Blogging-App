@@ -47,6 +47,7 @@ class ResetPassword extends React.Component {
       })
       .catch((err) => {
         console.log("Something went wrong!");
+        this.setState({ localError: "Looks like the URL is invalid." });
       });
   }
 
@@ -105,8 +106,11 @@ class ResetPassword extends React.Component {
               <div style={{ marginBottom: "20px" }}>
                 <h2 style={{ marginBottom: "0px" }}>Reset your Password</h2>
                 <small style={{ color: "tomato", lineHeight: "1px" }}>
-                  Please don't share this link to anyone.
+                  {this.state.localError
+                    ? this.state.localError
+                    : "Please don't share this link to anyone."}
                 </small>
+                {/* <p>{this.state.localError}</p> */}
               </div>
               <input
                 style={{
@@ -114,6 +118,7 @@ class ResetPassword extends React.Component {
                   fontWeight: "bold",
                   border: "none",
                   outline: "none",
+                  textAlign: "center",
                 }}
                 disabled
                 type="text"

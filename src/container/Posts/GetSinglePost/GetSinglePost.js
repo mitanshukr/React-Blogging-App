@@ -17,7 +17,7 @@ import { FiShare, FiLock } from "react-icons/fi";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import Tag from "../../../components/UI/TagStyler/Tag";
-import { Link, withRouter} from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 class GetSinglePost extends Component {
   state = {
@@ -332,4 +332,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToprops,
   mapDispatchToProps
-)(withRouter(GetSinglePost));
+)(withRouter(withErrorHandler(GetSinglePost, axios)));

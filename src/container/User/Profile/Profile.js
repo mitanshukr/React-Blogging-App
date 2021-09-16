@@ -13,6 +13,10 @@ class Profile extends React.Component {
         "feed"
       );
     };
+    // this.userName =
+    //   this.props.match.params.username[0] === "@"
+    //     ? this.props.match.params.username
+    //     : "@" + this.props.match.params.username;
     this.state = {
       userId: null,
       firstName: null,
@@ -48,6 +52,9 @@ class Profile extends React.Component {
 
   componentDidUpdate() {
     const username = this.props.match.params.username;
+    // this.props.match.params.username[0] === "@"
+    //   ? this.props.match.params.username
+    //   : "@" + this.props.match.params.username;
     const feedQuery = this.getQueryParam();
 
     if (this.state.username !== username) {
