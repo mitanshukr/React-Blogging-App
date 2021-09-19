@@ -7,13 +7,9 @@ import AuthLayout from "../../../components/Layout/AuthLayout";
 import AuthCard from "../../../components/UI/AuthCard/AuthCard";
 
 import Button from "../../../components/UI/Button/Button";
+import ErrorCard from "../../../components/UI/ErrorCard/ErrorCard";
 import Input from "../../../components/UI/Input/Input";
-import Spinner from "../../../components/UI/Spinner/Spinner";
-import {
-  errorHandler,
-  loginActionHandler,
-  redirectPathHandler,
-} from "../../../store/actions";
+import { loginActionHandler } from "../../../store/actions";
 import "./Login.css";
 
 class Login extends Component {
@@ -56,6 +52,9 @@ class Login extends Component {
   }
 
   inputChangeHandler = (e, stateName) => {
+    if (this.state.localError) {
+      this.setState({ localError: null });
+    }
     const updatedInputElements = { ...this.state.inputElements };
     updatedInputElements[stateName].value = e.target.value;
 
@@ -81,9 +80,12 @@ class Login extends Component {
         }
       })
       .catch((err) => {
-        //local.err....
-        console.log(err.response);
-        this.setState({ serverBusy: false });
+        this.setState({
+          serverBusy: false,
+          localError:
+            err?.response?.data?.message ||
+            "Something went wrong! Please try again later.",
+        });
       });
     // this.props.history.goBack();
   };
@@ -96,6 +98,7 @@ class Login extends Component {
           onChange={(e) => this.inputChangeHandler(e, element)}
           elementConfig={this.state.inputElements[element].elementConfig}
           value={this.state.inputElements[element].value}
+          // errorMsg="Hello Error"
         />
         {element === "password" ? (
           <small>
@@ -114,7 +117,7 @@ class Login extends Component {
             ) : (
               <h2>Welcome Back!</h2>
             )}
-            <p className="Error">{this.props.errorMsg}</p>
+            <ErrorCard>{this.state.localError}</ErrorCard>
             {formElements}
             <Button
               type="submit"
@@ -123,6 +126,9 @@ class Login extends Component {
               {this.state.serverBusy ? "Logging in... Please wait" : "Login"}
             </Button>
           </form>
+          <div>
+            <p>New User? Register here!</p>
+          </div>
         </AuthCard>
       </AuthLayout>
     );

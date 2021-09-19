@@ -5,21 +5,14 @@ import { Editor } from "@tinymce/tinymce-react";
 
 import CreatePost from "../../components/Posts/CreatePost/CreatePost";
 import Button from "../../components/UI/Button/Button";
-// import Input from "../../components/UI/Input/Input";
 import Modal from "../../components/UI/Modal/Modal";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import { dispatchBodyHandler } from "../../store/actions";
 
-import "./WritingZone.css";
 import { getStringToTagsArray } from "../Posts/utils/tagsFormatHandler";
+import "./WritingZone.css";
 
 class WritingZone extends Component {
-  // constructor(props) {
-  //     super(props);
-  //     this.state = {
-  //         body: ''
-  //       };
-  // }
   state = {
     inputElements: {
       title: {
@@ -29,8 +22,10 @@ class WritingZone extends Component {
           type: "text",
           placeholder: "Add Title",
           autoComplete: "off",
+          required: "true",
         },
         value: "",
+        label: "Title",
         validation: {},
       },
       excerpt: {
@@ -40,6 +35,7 @@ class WritingZone extends Component {
           placeholder: "Add a brief Summary",
         },
         value: "",
+        label: "Excerpt",
         validation: {},
       },
       body: {
@@ -59,31 +55,25 @@ class WritingZone extends Component {
         elementConfig: {
           name: "tags",
           type: "text",
-          placeholder: "Add Tags seperated with comma",
+          placeholder: "Add Tags seperated by comma",
         },
         value: "",
+        label: "Tags",
         validation: {},
       },
-      // isPrivate: {
-      //   elementType: "checkbox",
-      //   elementConfig: {
-      //     name: "isPrivate",
-      //     type: "checkbox",
-      //   },
-      //   value: false,
-      //   validation: {}
-      // },
       isPrivate: {
         elementType: "radio",
         elementConfig: {
           name: "isPrivate",
           type: "radio",
+          required: "true",
           options: [
             { value: true, displayValue: "Yes", checked: false },
             { value: false, displayValue: "No", checked: true },
           ],
         },
         value: false,
+        label: "Keep it Secret?",
         validation: {},
       },
     },
@@ -217,7 +207,6 @@ class WritingZone extends Component {
   render() {
     return (
       <>
-        {/* <HomePopup /> */}
         <Modal
           visibility={this.state.modalVisibility}
           clicked={this.backdropToggler}

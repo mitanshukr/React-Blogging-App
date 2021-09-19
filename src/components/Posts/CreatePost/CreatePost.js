@@ -8,11 +8,11 @@ const createPost = (props) => {
     if (element === "body") return null;
     return (
       <Aux key={element}>
-        <label>{element === "isPrivate" ? "Keep it Secret?" : element}</label>
         <Input
           elementType={props.formData[element].elementType}
           elementConfig={props.formData[element].elementConfig}
           value={props.formData[element].value}
+          label={props.formData[element].label}
           onChange={props.onChange}
         />
       </Aux>

@@ -15,25 +15,29 @@
   margin-bottom: 20px;
 }
 
-.EditPost__col1 > p {
+.EditPost__col1--p {
   font-weight: bold;
   color: tomato;
   margin: 0;
 }
 
-.EditPost__col1 > input {
-  margin-bottom: 15px;
+.EditPost__col1 > div:first-of-type {
   width: 99%;
+  margin: 0;
+}
+.EditPost__col1 input {
+  margin-bottom: 15px;
   font-size: 2.5rem;
   font-weight: bold;
   padding-left: 0;
   border: 1.5px solid transparent;
   border-radius: 2px;
   outline-color: rgba(102, 102, 102, 0.315);
+  transition: border-color 0.2s ease-in;
 }
 
-.EditPost__col1 > input:hover {
-  border-color: rgba(102, 102, 102, 0.315);
+.EditPost__col1 input:hover {
+  border-bottom-color: rgba(102, 102, 102, 0.315);
 }
 
 .EditPost__editor {
@@ -53,13 +57,14 @@
   flex-shrink: 2;
 }
 
-.EditPost__col2 label {
-  font-weight: bold;
+.EditPost__col2 > * {
+  margin-bottom: 10px;
 }
 
 .EditPost__actions {
   display: flex;
   justify-content: flex-end;
+  padding-right: 10px;
 }
 
 .EditPost__actions button {
@@ -67,46 +72,32 @@
 }
 
 .EditPost__excerpt {
-  display: flex;
-  flex-direction: column;
-  margin-top: 80px;
-  margin-bottom: 20px;
+  margin-top: 70px;
 }
 
 .EditPost__excerpt textarea {
-  width: 100%;
   box-sizing: border-box;
-  padding: 10px;
   resize: none;
-  height: 150px;
+  padding: 10px;
+  height: 155px;
   font-family: inherit;
   font-size: 14px;
-  margin: 10px 0;
 }
 
 /* .EditPost__excerpt textarea::-webkit-scrollbar {
     display: none;
 } */
 
-.EditPost__tags {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-}
-
 .EditPost__tags small {
   font-weight: normal;
   font-size: 11px;
 }
 
-.EditPost__tags > input {
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .EditPost__isPrivate {
   display: flex;
   align-items: center;
+  padding-left: 5px;
+  /* margin-top: 8px; */
 }
 
 .EditPost__isPrivate > * {
@@ -120,6 +111,6 @@
 }
 
 .error403 {
-    width: 100%;
-    text-align: center;
+  width: 100%;
+  text-align: center;
 }

@@ -1,16 +1,68 @@
-.InputText {
-    display: block;
-    margin: 12px auto;
-    width: 300px;
-    padding: 8px;
+.InputComponent {
+  display: block;
+  margin: auto;
+  width: 300px;
+  padding: 8px;
 }
 
-.RadioBtn {
-    display: inline-block;
+.InputComponent label {
+  display: block;
+  padding-left: 2px;
+  text-align: left !important;
+  text-transform: capitalize;
+  font-weight: 500;
+  font-size: 14px;
 }
 
-.RadioBtn label {
-    display: inline-block !important;
-    padding: 0 10px 0 1px !important;
-    cursor: pointer;
+.InputComponent input,
+.InputComponent textarea {
+  display: block;
+  width: fill-available;
+  width: -webkit-fill-available;
+  width: -moz-available;
+  margin-top: 4px;
+  padding: 8px;
+}
+
+.InputComponent .error {
+  border: 1.4px solid red;
+  outline-color: red;
+}
+
+.InputComponent .errorMsg {
+  color: red;
+  display: block;
+  text-align: left;
+  font-size: 11px;
+  padding-left: 2px;
+}
+
+.InputComponent textarea {
+  resize: none;
+  min-height: 60px;
+  font-family: inherit;
+}
+
+.InputComponent .required {
+  color: red;
+}
+
+.InputComponent .RadioBtn {
+  text-align: left;
+}
+
+.InputComponent .RadioBtn * {
+  color: inherit;
+  display: inline;
+  width: fit-content;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.InputComponent .RadioBtn .required {
+  color: red;
+}
+
+.InputComponent .RadioBtn > * {
+  padding-right: 8px;
 }

@@ -3,12 +3,13 @@
   flex-direction: column;
 }
 
-.Login__inputDiv input {
-  margin-bottom: 3px;
+.Login__inputDiv > div {
+  padding: 3px;
 }
 
 .Login__inputDiv small {
   align-self: flex-end;
+  padding-right: 8px;
 }
 
 .Login__inputDiv small a,
@@ -21,20 +22,4 @@
 .Login__inputDiv small a:hover {
   text-decoration: underline;
   color: tomato;
-}
-
-.Error {
-  display: inline-block;
-  width: 290px;
-  background-color: rgba(255, 28, 28, 0.575);
-  color: #2c2926;
-  padding: 15px;
-  margin: 0;
-  text-align: left;
-}
-
-.Error:empty {
-  padding: 0;
-  border: none;
-  display: none;
 }

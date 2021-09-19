@@ -7,6 +7,7 @@ import classes from "./Signup.module.css";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 import AuthCard from "../../../components/UI/AuthCard/AuthCard";
 import { connect } from "react-redux";
+import ErrorCard from "../../../components/UI/ErrorCard/ErrorCard";
 
 class Signup extends Component {
   constructor(props) {
@@ -104,9 +105,13 @@ class Signup extends Component {
         });
       })
       .catch((err) => {
-        console.log(err.response);
-        this.setState({ serverBusy: false });
-        //localError...
+        console.log(err?.response?.data);
+        this.setState({
+          serverBusy: false,
+          localError:
+            err?.response?.data?.message ||
+            "Something went wrong! Please try again later.",
+        });
       });
   };
 
@@ -124,11 +129,9 @@ class Signup extends Component {
     return (
       <AuthLayout>
         <AuthCard>
-          <form onSubmit={this.signupHandler}>
+          <form onSubmit={this.signupHandler} autoComplete="false">
             <h2>Signup Form</h2>
-            <p className={`${classes.message} ${classes.error}`}>
-              {this.state.localError}
-            </p>
+            <ErrorCard>{this.state.localError}</ErrorCard>
             <p className={`${classes.message} ${classes.success}`}>
               {this.state.successMsg}
             </p>

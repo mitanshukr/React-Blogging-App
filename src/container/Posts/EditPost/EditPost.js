@@ -134,9 +134,7 @@ class EditPost extends Component {
             <Spinner />
           ) : this.state.localError ? (
             <p>{this.state.localError.toString()}</p>
-          ) : (
-            ""
-          )}
+          ) : null}
         </Modal>
         {this.state.accessDenied ? (
           <div className={classes.error403}>
@@ -146,7 +144,7 @@ class EditPost extends Component {
         ) : (
           <div className={classes.EditPost}>
             <div className={classes.EditPost__col1}>
-              <p>Edit Post</p>
+              <p className={classes['EditPost__col1--p']} >Edit Post</p>
               <Input
                 elementType="input"
                 elementConfig={{
@@ -187,33 +185,29 @@ class EditPost extends Component {
                 <Button onClick={this.updatePostHandler}>Update</Button>
               </div>
               <div className={classes.EditPost__excerpt}>
-                <label htmlFor="editExcerpt">Excerpt</label>
                 <Input
                   onChange={this.inputHandler}
                   elementType="textarea"
                   elementConfig={{
                     name: "excerpt",
                     type: "textarea",
-                    id: "editExcerpt",
                     placeholder: "Add a Brief Summary",
                     autoComplete: "off",
                   }}
+                  label="Excerpt"
                   value={this.state.excerpt}
                 />
               </div>
               <div className={classes.EditPost__tags}>
-                <label htmlFor="editTags">
-                  Tags <small>(Separated with Comma)</small>
-                </label>
                 <Input
                   onChange={this.inputHandler}
                   value={this.state.tags}
                   elementType="input"
+                  label={["Tags", <small> (Separated by Comma)</small>]}
                   elementConfig={{
                     name: "tags",
-                    id: "editTags",
                     type: "text",
-                    placeholder: "Add Tags separated with commas",
+                    placeholder: "Add Tags separated by comma",
                     autoComplete: "off",
                   }}
                 />
