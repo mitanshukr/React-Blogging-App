@@ -270,7 +270,6 @@ class GetSinglePost extends Component {
                   size={20}
                 />
               )}
-
               <p>
                 {this.state.likeCount}{" "}
                 {this.state.likeCount <= 1 ? "like" : "likes"}

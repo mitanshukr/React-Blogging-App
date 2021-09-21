@@ -1,8 +1,11 @@
 .ErrorCard {
+  display: flex;
+  justify-content: center;
   height: 35px;
-  margin: 0 3px;
-  margin-bottom: 3px;
+  margin: 0 8px;
+  margin-bottom: 1px;
 }
+
 .ErrorCard__msg {
   display: flex;
   align-items: center;

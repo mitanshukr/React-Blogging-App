@@ -6,6 +6,7 @@ import classes from "./CreatePost.module.css";
 const createPost = (props) => {
   const formElement = Object.keys(props.formData).map((element) => {
     if (element === "body") return null;
+    console.log(props.formData);
     return (
       <Aux key={element}>
         <Input
@@ -14,6 +15,9 @@ const createPost = (props) => {
           value={props.formData[element].value}
           label={props.formData[element].label}
           onChange={props.onChange}
+          errorMsg={props.formData[element].validation.errorMsg}
+          required={props.formData[element].validation.required}
+          onBlur={props.onBlur}
         />
       </Aux>
     );

@@ -3,6 +3,7 @@
   margin: auto;
   width: 300px;
   padding: 8px;
+  position: relative;
 }
 
 .InputComponent label {
@@ -27,14 +28,16 @@
 .InputComponent .error {
   border: 1.4px solid red;
   outline-color: red;
+  border-radius: 2px;
 }
 
 .InputComponent .errorMsg {
   color: red;
   display: block;
   text-align: left;
-  font-size: 11px;
+  font-size: 10px;
   padding-left: 2px;
+  position: absolute;
 }
 
 .InputComponent textarea {

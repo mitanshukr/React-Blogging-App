@@ -9,14 +9,15 @@ const input = (props) => {
         <>
           <label htmlFor={props.label}>
             {props.label}
-            {props.elementConfig.required ? (
+            {props.required ? (
               <span className={classes.required}>*</span>
             ) : null}
           </label>
           <input
-            // className={classes.error}
+            className={props.errorMsg ? classes.error : ""}
             id={props.label}
             onChange={props.onChange}
+            onBlur={props.onBlur}
             value={props.value}
             {...props.elementConfig}
           />
@@ -29,17 +30,19 @@ const input = (props) => {
         <>
           <label htmlFor={props.label}>
             {props.label}
-            {props.elementConfig.required ? (
+            {props.required ? (
               <span className={classes.required}>*</span>
             ) : null}
           </label>
           <textarea
-            // className={classes.error}
+            className={props.errorMsg ? classes.error : ""}
             id={props.label}
             onChange={props.onChange}
+            onBlur={props.onBlur}
             defaultValue={props.value}
             {...props.elementConfig}
           />
+          <small className={classes.errorMsg}>{props.errorMsg}</small>
         </>
       );
       break;
@@ -48,7 +51,7 @@ const input = (props) => {
         <div onChange={props.onChange} className={classes.RadioBtn}>
           <p>
             {props.label}
-            {props.elementConfig.required ? (
+            {props.required ? (
               <span className={classes.required}>*</span>
             ) : null}
           </p>
@@ -74,17 +77,18 @@ const input = (props) => {
         <>
           <label htmlFor={props.label}>
             {props.label}
-            {props.elementConfig.required ? (
+            {props.required ? (
               <span className={classes.required}>*</span>
             ) : null}
           </label>
           <input
-            // className={classes.error}
+            className={props.errorMsg ? classes.error : ""}
             id={props.label}
             onChange={props.onChange}
             value={props.value}
             {...props.elementConfig}
           />
+          <small className={classes.errorMsg}>{props.errorMsg}</small>
         </>
       );
   }
