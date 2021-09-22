@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "../../axios-instance";
 import { Editor } from "@tinymce/tinymce-react";
-import { clone, cloneDeep } from "lodash";
+import { cloneDeep } from "lodash";
 
 import CreatePost from "../../components/Posts/CreatePost/CreatePost";
 import Button from "../../components/UI/Button/Button";
@@ -11,6 +11,7 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import { dispatchBodyHandler } from "../../store/actions";
 import wordCount from "html-word-count";
 
+import checkValidity from "../../Utility/inputValidation";
 import { getStringToTagsArray } from "../Posts/utils/tagsFormatHandler";
 import "./WritingZone.css";
 
@@ -48,7 +49,7 @@ class WritingZone extends Component {
           errorMsg: null,
           isTouched: false,
           minWordCount: 10,
-          maxWordCount: 30,
+          maxWordCount: 50,
         },
       },
       body: {
@@ -57,8 +58,6 @@ class WritingZone extends Component {
           name: "body",
           placeholder:
             "<p>What's in your mind right now?\n\nThe rule is simple...\nDon't think, just write.</p>",
-          required: true,
-          autoFocus: true,
         },
         value: "",
         validation: {},
@@ -112,79 +111,66 @@ class WritingZone extends Component {
     this.props.dispatchBody(this.state.inputElements.body.value);
   }
 
-  checkValidity(value, rules) {
-    if (!rules) {
-      return null;
-    }
-
-    if (rules.required) {
-      if (value.trim() == "") {
-        return "Required Field";
-      }
-    }
-
-    if (rules.minWordCount) {
-      if (value && value.split(" ").length < rules.minWordCount) {
-        return "Min word count error";
-      }
-    }
-
-    if (rules.maxWordCount) {
-      if (value && value.split(" ").length > rules.maxWordCount) {
-        return "Max word count error";
-      }
-    }
-
-    if (rules.minLength) {
-      if (value && value.length < rules.minLength) {
-        return "Min Length invalid";
-      }
-    }
-
-    if (rules.maxLength) {
-      if (value && value.length > rules.maxLength) {
-        return "Max Length invalid";
-      }
-    }
-
-    if (rules.maxTagCount) {
-      if (value.trim().split(",").length > 5) {
-        return "Should be less than 5 Tags";
-      }
-    }
-
-    if (rules.isEmail) {
-      const pattern =
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-      if (!pattern.test(value)) {
-        return "Email Invalid";
-      }
-    }
-
-    if (rules.isNumeric) {
-      const pattern = /^\d+$/;
-      if (!pattern.test(value)) {
-        return "Should be Numeric";
-      }
-    }
-
-    return null;
-  }
-
   createPostHandler = (event) => {
     event.preventDefault();
     if (this.props.isAuthenticated) {
-      // if (
-      //   !this.state.inputElements.body.value ||
-      //   wordCount(this.state.inputElements.body.value) < 25
-      // ) {
-      //   alert("Error: Minimum Word Count Should be 25.");
-      //   return;
-      // }
+      if (
+        !this.state.inputElements.body.value ||
+        wordCount(this.state.inputElements.body.value) < 25
+      ) {
+        alert("Error: Minimum Word Count Should be 25.");
+        return;
+      }
       this.setState({ modalVisibility: true });
     } else {
       this.props.history.push("/login");
     }
+  };
+
+  onBlurEventHandler = (event) => {
+    let name = event.target?.name;
+    let value = event.target?.value;
+    console.log(name, value);
+    const errorMsg = checkValidity(
+      value,
+      this.state.inputElements[name].validation
+    );
+    const updatedElem = cloneDeep(this.state.inputElements[name]);
+    updatedElem.value = value;
+    updatedElem.validation.isTouched = true;
+    updatedElem.validation.errorMsg = errorMsg;
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        inputElements: {
+          ...prevState.inputElements,
+          [name]: updatedElem,
+        },
+      };
+    });
+    return errorMsg;
+  };
+
+  inputChangeHandler = (event) => {
+    let value = event.target?.value;
+    let name = event.target?.name;
+    if (!name) {
+      name = "body";
+      value = event;
+    }
+    console.log(value);
+    let errorMsg = null;
+    if (this.state.inputElements[name].validation.isTouched) {
+      errorMsg = checkValidity(
+        value,
+        this.state.inputElements[name].validation
+      );
+    }
+    const updatedInputElements = cloneDeep(this.state.inputElements);
+    updatedInputElements[name].value = value;
+    updatedInputElements[name].validation.errorMsg = errorMsg;
+
+    this.setState({ inputElements: updatedInputElements });
   };
 
   submitPostHandler = (event) => {
@@ -240,58 +226,12 @@ class WritingZone extends Component {
       });
   };
 
-  onBlurEventHandler = (event) => {
-    let name = event.target?.name;
-    let value = event.target?.value;
-    console.log(name, value);
-    const errorMsg = this.checkValidity(
-      value,
-      this.state.inputElements[name].validation
-    );
-    const updatedElem = cloneDeep(this.state.inputElements[name]);
-    updatedElem.value = value;
-    updatedElem.validation.isTouched = true;
-    updatedElem.validation.errorMsg = errorMsg;
-    this.setState((prevState) => {
-      return {
-        ...prevState,
-        inputElements: {
-          ...prevState.inputElements,
-          [name]: updatedElem,
-        },
-      };
-    });
-    return errorMsg;
-  };
-
-  inputChangeHandler = (event) => {
-    let value = event.target?.value;
-    let name = event.target?.name;
-    if (!name) {
-      name = "body";
-      value = event;
-    }
-    let errorMsg = null;
-    if (this.state.inputElements[name].validation.isTouched) {
-      errorMsg = this.checkValidity(
-        value,
-        this.state.inputElements[name].validation
-      );
-    }
-    const updatedInputElements = cloneDeep(this.state.inputElements);
-    updatedInputElements[name].value = value;
-    updatedInputElements[name].validation.errorMsg = errorMsg;
-
-    this.setState({ inputElements: updatedInputElements });
+  cancelBtnHandler = () => {
+    this.setState({ modalVisibility: false });
   };
 
   backdropToggler = () => {
-    this.setState({ modalVisibility: false });
-    this.setState({ localError: null });
-  };
-
-  cancelBtnHandler = () => {
-    this.setState({ modalVisibility: false });
+    this.setState({ modalVisibility: false, localError: null });
   };
 
   render() {
@@ -323,11 +263,12 @@ class WritingZone extends Component {
               init={{
                 placeholder:
                   "What's in your mind right now?\nThe rule is simple...\nDon't think, just write.",
-                height: "70vh",
-                width: "80vw",
+                height: "100%",
+                width: "100%",
                 content_css: "./WritingZone.css",
                 menubar: false,
                 branding: false,
+                resize: false,
                 plugins: [
                   "advlist autolink lists link image charmap print preview anchor",
                   "searchreplace visualblocks code fullscreen",

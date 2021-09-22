@@ -23,3 +23,19 @@
   text-decoration: underline;
   color: tomato;
 }
+
+.Login__registerLink {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.Login__registerLink a,
+.Login__registerLink a:active,
+.Login__registerLink a:visited {
+  color: tomato;
+  text-decoration: none;
+}
+
+.Login__registerLink a:hover {
+  text-decoration: underline;
+}

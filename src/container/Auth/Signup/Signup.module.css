@@ -36,10 +36,31 @@
   display: none;
 }
 
-.error {
+/* .error {
   background-color: rgba(255, 28, 28, 0.575);
-}
+} */
 
 .success {
   background-color: rgb(1, 151, 1);
+}
+
+.Signup__LoginLink {
+  margin: 0;
+  padding: 0;
+}
+
+.Signup__LoginLink p {
+  margin: 0;
+  padding: 0;
+}
+
+.Signup__LoginLink a,
+.Signup__LoginLink a:active,
+.Signup__LoginLink a:visited {
+  color: tomato;
+  text-decoration: none;
+}
+
+.Signup__LoginLink a:hover {
+  text-decoration: underline;
 }

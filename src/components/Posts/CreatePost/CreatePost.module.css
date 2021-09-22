@@ -8,6 +8,12 @@
   font-size: 22px;
 }
 
+.CreatePost textarea {
+  height: 50px;
+  resize: vertical;
+  max-height: 150px;
+}
+
 .CreatePost .Button {
   margin-top: 25px;
   margin-bottom: 10px;

@@ -2,14 +2,14 @@
   margin-top: 35px;
 }
 
-.WritingZone textarea {
+/* .WritingZone textarea {
   width: 50%;
   height: 300px;
   padding: 10px;
   font-size: 18px;
   margin-bottom: 15px;
   resize: none;
-}
+} */
 
 .WritingZone div {
   width: 80vw;
@@ -27,4 +27,6 @@
   min-height: 200px;
   background: url("../../assets/loaders/loader.gif") no-repeat center;
   box-sizing: border-box;
+  width: 85vw;
+  height: 75vh;
 }

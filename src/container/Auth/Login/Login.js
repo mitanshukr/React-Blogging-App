@@ -10,6 +10,8 @@ import Button from "../../../components/UI/Button/Button";
 import ErrorCard from "../../../components/UI/ErrorCard/ErrorCard";
 import Input from "../../../components/UI/Input/Input";
 import { loginActionHandler } from "../../../store/actions";
+import checkValidity from "../../../Utility/inputValidation";
+import { cloneDeep } from "lodash";
 import "./Login.css";
 
 class Login extends Component {
@@ -20,12 +22,17 @@ class Login extends Component {
         email: {
           elementType: "input",
           elementConfig: {
-            name: "username",
+            name: "email",
             type: "text",
             placeholder: "Your Email Id",
           },
           value: "",
-          validation: {},
+          validation: {
+            errorMsg: null,
+            isTouched: false,
+            required: true,
+            isEmail: true,
+          },
         },
         password: {
           elementType: "input",
@@ -35,7 +42,12 @@ class Login extends Component {
             placeholder: "Your Password",
           },
           value: "",
-          validation: {},
+          validation: {
+            errorMsg: null,
+            isTouched: false,
+            required: true,
+            // isStrongPassword: true,
+          },
         },
       },
       serverBusy: false,
@@ -51,18 +63,58 @@ class Login extends Component {
     }
   }
 
-  inputChangeHandler = (e, stateName) => {
+  onBlurEventHandler = (event) => {
+    let name = event.target?.name || event.name;
+    let value = event.target?.value || event.value || "";
+    const errorMsg = checkValidity(
+      value,
+      this.state.inputElements[name].validation
+    );
+    const updatedElem = cloneDeep(this.state.inputElements[name]);
+    updatedElem.value = value;
+    updatedElem.validation.isTouched = true;
+    updatedElem.validation.errorMsg = errorMsg;
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        inputElements: {
+          ...prevState.inputElements,
+          [name]: updatedElem,
+        },
+      };
+    });
+    return errorMsg;
+  };
+
+  inputChangeHandler = (e) => {
+    let name = e.target?.name;
+    let value = e.target?.value;
+    let errorMsg = null;
     if (this.state.localError) {
       this.setState({ localError: null });
     }
-    const updatedInputElements = { ...this.state.inputElements };
-    updatedInputElements[stateName].value = e.target.value;
-
+    if (this.state.inputElements[name].validation.isTouched) {
+      errorMsg = checkValidity(
+        value,
+        this.state.inputElements[name].validation
+      );
+    }
+    const updatedInputElements = cloneDeep(this.state.inputElements);
+    updatedInputElements[name].value = value;
+    updatedInputElements[name].validation.errorMsg = errorMsg;
     this.setState({ inputElements: updatedInputElements });
   };
 
-  loginHandler = (e) => {
+  loginSubmitHandler = (e) => {
     e.preventDefault();
+    let error = this.state.localError;
+    for (let field in this.state.inputElements) {
+      error += this.onBlurEventHandler({
+        name: field,
+        value: this.state.inputElements[field].value,
+      });
+    }
+    if (error) return;
     if (this.state.serverBusy) return;
     this.setState({ serverBusy: true });
     const userCred = {
@@ -87,7 +139,6 @@ class Login extends Component {
             "Something went wrong! Please try again later.",
         });
       });
-    // this.props.history.goBack();
   };
 
   render() {
@@ -95,10 +146,11 @@ class Login extends Component {
       <div className="Login__inputDiv" key={element}>
         <Input
           elementType={this.state.inputElements[element].elementType}
-          onChange={(e) => this.inputChangeHandler(e, element)}
+          onChange={this.inputChangeHandler}
           elementConfig={this.state.inputElements[element].elementConfig}
           value={this.state.inputElements[element].value}
-          // errorMsg="Hello Error"
+          errorMsg={this.state.inputElements[element].validation.errorMsg}
+          onBlur={this.onBlurEventHandler}
         />
         {element === "password" ? (
           <small>
@@ -111,7 +163,7 @@ class Login extends Component {
     return (
       <AuthLayout>
         <AuthCard>
-          <form onSubmit={this.loginHandler}>
+          <form onSubmit={this.loginSubmitHandler}>
             {this.from.pathname !== "/" ? (
               <h2>Please Login to Continue!</h2>
             ) : (
@@ -120,14 +172,19 @@ class Login extends Component {
             <ErrorCard>{this.state.localError}</ErrorCard>
             {formElements}
             <Button
+              style={{ minWidth: "100px" }}
               type="submit"
-              disabled={this.state.serverBusy ? true : false}
+              disabled={
+                this.state.serverBusy || this.state.localError ? true : false
+              }
             >
               {this.state.serverBusy ? "Logging in... Please wait" : "Login"}
             </Button>
           </form>
-          <div>
-            <p>New User? Register here!</p>
+          <div className="Login__registerLink">
+            <p>
+              New here? <Link to="/signup">Signup</Link>
+            </p>
           </div>
         </AuthCard>
       </AuthLayout>

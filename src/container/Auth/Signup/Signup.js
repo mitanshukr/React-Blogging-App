@@ -8,6 +8,9 @@ import AuthLayout from "../../../components/Layout/AuthLayout";
 import AuthCard from "../../../components/UI/AuthCard/AuthCard";
 import { connect } from "react-redux";
 import ErrorCard from "../../../components/UI/ErrorCard/ErrorCard";
+import { cloneDeep } from "lodash";
+import checkValidity from "../../../Utility/inputValidation";
+import { Link } from "react-router-dom";
 
 class Signup extends Component {
   constructor(props) {
@@ -19,50 +22,73 @@ class Signup extends Component {
           elementConfig: {
             name: "firstName",
             type: "text",
-            placeholder: "Your First Name",
+            placeholder: "Enter your First Name",
           },
           value: "",
-          validation: {},
+          validation: {
+            errorMsg: null,
+            isTouched: false,
+            required: true,
+          },
         },
         lastName: {
           elementType: "input",
           elementConfig: {
             name: "lastName",
             type: "text",
-            placeholder: "Your Last Name",
+            placeholder: "Enter your Last Name",
           },
           value: "",
-          validation: {},
+          validation: {
+            errorMsg: null,
+            isTouched: false,
+            required: true,
+          },
         },
         email: {
           elementType: "input",
           elementConfig: {
-            name: "username",
+            name: "email",
             type: "text",
-            placeholder: "Your Email Id",
+            placeholder: "Enter your Email Address",
           },
           value: "",
-          validation: {},
+          validation: {
+            errorMsg: null,
+            isTouched: false,
+            required: true,
+            isEmail: true,
+          },
         },
         password: {
           elementType: "input",
           elementConfig: {
             name: "password",
             type: "password",
-            placeholder: "Enter a Password",
+            placeholder: "Enter a New Password",
           },
           value: "",
-          validation: {},
+          validation: {
+            errorMsg: null,
+            isTouched: false,
+            required: true,
+            isStrongPassword: true,
+          },
         },
         password2: {
           elementType: "input",
           elementConfig: {
-            name: "password",
+            name: "password2",
             type: "password",
             placeholder: "Re-enter the Password",
           },
           value: "",
-          validation: {},
+          validation: {
+            errorMsg: null,
+            isTouched: false,
+            required: true,
+            // isStrongPassword: true,
+          },
         },
       },
       serverBusy: false,
@@ -78,15 +104,77 @@ class Signup extends Component {
     }
   };
 
-  inputChangeHandler = (e, stateName) => {
-    const updatedInputElements = { ...this.state.inputElements };
-    updatedInputElements[stateName].value = e.target.value;
+  onBlurEventHandler = (event) => {
+    let name = event.target?.name || event.name;
+    let value = event.target?.value || event.value || "";
+    let errorMsg = checkValidity(
+      value,
+      this.state.inputElements[name].validation
+    );
+    if (name === "password2") {
+      if (value !== this.state.inputElements.password.value) {
+        errorMsg = "Password does not Match.";
+      }
+    }
+    const updatedElem = cloneDeep(this.state.inputElements[name]);
+    updatedElem.value = value;
+    updatedElem.validation.isTouched = true;
+    updatedElem.validation.errorMsg = errorMsg;
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        inputElements: {
+          ...prevState.inputElements,
+          [name]: updatedElem,
+        },
+      };
+    });
+    return errorMsg;
+  };
 
+  inputChangeHandler = (e) => {
+    let name = e.target?.name;
+    let value = e.target?.value;
+    let errorMsg = null;
+    if (this.state.localError) {
+      this.setState({ localError: null });
+    }
+    if (this.state.inputElements[name].validation.isTouched) {
+      errorMsg = checkValidity(
+        value,
+        this.state.inputElements[name].validation
+      );
+    }
+    if (name === "password2") {
+      if (value !== this.state.inputElements.password.value) {
+        errorMsg = "Password does not Match.";
+      }
+    }
+
+    const updatedInputElements = cloneDeep(this.state.inputElements);
+    if (name === "password") {
+      if (value !== this.state.inputElements.password2.value) {
+        updatedInputElements.password2.validation.errorMsg =
+          "Password does not Match.";
+      } else {
+        updatedInputElements.password2.validation.errorMsg = null;
+      }
+    }
+    updatedInputElements[name].value = value;
+    updatedInputElements[name].validation.errorMsg = errorMsg;
     this.setState({ inputElements: updatedInputElements });
   };
 
-  signupHandler = (e) => {
+  signupSubmitHandler = (e) => {
     e.preventDefault();
+    let error = null;
+    for (let field in this.state.inputElements) {
+      error += this.onBlurEventHandler({
+        name: field,
+        value: this.state.inputElements[field].value,
+      });
+    }
+    if (error) return;
     if (this.state.serverBusy) return;
     this.setState({ serverBusy: true });
     const userData = {
@@ -120,25 +208,34 @@ class Signup extends Component {
       <Input
         key={element}
         elementType={this.state.inputElements[element].elementType}
-        onChange={(e) => this.inputChangeHandler(e, element)}
+        onChange={this.inputChangeHandler}
         elementConfig={this.state.inputElements[element].elementConfig}
         value={this.state.inputElements[element].value}
+        onBlur={this.onBlurEventHandler}
+        errorMsg={this.state.inputElements[element].validation.errorMsg}
       />
     ));
 
     return (
-      <AuthLayout>
+      <AuthLayout style={{ paddingTop: "0.2rem" }}>
         <AuthCard>
-          <form onSubmit={this.signupHandler} autoComplete="false">
+          <form onSubmit={this.signupSubmitHandler} autoComplete="false">
             <h2>Signup Form</h2>
+            <div className={classes.Signup__LoginLink}>
+              <p>
+                Already have an Account? <Link to="/login">Login</Link>
+              </p>
+            </div>
             <ErrorCard>{this.state.localError}</ErrorCard>
-            <p className={`${classes.message} ${classes.success}`}>
+            {/* <p className={`${classes.message} ${classes.success}`}>
               {this.state.successMsg}
-            </p>
+            </p> */}
             {formElements}
             <Button
               type="submit"
-              disabled={this.state.serverBusy ? true : false}
+              disabled={
+                this.state.serverBusy || this.state.localError ? true : false
+              }
             >
               {this.state.serverBusy ? "Processing...Please wait!" : "Register"}
             </Button>

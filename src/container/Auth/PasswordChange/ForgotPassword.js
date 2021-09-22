@@ -6,6 +6,10 @@ import Button from "../../../components/UI/Button/Button";
 import axios from "axios";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 import AuthCard from "../../../components/UI/AuthCard/AuthCard";
+import { cloneDeep } from "lodash";
+import checkValidity from "../../../Utility/inputValidation";
+import ErrorCard from "../../../components/UI/ErrorCard/ErrorCard";
+import { Link } from "react-router-dom";
 // import Spinner from "../../../components/UI/Spinner/Spinner";
 
 class ForgotPassword extends React.Component {
@@ -14,12 +18,17 @@ class ForgotPassword extends React.Component {
       email: {
         elementType: "input",
         elementConfig: {
-          name: "username",
+          name: "email",
           type: "text",
-          placeholder: "Your Email Id",
+          placeholder: "Enter your Email Address",
         },
         value: "",
-        validation: {},
+        validation: {
+          errorMsg: null,
+          isTouched: false,
+          required: true,
+          isEmail: true,
+        },
       },
     },
     resetEmailSent: false,
@@ -27,20 +36,55 @@ class ForgotPassword extends React.Component {
     localError: null,
   };
 
+  onBlurEventHandler = (event) => {
+    let value = event.target?.value || event.value || "";
+    const errorMsg = checkValidity(
+      value,
+      this.state.inputElements.email.validation
+    );
+    const updatedElem = cloneDeep(this.state.inputElements.email);
+    updatedElem.value = value;
+    updatedElem.validation.isTouched = true;
+    updatedElem.validation.errorMsg = errorMsg;
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        inputElements: {
+          ...prevState.inputElements,
+          email: updatedElem,
+        },
+      };
+    });
+    return errorMsg;
+  };
+
   inputChangeHandler = (e) => {
-    const updatedInputElements = { ...this.state.inputElements };
+    let value = e.target?.value;
+    let errorMsg = null;
+    if (this.state.localError) {
+      this.setState({ localError: null });
+    }
+    if (this.state.inputElements.email.validation.isTouched) {
+      errorMsg = checkValidity(
+        value,
+        this.state.inputElements.email.validation
+      );
+    }
+    const updatedInputElements = cloneDeep(this.state.inputElements);
     updatedInputElements.email.value = e.target.value;
+    updatedInputElements.email.validation.errorMsg = errorMsg;
     this.setState({ inputElements: updatedInputElements });
   };
 
   forgotPassSubmitHandler = (e) => {
-    if (this.state.inputElements.email.value.length === 0) {
-      alert("Please provide a valid email");
-      return;
-    }
-    if (this.state.serverBusy) {
-      return;
-    }
+    e.preventDefault();
+    let error = this.state.localError;
+    error += this.onBlurEventHandler({
+      name: "email",
+      value: this.state.inputElements.email.value,
+    });
+    if (error) return;
+    if (this.state.serverBusy) return;
     this.setState({ serverBusy: true });
     axios
       .post("http://localhost:8000/auth/forgot-password", {
@@ -54,15 +98,19 @@ class ForgotPassword extends React.Component {
         this.setState({ serverBusy: false });
       })
       .catch((err) => {
-        console.log(err.response);
-        this.setState({ serverBusy: false });
-        //this.setState({localError: ...})
+        this.setState({
+          serverBusy: false,
+          localError:
+            err?.response?.data?.message ||
+            "Something went wrong! Please try again later.",
+        });
       });
   };
 
   render() {
     return (
       <AuthLayout>
+        {/* <h3>Immune Ink Logo here</h3> */}
         <AuthCard>
           {this.state.resetEmailSent ? (
             <>
@@ -79,20 +127,34 @@ class ForgotPassword extends React.Component {
                   Link in your Inbox.
                 </small>
               </div>
-              <Input
-                key="email"
-                elementType={this.state.inputElements.email.elementType}
-                onChange={(e) => this.inputChangeHandler(e)}
-                elementConfig={this.state.inputElements.email.elementConfig}
-                value={this.state.inputElements.email.value}
-              />
-              <Button
-                type="submit"
-                onClick={this.forgotPassSubmitHandler}
-                disabled={this.state.serverBusy ? true : false}
-              >
-                {this.state.serverBusy ? "Please wait..." : "Submit"}
-              </Button>
+              <form>
+                <ErrorCard>{this.state.localError}</ErrorCard>
+                <Input
+                  key="email"
+                  elementType={this.state.inputElements.email.elementType}
+                  onChange={(e) => this.inputChangeHandler(e)}
+                  elementConfig={this.state.inputElements.email.elementConfig}
+                  value={this.state.inputElements.email.value}
+                  errorMsg={this.state.inputElements.email.validation.errorMsg}
+                  onBlur={this.onBlurEventHandler}
+                />
+                <Button
+                  type="submit"
+                  onClick={this.forgotPassSubmitHandler}
+                  disabled={
+                    this.state.serverBusy || this.state.localError
+                      ? true
+                      : false
+                  }
+                >
+                  {this.state.serverBusy ? "Please wait..." : "Get Link"}
+                </Button>
+              </form>
+              <div>
+                <p>
+                  <Link to="/login">Go back to Login Page</Link>
+                </p>
+              </div>
             </>
           )}
         </AuthCard>

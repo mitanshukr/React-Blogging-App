@@ -6,7 +6,6 @@ import classes from "./CreatePost.module.css";
 const createPost = (props) => {
   const formElement = Object.keys(props.formData).map((element) => {
     if (element === "body") return null;
-    console.log(props.formData);
     return (
       <Aux key={element}>
         <Input
