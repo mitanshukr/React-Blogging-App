@@ -23,13 +23,13 @@ const checkValidity = (value, rules) => {
 
   if (rules.minLength) {
     if (value && value.length < rules.minLength) {
-      return `Length must be greater than ${rules.minLength - 1}.`;
+      return `Length must be greater than or equal to ${rules.minLength}.`;
     }
   }
 
   if (rules.maxLength) {
     if (value && value.length > rules.maxLength) {
-      return `Length must be less than ${rules.maxLength + 1}.`;
+      return `Length must be less than or equal to ${rules.maxLength}.`;
     }
   }
 
@@ -55,29 +55,28 @@ const checkValidity = (value, rules) => {
   }
 
   if (rules.isStrongPassword) {
-    // var regularExpression = /^(\S)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{10,16}$/;
-    const isNonWhiteSpace = /^\S*$/;
-    if (!isNonWhiteSpace.test(value)) {
+    // let regex = /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).{10,16}$/;
+    const isWhitespace = /^(?=.*\s)/;
+    if (isWhitespace.test(value)) {
       return "Password must not contain Whitespaces.";
     }
 
-    const isContainsUppercase = /^(?=.*[A-Z]).*$/;
+    const isContainsUppercase = /^(?=.*[A-Z])/;
     if (!isContainsUppercase.test(value)) {
       return "Password must have at least one Uppercase Character.";
     }
 
-    const isContainsLowercase = /^(?=.*[a-z]).*$/;
+    const isContainsLowercase = /^(?=.*[a-z])/;
     if (!isContainsLowercase.test(value)) {
       return "Password must have at least one Lowercase Character.";
     }
 
-    const isContainsNumber = /^(?=.*[0-9]).*$/;
+    const isContainsNumber = /^(?=.*[0-9])/;
     if (!isContainsNumber.test(value)) {
       return "Password must contain at least one Digit.";
     }
 
-    const isContainsSymbol =
-      /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).*$/;
+    const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])/;
     if (!isContainsSymbol.test(value)) {
       return "Password must contain at least one Special Symbol.";
     }

@@ -1,15 +1,15 @@
 .GetPosts {
-    width: 100%;
-    /* height: 100vh; */
-    background-color: #fff;
-    margin: 0;
-    margin-bottom: 20px;
-    padding: 20px 0;
-    box-sizing: border-box;
-    text-align: center;
-  }
-  
-  /* .GetPosts__banner {
+  width: 100%;
+  /* height: 100vh; */
+  background-color: #fff;
+  margin: 0;
+  margin-bottom: 20px;
+  padding: 20px 0;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* .GetPosts__banner {
     height: 200px;
     background-color: tomato;
     text-align: center;
@@ -26,3 +26,28 @@
   .GetPosts__banner > * {
     margin: 5px 0;
   } */
+
+.GetPosts__LoadMore {
+  border: 1px solid #2c2926;
+  box-sizing: border-box;
+  padding: 10px;
+  margin: 0 auto;
+  max-width: 250px;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+}
+
+.GetPosts__LoadMore p {
+  margin: 0;
+  color: #2c2926;
+  font-weight: 500;
+  transition: all 0.2s ease-in;
+}
+
+.GetPosts__LoadMore:hover {
+  background-color: rgba(255, 99, 71, 0.8);
+}
+
+.GetPosts__LoadMore:hover p {
+  color: white;
+}

@@ -22,6 +22,7 @@ import ForgotPassword from "./container/Auth/PasswordChange/ForgotPassword";
 import ResetPassword from "./container/Auth/PasswordChange/ResetPassword";
 import EmailVerification from "./container/Auth/EmailVerification/EmailVerification";
 import AuthRoute from "./hoc/AuthRoute";
+import NotFound404 from "./components/UI/SvgImages/NotFound404";
 
 class App extends Component {
   constructor(props) {
@@ -83,7 +84,7 @@ class App extends Component {
                 <Logout />
               </AuthRoute>
 
-              <Route render={() => <h1>Not Found</h1>} />
+              <Route render={() => <NotFound404 />} />
             </Switch>
           </Layout>
         </Switch>

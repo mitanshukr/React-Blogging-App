@@ -14,13 +14,18 @@ import deletePostHandler from "../utils/deletePostHandler";
 import { postSaveToggler, showNotification } from "../../../store/actions";
 import getPostURI from "../utils/getPostsURIHandler";
 import { withRouter } from "react-router-dom";
+import ServerDown from "../../../components/UI/SvgImages/ServerDown";
+import { cloneDeep } from "lodash";
 
 class GetPosts extends Component {
   constructor(props) {
     super(props);
     this.state = {
       posts: null,
+      leftOffpostId: null,
+      remainingPosts: null,
       serverBusy: false,
+      localError: null,
     };
   }
 
@@ -36,11 +41,13 @@ class GetPosts extends Component {
         }
       )
       .then((response) => {
-        const posts = response.data.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        this.setState({ posts: posts, serverBusy: false });
+        const posts = response.data.posts;
+        this.setState({
+          posts: posts,
+          leftOffpostId: response.data.leftOffId,
+          remainingPosts: response.data.remaining,
+          serverBusy: false,
+        });
 
         if (this.props.type === "SAVED_ITEMS") {
           const postIdArr = posts.map((post) => post?._id);
@@ -48,10 +55,50 @@ class GetPosts extends Component {
         }
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response) {
+          if (err.response.status == "500") {
+            this.setState({ localError: "500" });
+          }
+        } else {
+          this.setState({ localError: "NETWORK_ERROR" });
+        }
         this.setState({ serverBusy: false });
       });
   }
+
+  loadMoreHandler = () => {
+    if (this.loadingMore) return;
+    this.loadingMore = true;
+    axios
+      .get(
+        getPostURI(
+          this.props.type,
+          this.props.userId,
+          this.props.userName,
+          this.state.leftOffpostId
+        ),
+        {
+          headers: {
+            Authorization: `Bearer ${this.props.authToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        const newPosts = response.data.posts;
+        this.setState((prevState) => {
+          return {
+            posts: prevState.posts.concat(newPosts),
+            leftOffpostId: response.data.leftOffId,
+            remainingPosts: response.data.remaining,
+          };
+        });
+        this.loadingMore = false;
+      })
+      .catch((err) => {
+        this.loadingMore = false;
+        console.log(err);
+      });
+  };
 
   savePostToggler = (status, postId) => {
     this.props.savePostDispatcher(status, postId, this.props.authToken, null);
@@ -76,10 +123,13 @@ class GetPosts extends Component {
 
   singlePostDeletion = (e, postId) => {
     e.stopPropagation();
-    const postsArr = [...this.state.posts];
+    const postsArr = cloneDeep(this.state.posts);
     const deletedPostIndex = postsArr.findIndex((post) => post._id === postId);
     postsArr.splice(deletedPostIndex, 1);
     this.setState({ posts: postsArr });
+    if (this.state.posts.length === 0 && this.state.remainingPosts > 0) {
+      this.loadMoreHandler();
+    }
 
     deletePostHandler(this.props.authToken, postId)
       .then((status) => {
@@ -98,18 +148,25 @@ class GetPosts extends Component {
     if (this.state.serverBusy) {
       posts = <Spinner />;
     }
+    if (this.state.localError) {
+      if (this.state.localError === "NETWORK_ERROR") {
+        posts = <ServerDown />;
+      }
+    }
 
     if (this.state.posts) {
       posts = (
         <div className={classes.GetPosts}>
-          {this.state.posts.length !== 0
-            ? this.state.posts.map((post) => {
+          {this.state.posts.length !== 0 ? (
+            <>
+              {this.state.posts.map((post) => {
                 return (
                   <GetPost
                     key={post._id}
                     postId={post._id}
                     title={post.title}
                     excerpt={post.excerpt}
+                    body={post.body}
                     date={post.createdAt}
                     isPrivate={post.isPrivate}
                     firstName={post.creator?.firstName}
@@ -135,8 +192,19 @@ class GetPosts extends Component {
                     delete={(e) => this.singlePostDeletion(e, post._id)}
                   />
                 );
-              })
-            : this.props.children}
+              })}
+              {this.state.remainingPosts > 0 ? (
+                <div
+                  className={classes.GetPosts__LoadMore}
+                  onClick={this.loadMoreHandler}
+                >
+                  <p>Load More</p>
+                </div>
+              ) : null}
+            </>
+          ) : (
+            this.props.children
+          )}
         </div>
       );
     }
@@ -168,4 +236,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(withErrorHandler(GetPosts, axios)));
+)(withRouter(GetPosts));

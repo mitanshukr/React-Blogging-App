@@ -7,6 +7,7 @@ import ProfileIcon from "../../../../components/User/Profile/ProfileIcon";
 import DeletePost from "../../../../components/Posts/DeletePost/DeletePost";
 // import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
+import htmlToText from "html2plaintext";
 import classes from "./GetPost.module.css";
 
 class GetPost extends React.Component {
@@ -110,7 +111,13 @@ class GetPost extends React.Component {
         </div>
         <div className={classes.GetPost__main}>
           <h2 onClick={this.props.onClick}>{this.props.title}</h2>
-          <p>{this.props.excerpt}</p>
+          <p>
+            {this.props.excerpt ||
+              htmlToText(this.props.body)
+                .replace(/\s+/g, " ")
+                .trim()
+                .substring(0, 300) + "..."}
+          </p>
           <button
             onClick={this.props.onClick}
             className={`${classes[`GetPost__main--read`]} ${

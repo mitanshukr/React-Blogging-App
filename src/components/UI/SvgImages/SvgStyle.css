@@ -1,0 +1,17 @@
+.SvgStyle__main {
+  width: 100%;
+  text-align: center;
+}
+
+.SvgStyle__main > svg {
+  width: 260px;
+  height: 300px;
+}
+
+.SvgStyle__main > p {
+    margin: 0;
+    color: rgb(88, 0, 170);
+    /* color: rgb(255, 119, 119); */
+    font-weight: 400;
+    transform: translateY(-40px);
+}

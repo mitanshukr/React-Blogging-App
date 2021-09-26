@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "../../axios-instance";
 import { Editor } from "@tinymce/tinymce-react";
-import { cloneDeep } from "lodash";
+import { cloneDeep, join } from "lodash";
 
 import CreatePost from "../../components/Posts/CreatePost/CreatePost";
 import Button from "../../components/UI/Button/Button";
 import Modal from "../../components/UI/Modal/Modal";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import { dispatchBodyHandler } from "../../store/actions";
-import wordCount from "html-word-count";
-
+import htmlToText from "html2plaintext";
 import checkValidity from "../../Utility/inputValidation";
 import { getStringToTagsArray } from "../Posts/utils/tagsFormatHandler";
 import "./WritingZone.css";
@@ -33,8 +32,7 @@ class WritingZone extends Component {
           isTouched: false,
           required: true,
           minLength: 5,
-          minWordCount: 1,
-          maxWordCount: 10,
+          maxLength: 100,
         },
       },
       excerpt: {
@@ -48,8 +46,8 @@ class WritingZone extends Component {
         validation: {
           errorMsg: null,
           isTouched: false,
-          minWordCount: 10,
-          maxWordCount: 50,
+          minLength: 50,
+          maxLength: 350,
         },
       },
       body: {
@@ -116,9 +114,13 @@ class WritingZone extends Component {
     if (this.props.isAuthenticated) {
       if (
         !this.state.inputElements.body.value ||
-        wordCount(this.state.inputElements.body.value) < 25
+        htmlToText(this.state.inputElements.body.value)
+          .replace(/\s+/g, " ")
+          .trim().length < 200
       ) {
-        alert("Error: Minimum Word Count Should be 25.");
+        alert(
+          "Error: Length should be greater than or equal to 200 characters."
+        );
         return;
       }
       this.setState({ modalVisibility: true });
@@ -158,7 +160,6 @@ class WritingZone extends Component {
       name = "body";
       value = event;
     }
-    console.log(value);
     let errorMsg = null;
     if (this.state.inputElements[name].validation.isTouched) {
       errorMsg = checkValidity(
