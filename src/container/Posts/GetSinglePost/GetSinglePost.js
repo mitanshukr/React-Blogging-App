@@ -10,7 +10,7 @@ import getDateFormat from "../../../Utility/getDateFormat";
 import ProfileIcon from "../../../components/User/Profile/ProfileIcon";
 import copyToClipboard from "../../../Utility/copyToClipboardHandler";
 import editPostHandler from "../utils/editPostHandler";
-import { postSaveToggler, showNotification } from "../../../store/actions";
+import { showNotification } from "../../../store/actions";
 
 // import { BiShare, BiLockAlt, BiDotsVerticalRounded } from "react-icons/bi";
 import { FiShare, FiLock } from "react-icons/fi";
@@ -18,6 +18,8 @@ import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import Tag from "../../../components/UI/TagStyler/Tag";
 import { Link, withRouter } from "react-router-dom";
+import savePostHandler from "../utils/savePostHandler";
+import { cloneDeep } from "lodash";
 
 class GetSinglePost extends Component {
   state = {
@@ -97,7 +99,27 @@ class GetSinglePost extends Component {
   }
 
   savePostToggler(status, postId) {
-    this.props.savePostDispatcher(status, postId, this.props.authToken);
+    const updatedPost = cloneDeep(this.state.post);
+    if (status === "ADD") {
+      updatedPost.savedby.push(this.props.userId);
+    } else if (status === "REMOVE") {
+      const savedUserIdIndex = updatedPost.savedby.findIndex(
+        (userId) => userId === this.props.userId
+      );
+      updatedPost.savedby.splice(savedUserIdIndex, 1);
+    }
+    this.setState({ post: updatedPost });
+
+    savePostHandler(this.props.authToken, postId)
+      .then((response) => {
+        this.props.showNotif(response.data.message, true);
+        setTimeout(() => {
+          this.props.showNotif(response.data.message, false);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   likeToggleHandler = () => {
@@ -143,9 +165,6 @@ class GetSinglePost extends Component {
   };
 
   render() {
-    const isPostSaved = !!this.props.savedPosts.find(
-      (postId) => postId === this.postId
-    );
     let post = <Spinner />;
     if (this.state.accessDenied) {
       post = (
@@ -221,7 +240,9 @@ class GetSinglePost extends Component {
               )}
               <small className={classes.bookmarkIcons}>
                 {this.props.isAuthenticated ? (
-                  isPostSaved ? (
+                  this.state.post.savedby.find(
+                    (userId) => userId === this.props.userId
+                  ) ? (
                     <BsBookmarkFill
                       size={20}
                       onClick={this.savePostToggler.bind(
@@ -314,7 +335,6 @@ const mapStateToprops = (state) => {
     authToken: state.authToken,
     userId: state.userId,
     isAuthenticated: state.isAuthenticated,
-    savedPosts: state.savedPosts,
   };
 };
 
@@ -322,9 +342,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showNotif: (message, visibility) =>
       dispatch(showNotification(message, visibility)),
-    savePostDispatcher: (status, postId, authToken) =>
-      dispatch(postSaveToggler(status, postId, authToken)),
-    // saveRedirectPath: (path) => dispatch(redirectPathHandler(path)),
   };
 };
 

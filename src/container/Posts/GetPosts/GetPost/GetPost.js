@@ -43,9 +43,9 @@ class GetPost extends React.Component {
 
   render() {
     const postDate = getDateFormat(this.props.date);
-    const isPostSaved = !!this.props.savedPosts.find(
-      (postId) => postId === this.props.postId
-    );
+    // const isPostSaved = !!this.props.savedPosts.find(
+    //   (postId) => postId === this.props.postId
+    // );
     return (
       <div className={classes.GetPost}>
         {this.state.deletePost ? (
@@ -80,7 +80,7 @@ class GetPost extends React.Component {
           </section>
           <section>
             {this.props.isAuthenticated ? (
-              isPostSaved ? (
+              this.props.isSaved ? (
                 <BsBookmarkFill
                   onClick={this.props.savePostToggler.bind(
                     this,
@@ -185,7 +185,7 @@ class GetPost extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    savedPosts: state.savedPosts,
+    // savedPosts: state.savedPosts,
     authToken: state.authToken,
     isAuthenticated: state.isAuthenticated,
   };

@@ -11,11 +11,12 @@ import copyToClipboard from "../../../Utility/copyToClipboardHandler";
 import editPostHandler from "../utils/editPostHandler";
 import getSinglePostHandler from "../utils/getSinglePostHandler";
 import deletePostHandler from "../utils/deletePostHandler";
-import { postSaveToggler, showNotification } from "../../../store/actions";
+import { showNotification } from "../../../store/actions";
 import getPostURI from "../utils/getPostsURIHandler";
 import { withRouter } from "react-router-dom";
 import ServerDown from "../../../components/UI/SvgImages/ServerDown";
 import { cloneDeep } from "lodash";
+import savePostHandler from "../utils/savePostHandler";
 
 class GetPosts extends Component {
   constructor(props) {
@@ -48,11 +49,6 @@ class GetPosts extends Component {
           remainingPosts: response.data.remaining,
           serverBusy: false,
         });
-
-        if (this.props.type === "SAVED_ITEMS") {
-          const postIdArr = posts.map((post) => post?._id);
-          this.props.savePostDispatcher("UPDATE", null, null, postIdArr);
-        }
       })
       .catch((err) => {
         if (err.response) {
@@ -100,18 +96,6 @@ class GetPosts extends Component {
       });
   };
 
-  savePostToggler = (status, postId) => {
-    this.props.savePostDispatcher(status, postId, this.props.authToken, null);
-    if (this.props.type === "SAVED_ITEMS" && status === "REMOVE") {
-      const postIndex = this.state.posts.findIndex(
-        (post) => post._id === postId
-      );
-      const updatedPosts = [...this.state.posts];
-      updatedPosts.splice(postIndex, 1);
-      this.setState({ posts: updatedPosts });
-    }
-  };
-
   sharePostHandler = (e, postId) => {
     e.stopPropagation();
     copyToClipboard(e, postId);
@@ -121,11 +105,46 @@ class GetPosts extends Component {
     }, 2000);
   };
 
+  savePostToggler = (status, postId) => {
+    const updatedPosts = cloneDeep(this.state.posts);
+    const postIndex = updatedPosts.findIndex((post) => post._id === postId);
+    if (status === "ADD") {
+      updatedPosts[postIndex].savedby.push(this.props.userId);
+    } else if (status === "REMOVE") {
+      const savedUserIdIndex = updatedPosts[postIndex].savedby.findIndex(
+        (userId) => userId === this.props.userId
+      );
+      updatedPosts[postIndex].savedby.splice(savedUserIdIndex, 1);
+    }
+    this.setState({ posts: updatedPosts });
+
+    savePostHandler(this.props.authToken, postId)
+      .then((response) => {
+        this.props.showNotif(response.data.message, true);
+        setTimeout(() => {
+          this.props.showNotif(response.data.message, false);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (this.props.type === "SAVED_ITEMS" && status === "REMOVE") {
+      const postIndex = this.state.posts.findIndex(
+        (post) => post._id === postId
+      );
+      const updatedPosts = cloneDeep(this.state.posts);
+      updatedPosts.splice(postIndex, 1);
+      this.setState({ posts: updatedPosts });
+    }
+  };
+
   singlePostDeletion = (e, postId) => {
     e.stopPropagation();
     const postsArr = cloneDeep(this.state.posts);
     const deletedPostIndex = postsArr.findIndex((post) => post._id === postId);
     postsArr.splice(deletedPostIndex, 1);
+
     this.setState({ posts: postsArr });
     if (this.state.posts.length === 0 && this.state.remainingPosts > 0) {
       this.loadMoreHandler();
@@ -174,6 +193,9 @@ class GetPosts extends Component {
                     userName={`@${post.creator?.userName}`}
                     likeCount={post.likes.length}
                     viewCount={post.viewCount}
+                    isSaved={post.savedby.find(
+                      (userId) => userId === this.props.userId
+                    )}
                     isCurrentUser={post.creator?._id === this.props.userId}
                     isProfilePost={this.props.type === "PROFILE_POSTS"}
                     savePostToggler={this.savePostToggler}
@@ -226,10 +248,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     showNotif: (message, visibility) =>
       dispatch(showNotification(message, visibility)),
-    savePostDispatcher: (status, postId, authToken, updatedSavedItemsArr) =>
-      dispatch(
-        postSaveToggler(status, postId, authToken, updatedSavedItemsArr)
-      ),
   };
 };
 
