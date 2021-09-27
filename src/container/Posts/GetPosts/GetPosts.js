@@ -14,7 +14,7 @@ import deletePostHandler from "../utils/deletePostHandler";
 import { showNotification } from "../../../store/actions";
 import getPostURI from "../utils/getPostsURIHandler";
 import { withRouter } from "react-router-dom";
-import ServerDown from "../../../components/UI/SvgImages/ServerDown";
+import ServerDown from "../../../components/UI/SvgImages/ServerDown503";
 import { cloneDeep } from "lodash";
 import savePostHandler from "../utils/savePostHandler";
 
@@ -55,8 +55,10 @@ class GetPosts extends Component {
           if (err.response.status == "500") {
             this.setState({ localError: "500" });
           }
-        } else {
+        } else if (err.message.toLowerCase().includes("network error")) {
           this.setState({ localError: "NETWORK_ERROR" });
+        } else {
+          this.setState({ localError: "SOMETHING_WENT_WRONG" });
         }
         this.setState({ serverBusy: false });
       });
@@ -115,6 +117,9 @@ class GetPosts extends Component {
         (userId) => userId === this.props.userId
       );
       updatedPosts[postIndex].savedby.splice(savedUserIdIndex, 1);
+      if (this.props.type === "SAVED_ITEMS") {
+        updatedPosts.splice(postIndex, 1);
+      }
     }
     this.setState({ posts: updatedPosts });
 
@@ -128,15 +133,6 @@ class GetPosts extends Component {
       .catch((err) => {
         console.log(err);
       });
-
-    if (this.props.type === "SAVED_ITEMS" && status === "REMOVE") {
-      const postIndex = this.state.posts.findIndex(
-        (post) => post._id === postId
-      );
-      const updatedPosts = cloneDeep(this.state.posts);
-      updatedPosts.splice(postIndex, 1);
-      this.setState({ posts: updatedPosts });
-    }
   };
 
   singlePostDeletion = (e, postId) => {

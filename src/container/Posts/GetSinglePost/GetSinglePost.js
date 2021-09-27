@@ -4,14 +4,12 @@ import { connect } from "react-redux";
 import axios from "../../../axios-instance";
 import parse from "html-react-parser";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import withErrorHandler from "../../../hoc/withErrorHandler";
 import classes from "./GetSinglePost.module.css";
 import getDateFormat from "../../../Utility/getDateFormat";
 import ProfileIcon from "../../../components/User/Profile/ProfileIcon";
 import copyToClipboard from "../../../Utility/copyToClipboardHandler";
 import editPostHandler from "../utils/editPostHandler";
 import { showNotification } from "../../../store/actions";
-
 // import { BiShare, BiLockAlt, BiDotsVerticalRounded } from "react-icons/bi";
 import { FiShare, FiLock } from "react-icons/fi";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
@@ -20,6 +18,7 @@ import Tag from "../../../components/UI/TagStyler/Tag";
 import { Link, withRouter } from "react-router-dom";
 import savePostHandler from "../utils/savePostHandler";
 import { cloneDeep } from "lodash";
+import ErrorSvg from "../../../components/UI/ErrorSvg/ErrorSvg";
 
 class GetSinglePost extends Component {
   state = {
@@ -27,7 +26,6 @@ class GetSinglePost extends Component {
     isPostLiked: null,
     likeCount: 0,
     viewCount: 0,
-    accessDenied: false,
     localError: null,
   };
 
@@ -49,10 +47,6 @@ class GetSinglePost extends Component {
         },
       })
       .then((response) => {
-        if (!response?.data) {
-          this.setState({ accessDenied: true });
-        }
-        console.log(response?.data);
         const isPostLiked = !!response?.data.likes.find(
           (id) => id.toString() === this.props.userId
         );
@@ -78,8 +72,13 @@ class GetSinglePost extends Component {
         }
       })
       .catch((err) => {
-        console.log(err);
-        this.setState({ localError: err.message });
+        if (err.response?.status) {
+          this.setState({ localError: +err.response?.status });
+        } else if (err.message.toLowerCase().includes("network error")) {
+          this.setState({ localError: -1 });
+        } else {
+          this.setState({ localError: -2 });
+        }
       });
   }
 
@@ -93,7 +92,6 @@ class GetSinglePost extends Component {
   };
 
   componentWillUnmount() {
-    // clearTimeout(this.notifTimer);
     clearTimeout(this.likeTimer);
     clearTimeout(this.viewTimer);
   }
@@ -166,14 +164,10 @@ class GetSinglePost extends Component {
 
   render() {
     let post = <Spinner />;
-    if (this.state.accessDenied) {
-      post = (
-        <div style={{ width: "100%", textAlign: "center" }}>
-          <h2>403 : Access Denied!</h2>
-          <p>Private posts can be viewed only by its original creators.</p>
-        </div>
-      );
-    } else if (this.state.post) {
+    if (this.state.localError) {
+      post = <ErrorSvg status={this.state.localError} src="SINGLE_POST" />;
+    }
+    if (this.state.post) {
       const postDate = getDateFormat(this.state.post.createdAt);
       post = (
         <div className={classes.GetSinglePost}>
@@ -314,17 +308,7 @@ class GetSinglePost extends Component {
           </div>
         </div>
       );
-    } else if (this.state.localError) {
-      post = (
-        <div>
-          <p>{this.state.localError}</p>
-          <Spinner />
-        </div>
-      );
     }
-    // else if(!this.props.isAuthenticated){
-    //     post = <Redirect to="/login" />
-    // }
 
     return post;
   }
@@ -348,4 +332,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToprops,
   mapDispatchToProps
-)(withRouter(withErrorHandler(GetSinglePost, axios)));
+)(withRouter(GetSinglePost));

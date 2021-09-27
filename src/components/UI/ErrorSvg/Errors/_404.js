@@ -1,6 +1,6 @@
 import "./SvgStyle.css";
 
-const NotFound404 = (props) => {
+const _404 = (props) => {
   return (
     <div className="SvgStyle__main">
       <div>
@@ -325,4 +325,4 @@ const NotFound404 = (props) => {
   );
 };
 
-export default NotFound404;
+export default _404;
