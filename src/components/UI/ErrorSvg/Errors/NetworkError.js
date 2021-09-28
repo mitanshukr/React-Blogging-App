@@ -1,6 +1,6 @@
 import "./SvgStyle.css";
 
-const _503 = (props) => {
+const NetworkError = (props) => {
   return (
     <div className="SvgStyle__main">
       <div>
@@ -244,13 +244,12 @@ const _503 = (props) => {
         </svg>
       </div>
       <div className="messageBox">
-        <h2>503: Service Unavailable!</h2>
+        <h2>Network Error!</h2>
         <ul>
-          <li>We might be experiencing high traffic.</li>
+          <li>Please make sure you are connected to Internet.</li>
           <li>The server might be temporarily down. Please try again later!</li>
-          <li>Make sure you are connected to Internet.</li>
         </ul>
-        {/* <p>{props.message ? props.message : "ERR_503"}</p> */}
+        {/* <p>{props.message ? props.message : "ERR"}</p> */}
         <div className="messageBox__action">
           <a href="/">Go to Homepage</a>
           <a href="/">Contact Us</a>
@@ -260,4 +259,4 @@ const _503 = (props) => {
   );
 };
 
-export default _503;
+export default NetworkError;

@@ -11,6 +11,7 @@ import ErrorCard from "../../../components/UI/ErrorCard/ErrorCard";
 import { cloneDeep } from "lodash";
 import checkValidity from "../../../Utility/inputValidation";
 import { Link } from "react-router-dom";
+import getErrorMsg from "../authErrorHandler";
 
 class Signup extends Component {
   constructor(props) {
@@ -186,19 +187,20 @@ class Signup extends Component {
     axios
       .post("http://localhost:8000/auth/signup", userData)
       .then((response) => {
-        console.log(response.data);
+        const updatedInputElements = cloneDeep(this.state.inputElements);
+        for (let elem in updatedInputElements) {
+          updatedInputElements[elem].value = "";
+        }
         this.setState({
+          inputElements: updatedInputElements,
           successMsg: "Signup Successful! Please login to Continue.",
           serverBusy: false,
         });
       })
       .catch((err) => {
-        console.log(err?.response?.data);
         this.setState({
           serverBusy: false,
-          localError:
-            err?.response?.data?.message ||
-            "Something went wrong! Please try again later.",
+          localError: getErrorMsg(err),
         });
       });
   };
@@ -226,15 +228,18 @@ class Signup extends Component {
                 Already have an Account? <Link to="/login">Login</Link>
               </p>
             </div>
-            <ErrorCard>{this.state.localError}</ErrorCard>
-            {/* <p className={`${classes.message} ${classes.success}`}>
-              {this.state.successMsg}
-            </p> */}
+            {this.state.successMsg ? (
+              <p className={`${classes.success}`}>{this.state.successMsg}</p>
+            ) : (
+              <ErrorCard>{this.state.localError}</ErrorCard>
+            )}
             {formElements}
             <Button
               type="submit"
               disabled={
-                this.state.serverBusy || this.state.localError ? true : false
+                this.state.serverBusy ||
+                this.state.localError ||
+                this.state.successMsg
               }
             >
               {this.state.serverBusy ? "Processing...Please wait!" : "Register"}

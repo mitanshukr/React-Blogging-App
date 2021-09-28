@@ -17,6 +17,7 @@ import { withRouter } from "react-router-dom";
 import ServerDown from "../../../components/UI/SvgImages/ServerDown503";
 import { cloneDeep } from "lodash";
 import savePostHandler from "../utils/savePostHandler";
+import ErrorSvg from "../../../components/UI/ErrorSvg/ErrorSvg";
 
 class GetPosts extends Component {
   constructor(props) {
@@ -51,14 +52,12 @@ class GetPosts extends Component {
         });
       })
       .catch((err) => {
-        if (err.response) {
-          if (err.response.status == "500") {
-            this.setState({ localError: "500" });
-          }
+        if (err.response?.status) {
+          this.setState({ localError: +err.response?.status });
         } else if (err.message.toLowerCase().includes("network error")) {
-          this.setState({ localError: "NETWORK_ERROR" });
+          this.setState({ localError: -1 });
         } else {
-          this.setState({ localError: "SOMETHING_WENT_WRONG" });
+          this.setState({ localError: -2 });
         }
         this.setState({ serverBusy: false });
       });
@@ -164,11 +163,8 @@ class GetPosts extends Component {
       posts = <Spinner />;
     }
     if (this.state.localError) {
-      if (this.state.localError === "NETWORK_ERROR") {
-        posts = <ServerDown />;
-      }
+      posts = <ErrorSvg status={this.state.localError} />;
     }
-
     if (this.state.posts) {
       posts = (
         <div className={classes.GetPosts}>

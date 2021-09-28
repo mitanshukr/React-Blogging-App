@@ -1,8 +1,7 @@
-import axios from "axios";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 import AuthCard from "../../../components/UI/AuthCard/AuthCard";
 
@@ -13,6 +12,7 @@ import { loginActionHandler } from "../../../store/actions";
 import checkValidity from "../../../Utility/inputValidation";
 import { cloneDeep } from "lodash";
 import "./Login.css";
+import getErrorMsg from "../authErrorHandler";
 
 class Login extends Component {
   constructor(props) {
@@ -128,15 +128,13 @@ class Login extends Component {
           this.props.loginDispatchHandler(response.data);
           this.props.history.replace(this.from);
         } else {
-          throw new Error("Something went wrong :(");
+          throw new Error("Something went wrong.");
         }
       })
       .catch((err) => {
         this.setState({
           serverBusy: false,
-          localError:
-            err?.response?.data?.message ||
-            "Something went wrong! Please try again later.",
+          localError: getErrorMsg(err),
         });
       });
   };
@@ -174,9 +172,7 @@ class Login extends Component {
             <Button
               style={{ minWidth: "100px" }}
               type="submit"
-              disabled={
-                this.state.serverBusy || this.state.localError ? true : false
-              }
+              disabled={this.state.serverBusy || this.state.localError}
             >
               {this.state.serverBusy ? "Logging in... Please wait" : "Login"}
             </Button>

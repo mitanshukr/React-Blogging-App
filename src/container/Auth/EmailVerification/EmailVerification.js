@@ -40,7 +40,7 @@ class EmailVerification extends React.Component {
           <p>
             Thank you for verifing your email{" "}
             <span className={classes.email}>{this.state.email}</span>.<br></br>
-            You can safely close this window.
+            You can close this window now.
           </p>
         </>
       );
@@ -50,7 +50,7 @@ class EmailVerification extends React.Component {
           <h2 className={classes.success}>Email Already Verified!</h2>
           <p>
             Your email <span className={classes.email}>{this.state.email}</span>{" "}
-            is already verified.<br></br>You can safely close this window.
+            is already verified.<br></br>You can close this window now.
           </p>
         </>
       );

@@ -10,6 +10,7 @@ import { cloneDeep } from "lodash";
 import checkValidity from "../../../Utility/inputValidation";
 import ErrorCard from "../../../components/UI/ErrorCard/ErrorCard";
 import { Link } from "react-router-dom";
+import getErrorMsg from "../authErrorHandler";
 // import Spinner from "../../../components/UI/Spinner/Spinner";
 
 class ForgotPassword extends React.Component {
@@ -100,9 +101,7 @@ class ForgotPassword extends React.Component {
       .catch((err) => {
         this.setState({
           serverBusy: false,
-          localError:
-            err?.response?.data?.message ||
-            "Something went wrong! Please try again later.",
+          localError: getErrorMsg(err),
         });
       });
   };

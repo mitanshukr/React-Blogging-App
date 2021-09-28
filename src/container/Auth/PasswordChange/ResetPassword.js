@@ -33,7 +33,7 @@ class ResetPassword extends React.Component {
         validation: {},
       },
     },
-    userEmail: null,
+    userEmail: "",
     isPasswordUpdated: false,
     serverBusy: false,
     localError: null,

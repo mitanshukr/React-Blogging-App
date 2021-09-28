@@ -3,8 +3,8 @@ import _401 from "./Errors/_401";
 import _403 from "./Errors/_403";
 import _404 from "./Errors/_404";
 import _500 from "./Errors/_500";
-import _503 from "./Errors/_503";
 import _404_SinglePost from "./Errors/_404_SinglePost";
+import NetworkError from "./Errors/NetworkError";
 import SomethingWentWrong from "./Errors/SomethingWentWrong";
 
 const ErrorSvg = (props) => {
@@ -23,7 +23,7 @@ const ErrorSvg = (props) => {
   } else if (props.status === 500) {
     return <_500 />;
   } else if (props.status === -1) {
-    return <_503 />;
+    return <NetworkError />;
   } else {
     return <SomethingWentWrong />;
   }

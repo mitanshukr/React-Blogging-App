@@ -4,12 +4,10 @@ import { connect } from "react-redux";
 import axios from "../../../axios-instance";
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import withErrorHandler from "../../../hoc/withErrorHandler";
 import { Editor } from "@tinymce/tinymce-react";
 import Input from "../../../components/UI/Input/Input";
-
+import ErrorSvg from "../../../components/UI/ErrorSvg/ErrorSvg";
 import classes from "./EditPost.module.css";
-import Modal from "../../../components/UI/Modal/Modal";
 import { showNotification } from "../../../store/actions";
 import {
   getStringToTagsArray,
@@ -23,9 +21,10 @@ class EditPost extends Component {
     excerpt: "",
     body: "",
     tags: "",
-    isPrivate: null,
-    accessDenied: false,
+    isPrivate: false,
     serverBusy: false,
+    isRendering: true,
+    isChanged: false,
     localError: null,
   };
 
@@ -46,29 +45,30 @@ class EditPost extends Component {
         },
       })
       .then((response) => {
-        if (
-          !response?.data ||
-          response.data.creator._id !== this.props.userId
-        ) {
-          this.setState({
-            accessDenied: true,
-            localError: "Error 403: Bad Request",
-          });
+        if (response.data?.creator?._id !== this.props.userId) {
+          this.setState({ localError: 403 });
         } else {
           this.setState({
-            postRendered: true,
             title: response.data.title,
             excerpt: response.data.excerpt,
             body: response.data.body,
             tags: getTagArrayToString(response.data.tags),
             date: response.data.createdAt,
             isPrivate: response.data.isPrivate,
+            serverBusy: false,
+            isRendering: false,
           });
         }
       })
       .catch((err) => {
-        console.log(err);
-        this.setState({ localError: err });
+        if (err.response?.status) {
+          this.setState({ localError: +err.response?.status });
+        } else if (err.message.toLowerCase().includes("network error")) {
+          this.setState({ localError: -1 });
+        } else {
+          this.setState({ localError: -2 });
+        }
+        this.setState({ serverBusy: false, isRendering: false });
       });
   }
 
@@ -79,6 +79,7 @@ class EditPost extends Component {
 
   updatePostHandler = (e) => {
     e.preventDefault();
+    if (this.state.serverBusy) return;
     this.setState({ serverBusy: true });
     const updatedPost = {
       title: this.state.title,
@@ -94,8 +95,7 @@ class EditPost extends Component {
         },
       })
       .then((response) => {
-        console.log(response?.data);
-        this.setState({ serverBusy: false });
+        this.setState({ serverBusy: false, isChanged: false });
         this.props.showNotif("Post updated Successfully!", true);
         this.notifTimer = setTimeout(() => {
           this.props.showNotif("Post updated Successfully!", false);
@@ -104,10 +104,12 @@ class EditPost extends Component {
       .catch((err) => {
         this.setState({ serverBusy: false, localError: err?.message });
         console.log(err);
+        // show error in notification!
       });
   };
 
   inputHandler = (event) => {
+    if (!this.state.isChanged) this.setState({ isChanged: true });
     if (event.target.name === "title") {
       this.setState({ title: event.target.value });
     } else if (event.target.name === "excerpt") {
@@ -120,31 +122,21 @@ class EditPost extends Component {
   };
 
   editorChangeHandler = (data) => {
+    if (!this.state.isChanged) this.setState({ isChanged: true });
     this.setState({ body: data });
   };
 
   render() {
     return (
       <>
-        <Modal
-          visibility={this.state.serverBusy || !!this.state.localError}
-          // clicked={this.backdropToggler}
-        >
-          {this.state.serverBusy ? (
-            <Spinner />
-          ) : this.state.localError ? (
-            <p>{this.state.localError.toString()}</p>
-          ) : null}
-        </Modal>
-        {this.state.accessDenied ? (
-          <div className={classes.error403}>
-            <h2>403: Forbidden</h2>
-            <p>Access Denied! Unauthorzied Access.</p>
-          </div>
+        {this.state.isRendering ? (
+          <Spinner />
+        ) : this.state.localError ? (
+          <ErrorSvg status={this.state.localError} />
         ) : (
           <div className={classes.EditPost}>
             <div className={classes.EditPost__col1}>
-              <p className={classes['EditPost__col1--p']} >Edit Post</p>
+              <p className={classes["EditPost__col1--p"]}>Edit Post</p>
               <Input
                 elementType="input"
                 elementConfig={{
@@ -163,7 +155,8 @@ class EditPost extends Component {
                   value={this.state.body}
                   init={{
                     placeholder: "Content Body",
-                    height: "75vh",
+                    height: "80vh",
+                    resize: false,
                     width: "100%",
                     menubar: false,
                     branding: false,
@@ -181,8 +174,22 @@ class EditPost extends Component {
             </div>
             <div className={classes.EditPost__col2}>
               <div className={classes.EditPost__actions}>
-                <Button onClick={this.cancelUpdateHandler}>Cancel</Button>
-                <Button onClick={this.updatePostHandler}>Update</Button>
+                <Button
+                  onClick={this.cancelUpdateHandler}
+                  disabled={this.state.serverBusy}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={this.updatePostHandler}
+                  disabled={
+                    this.state.serverBusy ||
+                    this.state.isRendering ||
+                    !this.state.isChanged
+                  }
+                >
+                  {this.state.serverBusy ? "Updating..." : "Update"}
+                </Button>
               </div>
               <div className={classes.EditPost__excerpt}>
                 <Input
@@ -228,116 +235,6 @@ class EditPost extends Component {
         ;
       </>
     );
-    //   let post = <Spinner />;
-    //
-    //   } else if (this.state.serverBusy) {
-    //     post = <Spinner />;
-    //   } else if (this.state.postRendered) {
-    //     const elementConfig = {
-    //       name: "title",
-    //       type: "text",
-    //       placeholder: "Title",
-    //       autoComplete: "off",
-    //     };
-    //     post = (
-    //       <>
-    //       {/* <Modal
-    //         visibility={this.state.modalVisibility}
-    //         clicked={this.backdropToggler}
-    //       >
-    //         {this.state.serverBusy ? (
-    //           <Spinner />
-    //         ) : this.state.localError ? (
-    //           <p>{this.state.localError.toString()}</p>
-    //         )}
-    //       </Modal> */}
-    //       <div className={classes.EditPost}>
-    //         <div>
-    //           <p>Edit Post</p>
-    //           <Input
-    //             elementType="input"
-    //             elementConfig={elementConfig}
-    //             value={this.state.title}
-    //             onChange={this.inputHandler}
-    //           ></Input>
-    //           <small className={classes.editorLoading}>
-    //             Loading... Please Wait
-    //           </small>
-    //           <Editor
-    //             apiKey={process.env.REACT_APP_TINYMCE_API}
-    //             value={this.state.body}
-    //             init={{
-    //               placeholder: "Content Body",
-    //               height: "75vh",
-    //               width: "100%",
-    //               // content_css: "./WritingZone.css",
-    //               menubar: false,
-    //               branding: false,
-    //               plugins: [
-    //                 "advlist autolink lists link image charmap print preview anchor",
-    //                 "searchreplace visualblocks code fullscreen",
-    //                 "insertdatetime media table paste code help wordcount",
-    //               ],
-    //               toolbar:
-    //                 "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
-    //             }}
-    //             onEditorChange={this.editorChangeHandler}
-    //           />
-    //         </div>
-    //         <div>
-    //           <div>
-    //             <Button onClick={this.updatePostHandler}>Update</Button>
-    //             <Button onClick={this.cancelUpdateHandler}>Cancel</Button>
-    //           </div>
-    //           <p>Excerpt</p>
-    //           <Input
-    //             onChange={this.inputHandler}
-    //             elementType="textarea"
-    //             elementConfig={{
-    //               name: "excerpt",
-    //               type: "textarea",
-    //               placeholder: "Add a Brief Summary",
-    //               autoComplete: "off",
-    //             }}
-    //             value={this.state.excerpt}
-    //           />
-    //           <input type="hidden" />
-    //           <p>Tags</p>
-    //           <Input
-    //             onChange={this.inputHandler}
-    //             value={this.state.tags}
-    //             elementType="input"
-    //             elementConfig={{
-    //               name: "tags",
-    //               type: "text",
-    //               placeholder: "Add Tags separated with commas",
-    //               autoComplete: "off",
-    //             }}
-    //           />
-    //           <div>
-    //             <label htmlFor="isPrivate">Private Post?</label>
-    //             <input
-    //               onChange={this.inputHandler}
-    //               type="checkbox"
-    //               id="isPrivate"
-    //               name="isPrivate"
-    //               checked={this.state.isPrivate}
-    //             />
-    //           </div>
-    //         </div>
-    //       </div>
-
-    //     </>
-    //     );
-    //   } else if (this.state.localError) {
-    //     post = (
-    //       <div>
-    //         <p>{this.state.localError}</p>
-    //         <Spinner />
-    //       </div>
-    //     );
-    //   }
-    //   return post;
   }
 }
 
@@ -359,4 +256,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToprops,
   mapDispatchToProps
-)(withRouter(withErrorHandler(EditPost, axios)));
+)(withRouter(EditPost));

@@ -539,11 +539,11 @@ const _500 = (props) => {
       <div className="messageBox">
         <h2>500: Internal Server Error!</h2>
         <ul>
-          <li>There might be some temporary error. Please try again later.</li>
+          <li>There might be some temporary error.</li>
           <li>
-            If you're facing this error for quite some time, then please reach
-            out to us.
+            Or, We might be experiencing high traffic Please try again later..
           </li>
+          <li>Please reach out to us, if the issue persist for longer.</li>
           <li>Make sure you are connected to Internet.</li>
         </ul>
         {/* <p>{props.message ? props.message : "ERR_500"}</p> */}
