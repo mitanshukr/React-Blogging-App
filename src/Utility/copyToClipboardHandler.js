@@ -5,13 +5,15 @@ const postShareHandler = (e, postId) => {
     alert(`Clipboard API not available.\n${link}`);
     return;
   }
-  navigator.clipboard
+  return navigator.clipboard
     .writeText(link)
     .then(() => {
       console.log("Copied to Clipboard.");
+      return Promise.resolve("Copied to Clipboard.");
     })
     .catch((err) => {
-      alert("Failed to Copy, Please Try again! Error: ", err);
+      console.log("Failed to Copy, Please Try again! Error: ", err);
+      return Promise.reject("Failed to Copy, Try Again!");
     });
 };
 

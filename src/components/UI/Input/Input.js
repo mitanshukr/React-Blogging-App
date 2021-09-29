@@ -1,4 +1,3 @@
-import Aux from "../../../hoc/Auxiliary";
 import classes from "./Input.module.css";
 
 const input = (props) => {

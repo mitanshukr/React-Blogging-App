@@ -18,7 +18,7 @@
 .InputComponent input,
 .InputComponent textarea {
   display: block;
-  width: fill-available;
+  width: stretch;
   width: -webkit-fill-available;
   width: -moz-available;
   margin-top: 4px;

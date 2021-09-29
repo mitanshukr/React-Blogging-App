@@ -19,6 +19,7 @@ import { Link, withRouter } from "react-router-dom";
 import savePostHandler from "../utils/savePostHandler";
 import { cloneDeep } from "lodash";
 import ErrorSvg from "../../../components/UI/ErrorSvg/ErrorSvg";
+import getErrorStatusCode from "../utils/errorHandler";
 
 class GetSinglePost extends Component {
   state = {
@@ -29,9 +30,12 @@ class GetSinglePost extends Component {
     localError: null,
   };
 
+  componentWillUnmount() {
+    clearTimeout(this.viewTimer);
+  }
+
   componentDidMount() {
     let URI = null;
-    console.log(this.props.match);
     this.postId = this.props.match.params.postId;
     const isPrivate = this.props.match.path.split("/")[2] === "private";
     if (isPrivate) {
@@ -72,32 +76,28 @@ class GetSinglePost extends Component {
         }
       })
       .catch((err) => {
-        if (err.response?.status) {
-          this.setState({ localError: +err.response?.status });
-        } else if (err.message.toLowerCase().includes("network error")) {
-          this.setState({ localError: -1 });
-        } else {
-          this.setState({ localError: -2 });
-        }
+        this.setState({ localError: getErrorStatusCode(err) });
       });
   }
 
   sharePostHandler = (e, postId) => {
     e.stopPropagation();
-    this.props.showNotif("Link Copied to Clipboard!", true);
-    copyToClipboard(e, postId);
-    this.notifTimer = setTimeout(() => {
-      this.props.showNotif("Link Copied to Clipboard!", false);
-    }, 2000);
+    copyToClipboard(e, postId)
+      .then((res) => {
+        this.props.showNotification("Link Copied to Clipboard!", "SUCCESS");
+      })
+      .catch((err) => {
+        this.props.showNotification("Failed to Copy the Post URL!", "ERROR");
+      });
   };
 
-  componentWillUnmount() {
-    clearTimeout(this.likeTimer);
-    clearTimeout(this.viewTimer);
-  }
-
   savePostToggler(status, postId) {
+    // if (!this.props.isAuthenticated) {
+    //   this.props.showNotification("Please Login to Save this Post.", "ERROR");
+    //   return;
+    // }
     const updatedPost = cloneDeep(this.state.post);
+    const prevPostState = cloneDeep(this.state.post);
     if (status === "ADD") {
       updatedPost.savedby.push(this.props.userId);
     } else if (status === "REMOVE") {
@@ -110,32 +110,42 @@ class GetSinglePost extends Component {
 
     savePostHandler(this.props.authToken, postId)
       .then((response) => {
-        this.props.showNotif(response.data.message, true);
-        setTimeout(() => {
-          this.props.showNotif(response.data.message, false);
-        }, 1500);
+        this.props.showNotification(response.data.message, "SUCCESS");
       })
       .catch((err) => {
-        console.log(err);
+        if (status === "REMOVE") {
+          this.props.showNotification(
+            "Failed to Remove from Saved Items.",
+            "ERROR"
+          );
+        }
+        if (status === "ADD") {
+          this.props.showNotification("Failed to Add to Saved Items.", "ERROR");
+        }
+        this.setState({ post: prevPostState });
       });
   }
 
   likeToggleHandler = () => {
-    // if(!this.props.isAuthenticated){
-    //   this.props.saveRedirectPath(window.location.pathname);
-    //   this.props.history.push("/login");
-    // }
-    if (this.likeStatusQueued) {
+    if (!this.props.isAuthenticated) {
+      this.props.showNotification("Please Login to Like the Post.", "ERROR");
       return;
     }
+    if (this.likeStatusQueued) return;
+    let prevLikeState = null;
     this.likeStatusQueued = true;
     this.setState((prevState) => {
+      prevLikeState = {
+        likeCount: prevState.likeCount,
+        isPostLiked: prevState.isPostLiked,
+      };
       if (prevState.isPostLiked) {
         return { likeCount: prevState.likeCount - 1, isPostLiked: false };
       } else {
         return { likeCount: prevState.likeCount + 1, isPostLiked: true };
       }
     });
+
     axios
       .get(`http://localhost:8000/post/togglelike/${this.postId}`, {
         headers: {
@@ -144,21 +154,24 @@ class GetSinglePost extends Component {
       })
       .then((response) => {
         let message = null;
-        if (response.data.likeStatus) {
+        if (response.data?.likeStatus) {
           message = "Post Liked Successfully!";
         } else {
           message = "Like removed Successfully!";
         }
-        this.props.showNotif(message, true);
-        this.likeTimer = setTimeout(() => {
-          this.likeStatusQueued = false;
-          this.props.showNotif(message, false);
-        }, 1000);
+        this.props.showNotification(message, "SUCCESS");
+        this.likeStatusQueued = false;
       })
       .catch((err) => {
+        let message = null;
+        if (prevLikeState.isPostLiked) {
+          message = "Failed to remove Like! Please try again.";
+        } else {
+          message = "Failed to Like! Please try again.";
+        }
+        this.props.showNotification(message, "ERROR");
+        this.setState({ ...prevLikeState });
         this.likeStatusQueued = false;
-        console.log(err);
-        this.setState({ localError: err.message });
       });
   };
 
@@ -257,9 +270,7 @@ class GetSinglePost extends Component {
                       title="Save"
                     />
                   )
-                ) : (
-                  ""
-                )}
+                ) : null}
                 {/* <BiDotsVerticalRounded
               size={20}
               style={{ cursor: "auto" }}
@@ -306,6 +317,10 @@ class GetSinglePost extends Component {
               <Tag key={Math.random()}>{tag}</Tag>
             ))}
           </div>
+          <div className={classes.GetSinglePost__comments}>
+            Comment Feature will be added in next Major release.{" "}
+            <a href="/">Give Feedback</a>
+          </div>
         </div>
       );
     }
@@ -324,8 +339,8 @@ const mapStateToprops = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    showNotif: (message, visibility) =>
-      dispatch(showNotification(message, visibility)),
+    showNotification: (message, visibility, type) =>
+      dispatch(showNotification(message, visibility, type)),
   };
 };
 

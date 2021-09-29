@@ -1,4 +1,4 @@
-import { FaRegUser } from "react-icons/fa";
+// import { FaRegUser } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import ProfilePicture from "./ProfilePicture";
 

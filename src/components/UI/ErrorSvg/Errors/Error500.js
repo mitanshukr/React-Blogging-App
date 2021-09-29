@@ -22,9 +22,9 @@ const _500 = (props) => {
               y2="457.32"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="gray" stop-opacity="0.25" />
-              <stop offset="0.54" stop-color="gray" stop-opacity="0.12" />
-              <stop offset="1" stop-color="gray" stop-opacity="0.1" />
+              <stop offset="0" stopColor="gray" stopOpacity="0.25" />
+              <stop offset="0.54" stopColor="gray" stopOpacity="0.12" />
+              <stop offset="1" stopColor="gray" stopOpacity="0.1" />
             </linearGradient>
             <linearGradient
               id="26387a05-323e-43c3-b271-53af00551daf"
@@ -407,7 +407,7 @@ const _500 = (props) => {
             transform="translate(-83.88 -33.68)"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             opacity="0.1"
           />
           <path
@@ -415,7 +415,7 @@ const _500 = (props) => {
             transform="translate(-83.88 -33.68)"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             opacity="0.1"
           />
           <path
@@ -423,7 +423,7 @@ const _500 = (props) => {
             transform="translate(-83.88 -33.68)"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             opacity="0.1"
           />
           <path
@@ -431,7 +431,7 @@ const _500 = (props) => {
             transform="translate(-83.88 -33.68)"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             opacity="0.1"
           />
           <path
@@ -439,7 +439,7 @@ const _500 = (props) => {
             transform="translate(-83.88 -33.68)"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             opacity="0.1"
           />
           <path
@@ -447,7 +447,7 @@ const _500 = (props) => {
             transform="translate(-83.88 -33.68)"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             opacity="0.1"
           />
           <path
@@ -455,7 +455,7 @@ const _500 = (props) => {
             transform="translate(-83.88 -33.68)"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             opacity="0.1"
           />
           <path
@@ -463,7 +463,7 @@ const _500 = (props) => {
             transform="translate(-83.88 -33.68)"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             opacity="0.1"
           />
           <path
@@ -471,7 +471,7 @@ const _500 = (props) => {
             transform="translate(-83.88 -33.68)"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             opacity="0.1"
           />
           <path
@@ -479,7 +479,7 @@ const _500 = (props) => {
             transform="translate(-83.88 -33.68)"
             fill="none"
             stroke="#000"
-            stroke-miterlimit="10"
+            strokeMiterlimit="10"
             opacity="0.1"
           />
           <g opacity="0.05">

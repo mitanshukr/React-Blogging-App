@@ -22,8 +22,8 @@ const _400 = (props) => {
               y2="99"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="#6c63ff" />
-              <stop offset="1" stop-color="#3f3d56" />
+              <stop offset="0" stopColor="#6c63ff" />
+              <stop offset="1" stopColor="#3f3d56" />
             </linearGradient>
             <linearGradient
               id="a09f8209-a7b7-4999-9a81-8afbf160c3ae"
@@ -34,9 +34,9 @@ const _400 = (props) => {
               gradientTransform="translate(168)"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="gray" stop-opacity="0.25" />
-              <stop offset="0.54" stop-color="gray" stop-opacity="0.12" />
-              <stop offset="1" stop-color="gray" stop-opacity="0.1" />
+              <stop offset="0" stopColor="gray" stopOpacity="0.25" />
+              <stop offset="0.54" stopColor="gray" stopOpacity="0.12" />
+              <stop offset="1" stopColor="gray" stopOpacity="0.1" />
             </linearGradient>
           </defs>
           <title>dreamer</title>
@@ -438,8 +438,8 @@ const _400 = (props) => {
             transform="translate(-6 -52.33)"
             fill="none"
             stroke="#2f2e41"
-            stroke-miterlimit="10"
-            stroke-width="4"
+            strokeMiterlimit="10"
+            strokeWidth="4"
           />
           <circle cx="1092.72" cy="471.38" r="28" fill="#2f2e41" />
           <circle cx="1142.21" cy="518.05" r="28" fill="#2f2e41" />
@@ -450,8 +450,8 @@ const _400 = (props) => {
             transform="translate(-6 -52.33)"
             fill="none"
             stroke="#2f2e41"
-            stroke-miterlimit="10"
-            stroke-width="4"
+            strokeMiterlimit="10"
+            strokeWidth="4"
           />
           <circle cx="825.72" cy="415.38" r="28" fill="#2f2e41" />
           <circle cx="875.21" cy="462.05" r="28" fill="#2f2e41" />
@@ -462,8 +462,8 @@ const _400 = (props) => {
             transform="translate(-6 -52.33)"
             fill="none"
             stroke="#3f3d56"
-            stroke-miterlimit="10"
-            stroke-width="4"
+            strokeMiterlimit="10"
+            strokeWidth="4"
           />
           <circle cx="401.12" cy="466.08" r="11.81" fill="#3f3d56" />
           <circle cx="411.73" cy="492.74" r="11.81" fill="#3f3d56" />

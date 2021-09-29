@@ -103,11 +103,28 @@ const dispatchBodyHandler = (body) => {
   };
 };
 
-const showNotification = (message, visibility) => {
-  return {
-    type: "handleNotification",
-    message: message,
-    visibility: visibility,
+const hideNotification = (message, type) => {
+  return (dispatch) => {
+    setTimeout(() => {
+      dispatch({
+        type: "handleNotification",
+        message: message,
+        visibility: false,
+        status: type,
+      });
+    }, 2000);
+  };
+};
+
+const showNotification = (message, type) => {
+  return (dispatch) => {
+    dispatch({
+      type: "handleNotification",
+      message: message,
+      visibility: true,
+      status: type,
+    });
+    dispatch(hideNotification(message, type));
   };
 };
 

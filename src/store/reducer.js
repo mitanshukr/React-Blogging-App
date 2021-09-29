@@ -12,6 +12,7 @@ const initialState = {
   serverBusy: false,
   notifVisibility: false,
   notifMessage: null,
+  notifType: null,
   error: null,
   backgroundImage: null,
   message: null,
@@ -74,6 +75,7 @@ const reducer = (state = initialState, action) => {
       ...state,
       notifMessage: action.message,
       notifVisibility: action.visibility,
+      notifType: action.status,
     };
   }
   return state;

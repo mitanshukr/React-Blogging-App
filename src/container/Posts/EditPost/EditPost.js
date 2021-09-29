@@ -14,6 +14,7 @@ import {
   getTagArrayToString,
 } from "../utils/tagsFormatHandler";
 import { withRouter } from "react-router";
+import getErrorStatusCode from "../utils/errorHandler";
 
 class EditPost extends Component {
   state = {
@@ -61,20 +62,26 @@ class EditPost extends Component {
         }
       })
       .catch((err) => {
-        if (err.response?.status) {
-          this.setState({ localError: +err.response?.status });
-        } else if (err.message.toLowerCase().includes("network error")) {
-          this.setState({ localError: -1 });
-        } else {
-          this.setState({ localError: -2 });
-        }
-        this.setState({ serverBusy: false, isRendering: false });
+        this.setState({
+          localError: getErrorStatusCode(err),
+          serverBusy: false,
+          isRendering: false,
+        });
       });
   }
 
   cancelUpdateHandler = (e) => {
     e.preventDefault();
     this.props.history.goBack();
+    // if (this.props.location.state.prevPath.includes("/post/")) {
+    //   this.props.history.replace(
+    //     `/post${this.state.initialPrivacyStatus ? "/private" : ""}/${
+    //       this.postId
+    //     }`
+    //   );
+    // } else {
+    //   this.props.history.goBack();
+    // }
   };
 
   updatePostHandler = (e) => {
@@ -95,16 +102,18 @@ class EditPost extends Component {
         },
       })
       .then((response) => {
-        this.setState({ serverBusy: false, isChanged: false });
-        this.props.showNotif("Post updated Successfully!", true);
-        this.notifTimer = setTimeout(() => {
-          this.props.showNotif("Post updated Successfully!", false);
-        }, 1500);
+        this.setState({
+          serverBusy: false,
+          isChanged: false,
+        });
+        this.props.showNotification("Post updated Successfully!", "SUCCESS");
       })
       .catch((err) => {
-        this.setState({ serverBusy: false, localError: err?.message });
-        console.log(err);
-        // show error in notification!
+        this.setState({ serverBusy: false });
+        this.props.showNotification(
+          "Failed to Update! Please try again.",
+          "ERROR"
+        );
       });
   };
 
@@ -248,7 +257,7 @@ const mapStateToprops = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    showNotif: (message, visibility) =>
+    showNotification: (message, visibility) =>
       dispatch(showNotification(message, visibility)),
   };
 };

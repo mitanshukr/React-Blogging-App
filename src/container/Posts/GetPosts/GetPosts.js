@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import axios from "../../../axios-instance";
 import GetPost from "./GetPost/GetPost";
 import Spinner from "../../../components/UI/Spinner/Spinner";
-import withErrorHandler from "../../../hoc/withErrorHandler";
 import classes from "./GetPosts.module.css";
 
 import copyToClipboard from "../../../Utility/copyToClipboardHandler";
@@ -14,10 +13,12 @@ import deletePostHandler from "../utils/deletePostHandler";
 import { showNotification } from "../../../store/actions";
 import getPostURI from "../utils/getPostsURIHandler";
 import { withRouter } from "react-router-dom";
-import ServerDown from "../../../components/UI/SvgImages/ServerDown503";
 import { cloneDeep } from "lodash";
 import savePostHandler from "../utils/savePostHandler";
 import ErrorSvg from "../../../components/UI/ErrorSvg/ErrorSvg";
+import getErrorStatusCode from "../utils/errorHandler";
+
+// let isMounted = true;
 
 class GetPosts extends Component {
   constructor(props) {
@@ -30,6 +31,10 @@ class GetPosts extends Component {
       localError: null,
     };
   }
+
+  // componentWillUnmount() {
+  //   isMounted = false;
+  // }
 
   componentDidMount() {
     this.setState({ serverBusy: true });
@@ -52,14 +57,7 @@ class GetPosts extends Component {
         });
       })
       .catch((err) => {
-        if (err.response?.status) {
-          this.setState({ localError: +err.response?.status });
-        } else if (err.message.toLowerCase().includes("network error")) {
-          this.setState({ localError: -1 });
-        } else {
-          this.setState({ localError: -2 });
-        }
-        this.setState({ serverBusy: false });
+        this.setState({ localError: getErrorStatusCode(err) });
       });
   }
 
@@ -93,21 +91,27 @@ class GetPosts extends Component {
       })
       .catch((err) => {
         this.loadingMore = false;
-        console.log(err);
+        this.props.showNotification(
+          "Unable to Load. Please try again!",
+          "ERROR"
+        );
       });
   };
 
   sharePostHandler = (e, postId) => {
     e.stopPropagation();
-    copyToClipboard(e, postId);
-    this.props.showNotif("Link Copied to Clipboard!", true);
-    this.notifTimer = setTimeout(() => {
-      this.props.showNotif("Link Copied to Clipboard!", false);
-    }, 2000);
+    copyToClipboard(e, postId)
+      .then((res) => {
+        this.props.showNotification("Link Copied to Clipboard!", "SUCCESS");
+      })
+      .catch((err) => {
+        this.props.showNotification("Failed to Copy the Post URL!", "ERROR");
+      });
   };
 
   savePostToggler = (status, postId) => {
     const updatedPosts = cloneDeep(this.state.posts);
+    const prevState = cloneDeep(this.state);
     const postIndex = updatedPosts.findIndex((post) => post._id === postId);
     if (status === "ADD") {
       updatedPosts[postIndex].savedby.push(this.props.userId);
@@ -124,36 +128,41 @@ class GetPosts extends Component {
 
     savePostHandler(this.props.authToken, postId)
       .then((response) => {
-        this.props.showNotif(response.data.message, true);
-        setTimeout(() => {
-          this.props.showNotif(response.data.message, false);
-        }, 1500);
+        this.props.showNotification(response.data.message, "SUCCESS");
       })
       .catch((err) => {
-        console.log(err);
+        if (status === "REMOVE") {
+          this.props.showNotification(
+            "Failed to Remove from Saved Items.",
+            "ERROR"
+          );
+        }
+        if (status === "ADD") {
+          this.props.showNotification("Failed to Add to Saved Items.", "ERROR");
+        }
+        this.setState({ ...prevState });
       });
   };
 
   singlePostDeletion = (e, postId) => {
     e.stopPropagation();
     const postsArr = cloneDeep(this.state.posts);
+    const prevState = cloneDeep(this.state);
     const deletedPostIndex = postsArr.findIndex((post) => post._id === postId);
     postsArr.splice(deletedPostIndex, 1);
 
     this.setState({ posts: postsArr });
-    if (this.state.posts.length === 0 && this.state.remainingPosts > 0) {
+    if (postsArr.length === 0 && this.state.remainingPosts > 0) {
       this.loadMoreHandler();
     }
 
     deletePostHandler(this.props.authToken, postId)
-      .then((status) => {
-        this.props.showNotif("Post deleted Successfully!", true);
-        setTimeout(() => {
-          this.props.showNotif("Post deleted Successfully!", false);
-        }, 1500);
+      .then((res) => {
+        this.props.showNotification("Post deleted Successfully!", "SUCCESS");
       })
       .catch((err) => {
-        console.log(err);
+        this.props.showNotification("Failed to Delete. Try again!", "ERROR");
+        this.setState({ ...prevState });
       });
   };
 
@@ -168,7 +177,7 @@ class GetPosts extends Component {
     if (this.state.posts) {
       posts = (
         <div className={classes.GetPosts}>
-          {this.state.posts.length !== 0 ? (
+          {this.state.posts?.length !== 0 ? (
             <>
               {this.state.posts.map((post) => {
                 return (
@@ -238,7 +247,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    showNotif: (message, visibility) =>
+    showNotification: (message, visibility) =>
       dispatch(showNotification(message, visibility)),
   };
 };

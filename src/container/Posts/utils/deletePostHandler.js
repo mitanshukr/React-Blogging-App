@@ -8,7 +8,7 @@ const deletePostHandler = (authToken, postId) => {
       },
     })
     .then((response) => {
-      return Promise.resolve(true);
+      return Promise.resolve(response);
     })
     .catch((err) => {
       return Promise.reject(err);

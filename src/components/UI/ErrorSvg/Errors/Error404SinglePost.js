@@ -22,9 +22,9 @@ const _404_SinglePost = (props) => {
               y2="171.42"
               gradientUnits="userSpaceOnUse"
             >
-              <stop offset="0" stop-color="gray" stop-opacity="0.25" />
-              <stop offset="0.54" stop-color="gray" stop-opacity="0.12" />
-              <stop offset="1" stop-color="gray" stop-opacity="0.1" />
+              <stop offset="0" stopColor="gray" stopOpacity="0.25" />
+              <stop offset="0.54" stopColor="gray" stopOpacity="0.12" />
+              <stop offset="1" stopColor="gray" stopOpacity="0.1" />
             </linearGradient>
           </defs>
           <title>blank canvas</title>
@@ -39,8 +39,8 @@ const _404_SinglePost = (props) => {
             transform="translate(-100.52 -33.01)"
             fill="none"
             stroke="#535461"
-            stroke-miterlimit="10"
-            stroke-width="2"
+            strokeMiterlimit="10"
+            strokeWidth="2"
           />
           <path
             d="M922.66,586.49c-4.3,4.18-24.33,8.49-24.33,8.49s4.91-19.89,9.21-24.06a10.85,10.85,0,0,1,15.12,15.57Z"
@@ -117,8 +117,8 @@ const _404_SinglePost = (props) => {
             transform="translate(-100.52 -33.01)"
             fill="none"
             stroke="#535461"
-            stroke-miterlimit="10"
-            stroke-width="2"
+            strokeMiterlimit="10"
+            strokeWidth="2"
           />
           <path
             d="M865.56,539.92c-2.24,5.56-18.8,17.62-18.8,17.62s-3.56-20.18-1.32-25.73a10.85,10.85,0,1,1,20.12,8.11Z"

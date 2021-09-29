@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "../../axios-instance";
 import { Editor } from "@tinymce/tinymce-react";
-import { cloneDeep, join } from "lodash";
+import { cloneDeep } from "lodash";
 
 import CreatePost from "../../components/Posts/CreatePost/CreatePost";
 import Button from "../../components/UI/Button/Button";

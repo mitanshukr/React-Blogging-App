@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch, withRouter } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./App.css";
@@ -38,8 +38,9 @@ class App extends Component {
     let app = (
       <div className="App">
         <Notification
-          show={this.props.notifVisibility}
           message={this.props.notifMessage}
+          show={this.props.notifVisibility}
+          type={this.props.notifType}
         />
         <Switch>
           <Route
@@ -104,6 +105,7 @@ const mapStateToProps = (state) => {
     serverBusy: state.serverBusy,
     notifVisibility: state.notifVisibility,
     notifMessage: state.notifMessage,
+    notifType: state.notifType,
   };
 };
 

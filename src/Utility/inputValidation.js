@@ -4,7 +4,7 @@ const checkValidity = (value, rules) => {
   }
 
   if (rules.required) {
-    if (value.trim() == "") {
+    if (value.trim() === "") {
       return "Required Field";
     }
   }
@@ -76,7 +76,7 @@ const checkValidity = (value, rules) => {
       return "Password must contain at least one Digit.";
     }
 
-    const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])/;
+    const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}[\]|\\:;"'<>,.?/_₹])/;
     if (!isContainsSymbol.test(value)) {
       return "Password must contain at least one Special Symbol.";
     }
