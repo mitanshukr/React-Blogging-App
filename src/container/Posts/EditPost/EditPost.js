@@ -38,7 +38,6 @@ class EditPost extends Component {
     } else {
       URI = `http://localhost:8000/post/public/${this.postId}`;
     }
-
     axios
       .get(URI, {
         headers: {
@@ -107,6 +106,9 @@ class EditPost extends Component {
           isChanged: false,
         });
         this.props.showNotification("Post updated Successfully!", "SUCCESS");
+        this.props.history.replace(
+          `/post${this.state.isPrivate ? "/private" : ""}/${this.postId}`
+        );
       })
       .catch((err) => {
         this.setState({ serverBusy: false });

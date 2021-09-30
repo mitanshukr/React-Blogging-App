@@ -1,17 +1,22 @@
 const editPostHandler = (e, props, postId, isPrivate) => {
   e.stopPropagation();
   if (isPrivate) {
-    props.history.push({
-      pathname: `/post/private/edit/${postId}`,
-      state: { prevPath: props.location.pathname },
-    });
+    if (props.location.pathname.includes("/post/")) {
+      props.history.replace(`/post/private/edit/${postId}`);
+    } else {
+      props.history.push(`/post/private/edit/${postId}`);
+    }
   } else {
-    props.history.push({
-      pathname: `/post/edit/${postId}`,
-      // search: '',
-      state: { prevPath: props.location.pathname },
-    });
-    // props.history.push("/post/edit/" + postId);
+    if (props.location.pathname.includes("/post/")) {
+      props.history.replace(`/post/edit/${postId}`);
+    } else {
+      props.history.push(`/post/edit/${postId}`);
+    }
+    // props.history.replace({
+    //   pathname: `/post/edit/${postId}`,
+    //   search: '',
+    //   state: { prevPath: props.location.pathname },
+    // });
   }
 };
 

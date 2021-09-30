@@ -11,7 +11,7 @@ import copyToClipboard from "../../../Utility/copyToClipboardHandler";
 import editPostHandler from "../utils/editPostHandler";
 import { showNotification } from "../../../store/actions";
 // import { BiShare, BiLockAlt, BiDotsVerticalRounded } from "react-icons/bi";
-import { FiShare, FiLock } from "react-icons/fi";
+import { FiShare, FiLock, FiMoreVertical } from "react-icons/fi";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import Tag from "../../../components/UI/TagStyler/Tag";
@@ -38,6 +38,8 @@ class GetSinglePost extends Component {
     let URI = null;
     this.postId = this.props.match.params.postId;
     const isPrivate = this.props.match.path.split("/")[2] === "private";
+    // const isPrivate = this.props.history.location?.state?.isPrivate === true;
+
     if (isPrivate) {
       URI = `http://localhost:8000/post/private/${this.postId}`;
     } else {
@@ -229,7 +231,7 @@ class GetSinglePost extends Component {
                 ""
               )}
             </span>
-            <span>
+            <span className={classes.GetSinglePost__icons}>
               {this.state.post.isPrivate ? (
                 <small>
                   <FiLock
@@ -245,7 +247,7 @@ class GetSinglePost extends Component {
                   <FiShare title="Share this Post" size={20} />
                 </small>
               )}
-              <small className={classes.bookmarkIcons}>
+              <small>
                 {this.props.isAuthenticated ? (
                   this.state.post.savedby.find(
                     (userId) => userId === this.props.userId
@@ -271,15 +273,19 @@ class GetSinglePost extends Component {
                     />
                   )
                 ) : null}
-                {/* <BiDotsVerticalRounded
-              size={20}
-              style={{ cursor: "auto" }}
-              title="Actions"
-            /> */}
+              </small>
+              <small>
+                <FiMoreVertical
+                  size={20}
+                  style={{ cursor: "auto" }}
+                  title="Actions (Inactive)"
+                />
               </small>
             </span>
           </div>
-          <div>{parse(this.state.post.body)}</div>
+          <div className={classes.GetSinglePost__body}>
+            {parse(this.state.post.body)}
+          </div>
           <hr />
           <div className={classes.GetSinglePost__stats}>
             <div className={classes.GetSinglePost__likes}>

@@ -65,9 +65,14 @@
   cursor: pointer;
 }
 
-.bookmarkIcons {
-  margin-left: 8px;
+.GetSinglePost__icons > * {
+  margin-left: 10px;
 }
+
+.GetSinglePost__body{
+  padding-bottom: 10px;
+}
+
 .GetSinglePost__stats {
   display: flex;
   align-items: center;

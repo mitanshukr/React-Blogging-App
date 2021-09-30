@@ -4,10 +4,8 @@ import { connect } from "react-redux";
 import "./App.css";
 import Layout from "./components/Layout/Layout";
 import MyPosts from "./container/Posts/MyPosts/MyPosts";
-import GetSinglePost from "./container/Posts/GetSinglePost/GetSinglePost";
 import Feed from "./container/Posts/Feed/Feed";
 import WritingZone from "./container/WritingZone/WritingZone";
-import Login from "./container/Auth/Login/Login";
 import Logout from "./container/Auth/Logout";
 import Signup from "./container/Auth/Signup/Signup";
 import { sessionRefresher } from "./store/actions";
@@ -18,11 +16,14 @@ import Spinner from "./components/UI/Spinner/Spinner";
 import Profile from "./container/User/Profile/Profile";
 import Notification from "./components/UI/Notification/Notification";
 import SavedItems from "./container/Posts/SavedItems/SavedItems";
+import Login from "./container/Auth/Login/Login";
 import ForgotPassword from "./container/Auth/PasswordChange/ForgotPassword";
 import ResetPassword from "./container/Auth/PasswordChange/ResetPassword";
 import EmailVerification from "./container/Auth/EmailVerification/EmailVerification";
 import AuthRoute from "./hoc/AuthRoute";
 import NotFound404 from "./components/UI/SvgImages/NotFound404";
+import GetSinglePost from "./container/Posts/GetSinglePost/GetSinglePost";
+// import GetSinglePostRouter from "./container/Posts/GetSinglePost/Index";
 
 class App extends Component {
   constructor(props) {
