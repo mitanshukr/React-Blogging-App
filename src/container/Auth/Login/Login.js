@@ -107,6 +107,9 @@ class Login extends Component {
 
   loginSubmitHandler = (e) => {
     e.preventDefault();
+    if (this.state.serverBusy) return;
+    this.setState({ serverBusy: true });
+
     let error = this.state.localError;
     for (let field in this.state.inputElements) {
       error += this.onBlurEventHandler({
@@ -114,9 +117,11 @@ class Login extends Component {
         value: this.state.inputElements[field].value,
       });
     }
-    if (error) return;
-    if (this.state.serverBusy) return;
-    this.setState({ serverBusy: true });
+    if (error) {
+      this.setState({ serverBusy: false });
+      return;
+    }
+
     const userCred = {
       email: this.state.inputElements.email.value,
       password: this.state.inputElements.password.value,

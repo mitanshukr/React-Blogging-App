@@ -7,7 +7,13 @@ import axios from "axios";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 import AuthCard from "../../../components/UI/AuthCard/AuthCard";
 import { Link } from "react-router-dom";
+import checkValidity from "../../../Utility/inputValidation";
+import { cloneDeep } from "lodash";
+import getErrorMsg from "../authErrorHandler";
+import ErrorCard from "../../../components/UI/ErrorCard/ErrorCard";
 // import Spinner from "../../../components/UI/Spinner/Spinner";
+
+import classes from "./ResetPassword.module.css";
 
 class ResetPassword extends React.Component {
   state = {
@@ -17,59 +23,132 @@ class ResetPassword extends React.Component {
         elementConfig: {
           name: "password",
           type: "password",
-          placeholder: "Enter your new Password",
+          placeholder: "Enter a New Password",
         },
         value: "",
-        validation: {},
+        validation: {
+          errorMsg: null,
+          isTouched: false,
+          required: true,
+          isStrongPassword: true,
+        },
       },
       password2: {
         elementType: "input",
         elementConfig: {
-          name: "password",
+          name: "password2",
           type: "password",
-          placeholder: "Re-enter your new Password",
+          placeholder: "Re-enter the Password",
         },
         value: "",
-        validation: {},
+        validation: {
+          errorMsg: null,
+          isTouched: false,
+          required: true,
+          // isStrongPassword: true,
+        },
       },
     },
     userEmail: "",
     isPasswordUpdated: false,
+    linkBroken: null,
     serverBusy: false,
     localError: null,
   };
 
   componentDidMount() {
-    axios
-      .get(`http://localhost:8000/user/info/${this.props.match.params.userId}`)
-      .then((response) => {
-        this.setState({ userEmail: response?.data?.email });
-      })
-      .catch((err) => {
-        console.log("Something went wrong!");
-        this.setState({ localError: "Looks like the URL is invalid." });
-      });
+    const query = new URLSearchParams(this.props.location.search);
+    if (query.get("email")) {
+      this.setState({ userEmail: query.get("email") });
+    } else {
+      this.setState({ localError: "Looks like the URL is invalid." });
+    }
+    // axios
+    //   .get(`http://localhost:8000/user/info/${this.props.match.params.userId}`)
+    //   .then((response) => {
+    //     this.setState({ userEmail: response?.data?.email });
+    //   })
+    //   .catch((err) => {
+    //     this.setState({ localError: "Looks like the URL is invalid." });
+    //   });
   }
 
-  inputChangeHandler = (e, type) => {
-    const updatedInputElements = { ...this.state.inputElements };
-    updatedInputElements[type].value = e.target.value;
+  onBlurEventHandler = (event) => {
+    let name = event.target?.name || event.name;
+    let value = event.target?.value || event.value || "";
+    let errorMsg = checkValidity(
+      value,
+      this.state.inputElements[name].validation
+    );
+    if (name === "password2") {
+      if (value !== this.state.inputElements.password.value) {
+        errorMsg = "Password does not Match.";
+      }
+    }
+    const updatedElem = cloneDeep(this.state.inputElements[name]);
+    updatedElem.value = value;
+    updatedElem.validation.isTouched = true;
+    updatedElem.validation.errorMsg = errorMsg;
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        inputElements: {
+          ...prevState.inputElements,
+          [name]: updatedElem,
+        },
+      };
+    });
+    return errorMsg;
+  };
+
+  inputChangeHandler = (e) => {
+    let name = e.target?.name;
+    let value = e.target?.value;
+    let errorMsg = null;
+    if (this.state.inputElements[name].validation.isTouched) {
+      errorMsg = checkValidity(
+        value,
+        this.state.inputElements[name].validation
+      );
+    }
+    if (name === "password2") {
+      if (value !== this.state.inputElements.password.value) {
+        errorMsg = "Password does not Match.";
+      }
+    }
+
+    const updatedInputElements = cloneDeep(this.state.inputElements);
+    if (name === "password") {
+      if (value !== this.state.inputElements.password2.value) {
+        updatedInputElements.password2.validation.errorMsg =
+          "Password does not Match.";
+      } else {
+        updatedInputElements.password2.validation.errorMsg = null;
+      }
+    }
+    updatedInputElements[name].value = value;
+    updatedInputElements[name].validation.errorMsg = errorMsg;
     this.setState({ inputElements: updatedInputElements });
   };
 
   updatePassSubmitHandler = (e) => {
-    if (this.state.serverBusy) {
-      return;
-    }
-    if (
-      this.state.inputElements.password.value !==
-        this.state.inputElements.password2.value ||
-      this.state.inputElements.password2.value.length === 0
-    ) {
-      alert("Invalid Input!");
-      return;
-    }
+    if (this.state.serverBusy) return;
     this.setState({ serverBusy: true });
+    if (this.state.localError) {
+      this.setState({ localError: null });
+    }
+    let error = null;
+    for (let field in this.state.inputElements) {
+      error += this.onBlurEventHandler({
+        name: field,
+        value: this.state.inputElements[field].value,
+      });
+    }
+    if (error) {
+      this.setState({ serverBusy: false });
+      return;
+    }
+
     axios
       .post("http://localhost:8000/auth/reset-password", {
         userId: this.props.match.params.userId,
@@ -78,18 +157,38 @@ class ResetPassword extends React.Component {
       })
       .then((response) => {
         if (response.data.status === "SUCCESS") {
-          this.setState({ isPasswordUpdated: true });
+          this.setState({ isPasswordUpdated: true, serverBusy: false });
         }
-        this.setState({ serverBusy: false });
       })
       .catch((err) => {
-        console.log(err.response);
-        //state localError...
-        this.setState({ serverBusy: false });
+        let linkBroken = false;
+        if (
+          err.response?.data?.status === 400 ||
+          err.response?.data?.status === 410
+        ) {
+          linkBroken = true;
+        }
+        this.setState({
+          serverBusy: false,
+          localError: getErrorMsg(err),
+          linkBroken: linkBroken,
+        });
       });
   };
 
   render() {
+    let formElements = Object.keys(this.state.inputElements).map((element) => (
+      <Input
+        key={element}
+        elementType={this.state.inputElements[element].elementType}
+        onChange={this.inputChangeHandler}
+        elementConfig={this.state.inputElements[element].elementConfig}
+        value={this.state.inputElements[element].value}
+        onBlur={this.onBlurEventHandler}
+        errorMsg={this.state.inputElements[element].validation.errorMsg}
+      />
+    ));
+
     return (
       <AuthLayout>
         <AuthCard>
@@ -103,53 +202,34 @@ class ResetPassword extends React.Component {
             </>
           ) : (
             <>
-              <div style={{ marginBottom: "20px" }}>
+              <div className={classes.ResetPassword__header}>
                 <h2 style={{ marginBottom: "0px" }}>Reset your Password</h2>
-                <small style={{ color: "tomato", lineHeight: "1px" }}>
-                  {this.state.localError
-                    ? this.state.localError
-                    : "Please don't share this link to anyone."}
-                </small>
-                {/* <p>{this.state.localError}</p> */}
+                <small>Please don't share this link to anyone.</small>
+                <input
+                  disabled
+                  type="text"
+                  name="email"
+                  value={this.state.userEmail}
+                />
               </div>
-              <input
-                style={{
-                  color: "rgb(182, 182, 182)",
-                  fontWeight: "bold",
-                  border: "none",
-                  outline: "none",
-                  textAlign: "center",
-                }}
-                disabled
-                type="text"
-                name="email"
-                value={this.state.userEmail}
-              />
-
-              <Input
-                key="password"
-                elementType={this.state.inputElements.password.elementType}
-                onChange={(e) => this.inputChangeHandler(e, "password")}
-                elementConfig={this.state.inputElements.password.elementConfig}
-                value={this.state.inputElements.password.value}
-              />
-              <Input
-                key="password2"
-                elementType={this.state.inputElements.password2.elementType}
-                onChange={(e) => this.inputChangeHandler(e, "password2")}
-                elementConfig={this.state.inputElements.password2.elementConfig}
-                value={this.state.inputElements.password2.value}
-              />
+              <ErrorCard style={{ boxSizing: "border-box", width: "100%" }}>
+                {this.state.localError}
+              </ErrorCard>
+              {formElements}
               <Button
                 type="submit"
                 onClick={this.updatePassSubmitHandler}
-                disabled={this.state.serverBusy ? true : false}
+                disabled={this.state.serverBusy || this.state.linkBroken}
               >
                 {this.state.serverBusy ? "Please wait..." : "Update"}
               </Button>
             </>
           )}
         </AuthCard>
+        <div className={classes.ResetPassword__navigation}>
+          <Link to="/">Go to Homepage</Link>
+          <Link to="/login">Go to Login Page</Link>
+        </div>
       </AuthLayout>
     );
   }

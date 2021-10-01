@@ -1,6 +1,8 @@
 const getErrorMsg = (err) => {
   if (err.message.toLowerCase().includes("network error")) {
-    return "Server Down! Please try again later.";
+    return "Network Error! Please check your connectivity.";
+  } else if (err.response?.data?.status === 500) {
+    return "Server Error! Please try again Later.";
   } else if (err.response?.data?.message) {
     return err.response?.data?.message;
   } else {

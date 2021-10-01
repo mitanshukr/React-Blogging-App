@@ -110,7 +110,7 @@ class Profile extends React.Component {
 
               <GetPosts type="PROFILE_POSTS" userName={this.state.username}>
                 <div className={classes.LikedPosts__emptyMsg}>
-                  <h2>No Posts yet!</h2>
+                  <h2>No Post yet!</h2>
                   <p style={{ fontStyle: "italic", color: "grey" }}>
                     Parallel Lines do intersect, and they intersect beautifully.
                     <br />

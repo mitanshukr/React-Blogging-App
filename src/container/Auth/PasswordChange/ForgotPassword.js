@@ -79,7 +79,10 @@ class ForgotPassword extends React.Component {
 
   forgotPassSubmitHandler = (e) => {
     e.preventDefault();
-    let error = this.state.localError;
+    if (this.state.localError) {
+      this.setState({ localError: null });
+    }
+    let error = null;
     error += this.onBlurEventHandler({
       name: "email",
       value: this.state.inputElements.email.value,
@@ -116,6 +119,7 @@ class ForgotPassword extends React.Component {
               <h3>Reset Link Sent Successfully!</h3>
               <p>Please find the reset link sent to your inbox.</p>
               <small>Valid for 1hr.</small>
+              <Link to="/">Go to Home Page</Link>
             </>
           ) : (
             <>
@@ -140,11 +144,7 @@ class ForgotPassword extends React.Component {
                 <Button
                   type="submit"
                   onClick={this.forgotPassSubmitHandler}
-                  disabled={
-                    this.state.serverBusy || this.state.localError
-                      ? true
-                      : false
-                  }
+                  disabled={this.state.serverBusy ? true : false}
                 >
                   {this.state.serverBusy ? "Please wait..." : "Get Link"}
                 </Button>

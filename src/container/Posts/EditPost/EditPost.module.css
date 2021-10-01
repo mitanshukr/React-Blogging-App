@@ -26,7 +26,6 @@
   margin: 0;
 }
 .EditPost__col1 input {
-  margin-bottom: 15px;
   font-size: 2.5rem;
   font-weight: bold;
   padding-left: 0;
@@ -41,6 +40,7 @@
 }
 
 .EditPost__editor {
+  margin-top: 10px;
   min-height: 100px;
   background: url("../../../assets/loaders/loader.gif") no-repeat center;
 }

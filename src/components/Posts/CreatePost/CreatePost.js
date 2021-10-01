@@ -1,5 +1,6 @@
 import Aux from "../../../hoc/Auxiliary";
 import Button from "../../UI/Button/Button";
+import ErrorCard from "../../UI/ErrorCard/ErrorCard";
 import Input from "../../UI/Input/Input";
 import classes from "./CreatePost.module.css";
 
@@ -25,10 +26,17 @@ const createPost = (props) => {
     <div className={classes.CreatePost}>
       <h3>Create Post</h3>
       <form onSubmit={props.onSubmit}>
+        <ErrorCard>{props.errorMsg}</ErrorCard>
         {formElement}
         <div className={classes.Button}>
-          <Button type="submit">Submit</Button>
-          <Button type="button" onClick={props.cancelClicked}>
+          <Button type="submit" disabled={props.serverBusy}>
+            {props.serverBusy ? "Please wait..." : "Submit"}
+          </Button>
+          <Button
+            type="button"
+            onClick={props.cancelClicked}
+            disabled={props.serverBusy}
+          >
             Cancel
           </Button>
         </div>

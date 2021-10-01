@@ -7,7 +7,6 @@ import { cloneDeep } from "lodash";
 import CreatePost from "../../components/Posts/CreatePost/CreatePost";
 import Button from "../../components/UI/Button/Button";
 import Modal from "../../components/UI/Modal/Modal";
-import Spinner from "../../components/UI/Spinner/Spinner";
 import { dispatchBodyHandler } from "../../store/actions";
 import htmlToText from "html2plaintext";
 import checkValidity from "../../Utility/inputValidation";
@@ -82,11 +81,11 @@ class WritingZone extends Component {
           type: "radio",
           required: "true",
           options: [
-            { value: true, displayValue: "Yes", checked: false },
-            { value: false, displayValue: "No", checked: true },
+            { value: "yes", displayValue: "Yes", checked: false },
+            { value: "no", displayValue: "No", checked: true },
           ],
         },
-        value: false,
+        value: "no", //value of default checked:true option.
         label: "Keep it Secret?",
         validation: {
           required: true,
@@ -130,9 +129,9 @@ class WritingZone extends Component {
   };
 
   onBlurEventHandler = (event) => {
-    let name = event.target?.name;
-    let value = event.target?.value;
-    console.log(name, value);
+    let name = event.target?.name || event.name;
+    let value = event.target?.value || event.value || "";
+
     const errorMsg = checkValidity(
       value,
       this.state.inputElements[name].validation
@@ -154,6 +153,9 @@ class WritingZone extends Component {
   };
 
   inputChangeHandler = (event) => {
+    if (this.state.localError) {
+      this.setState({ localError: null });
+    }
     let value = event.target?.value;
     let name = event.target?.name;
     if (!name) {
@@ -176,29 +178,28 @@ class WritingZone extends Component {
 
   submitPostHandler = (event) => {
     event.preventDefault();
-    let error = this.onBlurEventHandler({
-      target: { name: "title", value: this.state.inputElements.title.value },
-    });
-    error += this.onBlurEventHandler({
-      target: {
-        name: "excerpt",
-        value: this.state.inputElements.excerpt.value,
-      },
-    });
-    error += this.onBlurEventHandler({
-      target: { name: "tags", value: this.state.inputElements.tags.value },
-    });
+    if (this.state.serverBusy) return;
+    this.setState({ serverBusy: true });
+
+    let error = null;
+    for (let field in this.state.inputElements) {
+      error += this.onBlurEventHandler({
+        name: field,
+        value: this.state.inputElements[field].value,
+      });
+    }
     if (error) {
+      this.setState({ serverBusy: false });
       return;
     }
 
-    this.setState({ serverBusy: true });
     const post = {
       title: this.state.inputElements.title.value,
       excerpt: this.state.inputElements.excerpt.value,
       body: this.state.inputElements.body.value,
       tags: getStringToTagsArray(this.state.inputElements.tags.value),
-      isPrivate: this.state.inputElements.isPrivate.value,
+      isPrivate:
+        this.state.inputElements.isPrivate.value === "yes" ? true : false,
       creator: {
         _id: this.props.userId,
         userName: this.props.userName,
@@ -222,8 +223,13 @@ class WritingZone extends Component {
         this.props.history.push("/posts");
       })
       .catch((err) => {
-        this.setState({ localError: err, serverBusy: false });
-        console.log(err);
+        let errorMsg = null;
+        if (err.message.toLowerCase().includes("network error")) {
+          errorMsg = "Network Error! Please try again.";
+        } else {
+          errorMsg = "Something Went Wrong! Please try again.";
+        }
+        this.setState({ localError: errorMsg, serverBusy: false });
       });
   };
 
@@ -232,6 +238,7 @@ class WritingZone extends Component {
   };
 
   backdropToggler = () => {
+    if (this.state.serverBusy) return;
     this.setState({ modalVisibility: false, localError: null });
   };
 
@@ -242,19 +249,17 @@ class WritingZone extends Component {
           visibility={this.state.modalVisibility}
           clicked={this.backdropToggler}
         >
-          {this.state.serverBusy ? (
-            <Spinner />
-          ) : this.state.localError ? (
-            <p>{this.state.localError.toString()}</p>
-          ) : (
+          {
             <CreatePost
               formData={this.state.inputElements}
               onChange={this.inputChangeHandler}
               onSubmit={this.submitPostHandler}
               cancelClicked={this.cancelBtnHandler}
               onBlur={this.onBlurEventHandler}
+              errorMsg={this.state.localError}
+              serverBusy={this.state.serverBusy}
             />
-          )}
+          }
         </Modal>
         <form onSubmit={this.createPostHandler} className="WritingZone">
           <div className="homeEditor">

@@ -23,7 +23,7 @@ const checkValidity = (value, rules) => {
 
   if (rules.minLength) {
     if (value && value.length < rules.minLength) {
-      return `Length must be greater than or equal to ${rules.minLength}.`;
+      return `Enter atleast ${rules.minLength} characters.`;
     }
   }
 
