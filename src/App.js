@@ -2,7 +2,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./App.css";
-import Layout from "./components/Layout/Layout";
+import Layout from "./container/Layout/Layout";
 import MyPosts from "./container/Posts/MyPosts/MyPosts";
 import Feed from "./container/Posts/Feed/Feed";
 import WritingZone from "./container/WritingZone/WritingZone";
@@ -14,7 +14,6 @@ import EditPost from "./container/Posts/EditPost/EditPost";
 import Account from "./container/User/Account/Account";
 import Spinner from "./components/UI/Spinner/Spinner";
 import Profile from "./container/User/Profile/Profile";
-import Notification from "./components/UI/Notification/Notification";
 import SavedItems from "./container/Posts/SavedItems/SavedItems";
 import Login from "./container/Auth/Login/Login";
 import ForgotPassword from "./container/Auth/PasswordChange/ForgotPassword";
@@ -39,11 +38,6 @@ class App extends Component {
   render() {
     let app = (
       <div className="App">
-        <Notification
-          message={this.props.notifMessage}
-          show={this.props.notifVisibility}
-          type={this.props.notifType}
-        />
         <Switch>
           <Route
             path="/verify-email/:userId/:verificationToken"
@@ -54,10 +48,7 @@ class App extends Component {
             path="/reset-password/:userId/:resetToken"
             component={ResetPassword}
           />
-          <Layout
-            isAuthenticated={this.props.isAuthenticated}
-            prevPath={this.props.history?.location?.pathname}
-          >
+          <Layout>
             <Switch>
               <Route path="/home" exact component={HomePage} />
               <Route path="/" exact component={WritingZone} />
@@ -109,9 +100,6 @@ const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.isAuthenticated,
     serverBusy: state.serverBusy,
-    notifVisibility: state.notifVisibility,
-    notifMessage: state.notifMessage,
-    notifType: state.notifType,
   };
 };
 

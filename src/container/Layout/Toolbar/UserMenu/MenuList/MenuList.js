@@ -1,7 +1,7 @@
 import React from "react";
 import { FaRegBookmark, FaRegUser, FaRocketchat, FaKey } from "react-icons/fa";
+import NavigationItem from "../../../../../components/Layout/NavigationItems/NavigationItem/NavigationItem";
 
-import NavigationItem from "../../../../components/Toolbar/NavigationItems/NavigationItem/NavigationItem";
 import classes from "./MenuList.module.css";
 
 class MenuList extends React.Component {
@@ -56,7 +56,11 @@ class MenuList extends React.Component {
         <NavigationItem onClick={this.linkClicked} link="/feedback">
           <FaRocketchat /> Feedback
         </NavigationItem>
-        <NavigationItem onClick={this.linkClicked} link="/logout" prevPath={this.props.prevPath}>
+        <NavigationItem
+          onClick={this.linkClicked}
+          link="/logout"
+          prevPath={this.props.prevPath}
+        >
           <FaKey /> Logout
         </NavigationItem>
       </div>
