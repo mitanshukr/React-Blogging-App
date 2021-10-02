@@ -23,6 +23,7 @@ import EmailVerification from "./container/Auth/EmailVerification/EmailVerificat
 import AuthRoute from "./hoc/AuthRoute";
 import NotFound404 from "./components/UI/SvgImages/NotFound404";
 import GetSinglePost from "./container/Posts/GetSinglePost/GetSinglePost";
+import HomePage from "./container/HomePage/HomePage";
 // import GetSinglePostRouter from "./container/Posts/GetSinglePost/Index";
 
 class App extends Component {
@@ -53,8 +54,12 @@ class App extends Component {
             path="/reset-password/:userId/:resetToken"
             component={ResetPassword}
           />
-          <Layout isAuthenticated={this.props.isAuthenticated}>
+          <Layout
+            isAuthenticated={this.props.isAuthenticated}
+            prevPath={this.props.history?.location?.pathname}
+          >
             <Switch>
+              <Route path="/home" exact component={HomePage} />
               <Route path="/" exact component={WritingZone} />
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />

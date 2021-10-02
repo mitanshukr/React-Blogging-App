@@ -1,0 +1,11 @@
+.Home {
+  width: 100vw;
+  /* margin: 0;
+  padding: 0;
+  box-sizing: border-box; */
+  height: calc(100vh - 59px);
+  background: url("../../assets/home.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}

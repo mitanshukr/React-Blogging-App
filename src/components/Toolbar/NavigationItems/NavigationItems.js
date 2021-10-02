@@ -14,7 +14,7 @@ const navigationItems = (props) => {
           Feed
         </NavigationItem>
         <NavigationItem link="/posts">Posts</NavigationItem>
-        <UserMenu />
+        <UserMenu prevPath={props.prevPath} />
       </ul>
     );
   } else {
@@ -26,7 +26,9 @@ const navigationItems = (props) => {
         <NavigationItem link="/feed" exact>
           Feed
         </NavigationItem>
-        <NavigationItem link="/login">Login</NavigationItem>
+        <NavigationItem link="/login" prevPath={props.prevPath}>
+          Login
+        </NavigationItem>
         <NavigationItem link="/signup">Signup</NavigationItem>
       </ul>
     );

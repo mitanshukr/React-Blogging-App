@@ -35,6 +35,7 @@ class MenuIcon extends React.Component {
             firstName={this.props.firstName}
             lastName={this.props.lastName}
             userName={this.props.userName}
+            prevPath={this.props.prevPath}
             iconId={{
               selfId: "user-icon-01",
               childId: "user-img-01",

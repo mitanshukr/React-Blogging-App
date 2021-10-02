@@ -5,6 +5,8 @@ import ProfilePicture from "./ProfilePicture";
 import classes from "./ProfileSection.module.css";
 
 const ProfileSection = (props) => {
+  const query = new URLSearchParams("user/?feed=posts").get("feed");
+
   return (
     <>
       <ProfilePicture />
@@ -21,8 +23,12 @@ const ProfileSection = (props) => {
       <div className={classes.ProfileSection__edit}>Edit</div>
       <div className={classes.ProfileSection__action}>
         <ul>
+          {/* {
+            props.menuItems
+          } */}
           <NavLink
             to={`/profile/${props.username}?feed=posts`}
+            activeClassName="hello"
             className={props.feedQuery !== "likes" ? classes.activeNav : ""}
           >
             <li>Public Posts</li>

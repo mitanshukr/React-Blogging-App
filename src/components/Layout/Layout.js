@@ -4,9 +4,12 @@ import Aux from "../../hoc/Auxiliary";
 const layout = (props) => {
   return (
     <Aux>
-      <Toolbar isAuthenticated={props.isAuthenticated} />
+      <Toolbar
+        isAuthenticated={props.isAuthenticated}
+        prevPath={props.prevPath}
+      />
       {/* //sidedrawer */}
-      <main>{props.children}</main>
+      <main style={{ height: "100%" }}>{props.children}</main>
     </Aux>
   );
 };

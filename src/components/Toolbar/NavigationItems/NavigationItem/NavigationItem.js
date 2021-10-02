@@ -6,8 +6,13 @@ const navigationItem = (props) => {
       <NavLink
         exact
         onClick={props.onClick}
-        activeClassName="active"
-        to={props.link}
+        // activeClassName="active"
+        to={{
+          pathname: props.link,
+          state: {
+            prevPath: props.prevPath,
+          },
+        }}
       >
         {props.children}
       </NavLink>

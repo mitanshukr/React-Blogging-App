@@ -11,7 +11,10 @@ const toolbar = (props) => {
         </NavLink>
       </div>
       <nav>
-        <NavigationItems isAuthenticated={props.isAuthenticated} />
+        <NavigationItems
+          isAuthenticated={props.isAuthenticated}
+          prevPath={props.prevPath}
+        />
         {/* togglerBtn */}
       </nav>
     </header>

@@ -56,7 +56,7 @@ class MenuList extends React.Component {
         <NavigationItem onClick={this.linkClicked} link="/feedback">
           <FaRocketchat /> Feedback
         </NavigationItem>
-        <NavigationItem onClick={this.linkClicked} link="/logout">
+        <NavigationItem onClick={this.linkClicked} link="/logout" prevPath={this.props.prevPath}>
           <FaKey /> Logout
         </NavigationItem>
       </div>

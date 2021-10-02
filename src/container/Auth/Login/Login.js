@@ -57,7 +57,12 @@ class Login extends Component {
   }
 
   authCheck() {
-    this.from = this.props.location?.state?.from || { pathname: "/" };
+    if (this.props.location?.state?.from?.isLogout) {
+      this.props.history.replace("/");
+    } else {
+      this.from = this.props.location?.state?.from ||
+        this.props.location?.state?.prevPath || { pathname: "/" };
+    }
     if (this.props.isAuthenticated) {
       this.props.history.replace(this.from);
     }
@@ -167,11 +172,12 @@ class Login extends Component {
       <AuthLayout>
         <AuthCard>
           <form onSubmit={this.loginSubmitHandler}>
-            {this.from.pathname !== "/" ? (
-              <h2>Please Login to Continue!</h2>
-            ) : (
-              <h2>Welcome Back!</h2>
-            )}
+            <h2 style={{ marginBottom: 0 }}>Welcome Back!</h2>
+            {this.props.location?.state?.from ? (
+              <small style={{ color: "tomato" }}>
+                Please Login to Continue.
+              </small>
+            ) : null}
             <ErrorCard>{this.state.localError}</ErrorCard>
             {formElements}
             <Button

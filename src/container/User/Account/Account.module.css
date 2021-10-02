@@ -32,10 +32,10 @@
     height: 70vh;
 }
 
-.Account__main-name {
+/* .Account__main-name {
     display: flex;
     justify-content: center;
-}
+} */
 
 .Account > * {
     border: 1px solid black;

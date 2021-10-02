@@ -1,16 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 
 import { logoutActionHandler } from "../../store/actions";
 
 class Logout extends Component {
-  componentWillUnmount() {
+  componentDidMount() {
     this.props.logoutDispatchHandler();
+    this.props.history.replace({
+      pathname: this.props.location.state.prevPath,
+      isLogout: true,
+    });
   }
 
   render() {
-    return <Redirect to="/" />;
+    return <></>;
   }
 }
 
@@ -20,4 +24,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Logout);
+export default connect(null, mapDispatchToProps)(withRouter(Logout));
