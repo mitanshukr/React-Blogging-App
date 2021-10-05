@@ -1,0 +1,17 @@
+.PersonalInfo {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 30px;
+}
+
+.PersonalInfo__main {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.PersonalInfo__profile {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

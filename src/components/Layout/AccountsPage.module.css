@@ -1,0 +1,43 @@
+.AccountsPage {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 100px;
+  flex-wrap: wrap;
+}
+
+.AccountsPage__header {
+  flex-basis: 100%;
+}
+
+.AccountsPage__col1 {
+  flex: 1 1 10%;
+  height: 200px;
+  position: sticky;
+  top: 0px;
+  border: 1px solid rgb(224, 224, 224);
+}
+
+.AccountsPage__col2 {
+  flex: 2 1 auto;
+  border: 1px solid rgb(224, 224, 224);
+}
+
+.AccountsPage__col1 ul {
+  list-style: none;
+  /* text-align: center; */
+  padding: 0;
+}
+
+.AccountsPage__col1 ul li {
+  padding: 6px 0 6px 15px;
+  border-radius: 500px;
+  font-weight: 500;
+  color: #2c2926;
+  transition: all 0.2s ease-in-out;
+}
+
+.AccountsPage__col1 ul li:hover {
+  background-color: rgb(253, 232, 232);
+  color: tomato;
+}
