@@ -11,7 +11,7 @@ import Signup from "./container/Auth/Signup/Signup";
 import { sessionRefresher } from "./store/actions";
 import { Component } from "react";
 import EditPost from "./container/Posts/EditPost/EditPost";
-import Account from "./container/User/Account/Account";
+import AccountsPage from "./container/User/AccountsPage/AccountsPage";
 import Spinner from "./components/UI/Spinner/Spinner";
 import Profile from "./container/User/Profile/Profile";
 import SavedItems from "./container/Posts/SavedItems/SavedItems";
@@ -59,7 +59,7 @@ class App extends Component {
               <Route path="/profile/:username(@\w+)" component={Profile} />
               {/* Regex Search in the above path - should start with @ */}
               <AuthRoute path="/user/account">
-                <Account />
+                <AccountsPage />
               </AuthRoute>
               <AuthRoute path="/user/saved-items">
                 <SavedItems />

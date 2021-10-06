@@ -1,15 +1,31 @@
 import React from "react";
 import { cloneDeep } from "lodash";
-import Input from "../../../components/UI/Input/Input";
-import ProfilePicture from "../../../components/User/Profile/ProfilePicture";
-import checkValidity from "../../../Utility/inputValidation";
-import classes from "./PersonalInfo.module.css";
 
-class PersonalInfo extends React.Component {
+import Input from "../../../components/UI/Input/Input";
+import classes from "./Account.module.css";
+import checkValidity from "../../../Utility/inputValidation";
+
+class Account extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       inputElements: {
+        email: {
+          elementType: "input",
+          elementConfig: {
+            name: "email",
+            type: "text",
+            placeholder: "Your Email Id",
+          },
+          label: "Email",
+          value: "",
+          validation: {
+            errorMsg: null,
+            isTouched: false,
+            required: true,
+            isEmail: true,
+          },
+        },
         userName: {
           elementType: "input",
           elementConfig: {
@@ -26,68 +42,22 @@ class PersonalInfo extends React.Component {
             minLength: 5,
           },
         },
-        firstName: {
+        password: {
           elementType: "input",
           elementConfig: {
-            name: "firstName",
-            type: "text",
-            placeholder: "Your First Name",
+            name: "password",
+            type: "password",
+            placeholder: "Your Password",
           },
-          label: "First Name",
+          label: "Password",
           value: "",
           validation: {
             errorMsg: null,
             isTouched: false,
             required: true,
+            isStrongPassword: true,
           },
         },
-        lastName: {
-          elementType: "input",
-          elementConfig: {
-            name: "lastName",
-            type: "text",
-            placeholder: "Your Last Name",
-          },
-          label: "Last Name",
-          value: "",
-          validation: {
-            errorMsg: null,
-            isTouched: false,
-            required: true,
-          },
-        },
-        //     email: {
-        //       elementType: "input",
-        //       elementConfig: {
-        //         name: "email",
-        //         type: "text",
-        //         placeholder: "Enter your Email Address",
-        //       },
-        //       label: "Email",
-        //       value: "",
-        //       validation: {
-        //         errorMsg: null,
-        //         isTouched: false,
-        //         required: true,
-        //         isEmail: true,
-        //       },
-        //     },
-        //     password: {
-        //       elementType: "input",
-        //       elementConfig: {
-        //         name: "password",
-        //         type: "password",
-        //         placeholder: "Your Password",
-        //       },
-        //       label: "Password",
-        //       value: "",
-        //       validation: {
-        //         errorMsg: null,
-        //         isTouched: false,
-        //         required: true,
-        //         isStrongPassword: true,
-        //       },
-        //     },
       },
       serverBusy: false,
       localError: null,
@@ -156,32 +126,24 @@ class PersonalInfo extends React.Component {
   };
 
   render() {
-    let formElements = Object.keys(this.state.inputElements).map((element) => (
-      <Input
-        key={element}
-        elementType={this.state.inputElements[element].elementType}
-        onChange={this.inputChangeHandler}
-        elementConfig={this.state.inputElements[element].elementConfig}
-        value={this.state.inputElements[element].value}
-        label={this.state.inputElements[element].label}
-        onBlur={this.onBlurEventHandler}
-        errorMsg={this.state.inputElements[element].validation.errorMsg}
-      />
-    ));
-
     return (
       <div className={classes.PersonalInfo}>
-        <div className={classes.PersonalInfo__profile}>
-          <ProfilePicture />
-          <p>Add Profile</p>
-        </div>
-        <div className={classes.PersonalInfo__main}>
-            {formElements}
-            <button>Update</button>
-        </div>
+        {["email", "userName", "password"].map((element) => (
+          <Input
+            key={element}
+            elementType={this.state.inputElements[element].elementType}
+            onChange={this.inputChangeHandler}
+            elementConfig={this.state.inputElements[element].elementConfig}
+            value={this.state.inputElements[element].value}
+            label={this.state.inputElements[element].label}
+            onBlur={this.onBlurEventHandler}
+            errorMsg={this.state.inputElements[element].validation.errorMsg}
+            required={this.state.inputElements[element].validation.required}
+          />
+        ))}
       </div>
     );
   }
 }
 
-export default PersonalInfo;
+export default Account;

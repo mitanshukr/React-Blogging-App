@@ -1,0 +1,41 @@
+.PersonalInfo {
+  display: flex;
+  flex-direction: column;
+  padding-left: 80px;
+  max-width: 400px;
+}
+
+.PersonalInfo input {
+  width: 100%;
+}
+
+.PersonalInfo__dp {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.PersonalInfo > div {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.PersonalInfo__inputRow {
+  display: flex;
+}
+
+.PersonalInfo__inputRow > div {
+  margin: 0;
+  width: 100%;
+}
+
+.PersonalInfo__inputRow > div:not(:last-of-type) {
+  margin-right: 15px;
+}
+
+.PersonalInfo__btn button {
+  margin: 0;
+  margin-left: 10px;
+  margin-top: 30px;
+  width: 80px;
+}
