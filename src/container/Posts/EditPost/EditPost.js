@@ -101,7 +101,11 @@ class EditPost extends Component {
       })
       .then((response) => {
         if (response.data?.creator?._id !== this.props.userId) {
-          this.setState({ localError: 403 });
+          this.setState({
+            localError: 403,
+            serverBusy: false,
+            isRendering: false,
+          });
         } else {
           const updatedElem = cloneDeep(this.state.inputElements);
           updatedElem.title.value = response.data.title;

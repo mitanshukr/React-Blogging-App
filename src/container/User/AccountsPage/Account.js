@@ -4,6 +4,7 @@ import { cloneDeep } from "lodash";
 import Input from "../../../components/UI/Input/Input";
 import classes from "./Account.module.css";
 import checkValidity from "../../../Utility/inputValidation";
+import Button from "../../../components/UI/Button/Button";
 
 class Account extends React.Component {
   constructor(props) {
@@ -128,19 +129,46 @@ class Account extends React.Component {
   render() {
     return (
       <div className={classes.PersonalInfo}>
-        {["email", "userName", "password"].map((element) => (
+        <Input
+          elementType="input"
+          elementConfig={{
+            name: "email",
+            type: "text",
+            placeholder: "Your Email Id",
+          }}
+          label="Email"
+          value={this.state.inputElements.email.value}
+          required={true}
+        />
+        <div>
           <Input
-            key={element}
-            elementType={this.state.inputElements[element].elementType}
-            onChange={this.inputChangeHandler}
-            elementConfig={this.state.inputElements[element].elementConfig}
-            value={this.state.inputElements[element].value}
-            label={this.state.inputElements[element].label}
-            onBlur={this.onBlurEventHandler}
-            errorMsg={this.state.inputElements[element].validation.errorMsg}
-            required={this.state.inputElements[element].validation.required}
+            elementType="input"
+            elementConfig={{
+              name: "userName",
+              type: "text",
+              placeholder: "Your Username",
+            }}
+            label="Username"
+            value={this.state.userName}
+            required={true}
           />
-        ))}
+          <Button>Update</Button>
+        </div>
+        <small>{process.env.REACT_APP_ROOT_URL}/@mitanshu</small>
+        <div>
+          <Input
+            elementType="input"
+            elementConfig={{
+              name: "password",
+              type: "password",
+              placeholder: "Your Password",
+            }}
+            label="Password"
+            value={this.state.userName}
+            required={true}
+          />
+          <Button>Update</Button>
+        </div>
       </div>
     );
   }

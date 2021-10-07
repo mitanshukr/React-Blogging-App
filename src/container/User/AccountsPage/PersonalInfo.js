@@ -5,28 +5,14 @@ import AccountPicture from "../../../components/User/Profile/AccountPicture";
 import checkValidity from "../../../Utility/inputValidation";
 import Button from "../../../components/UI/Button/Button";
 import classes from "./PersonalInfo.module.css";
+import { connect } from "react-redux";
+import axios from "axios";
 
 class PersonalInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       inputElements: {
-        // userName: {
-        //   elementType: "input",
-        //   elementConfig: {
-        //     name: "userName",
-        //     type: "text",
-        //     placeholder: "Your Username",
-        //   },
-        //   label: "Username",
-        //   value: "",
-        //   validation: {
-        //     errorMsg: null,
-        //     isTouched: false,
-        //     required: true,
-        //     minLength: 5,
-        //   },
-        // },
         firstName: {
           elementType: "input",
           elementConfig: {
@@ -54,13 +40,12 @@ class PersonalInfo extends React.Component {
           validation: {
             errorMsg: null,
             isTouched: false,
-            required: true,
           },
         },
-        contactNumber: {
+        contact: {
           elementType: "input",
           elementConfig: {
-            name: "contactNumber",
+            name: "contact",
             type: "text",
             placeholder: "Your Contact Number",
           },
@@ -71,10 +56,10 @@ class PersonalInfo extends React.Component {
             isTouched: false,
           },
         },
-        dob: {
+        birthdate: {
           elementType: "input",
           elementConfig: {
-            name: "dob",
+            name: "birthdate",
             type: "date",
             placeholder: "Enter your Birth Date",
           },
@@ -151,26 +136,36 @@ class PersonalInfo extends React.Component {
           value: "",
           validation: {},
         },
-        //     password: {
-        //       elementType: "input",
-        //       elementConfig: {
-        //         name: "password",
-        //         type: "password",
-        //         placeholder: "Your Password",
-        //       },
-        //       label: "Password",
-        //       value: "",
-        //       validation: {
-        //         errorMsg: null,
-        //         isTouched: false,
-        //         required: true,
-        //         isStrongPassword: true,
-        //       },
-        //     },
       },
       serverBusy: false,
       localError: null,
     };
+  }
+
+  //  PATCH `http://localhost:8000/user/update/${this.props.userId}`
+  //  Req: Bearer Token
+
+  componentDidMount() {
+    axios
+      .get(
+        `http://localhost:8000/user/${this.props.userId}?detailedInfo=true`,
+        {
+          headers: {
+            Authorization: `Bearer ${this.props.authToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        const updatedInputElements = cloneDeep(this.state.inputElements);
+        for (let elem in updatedInputElements) {
+          updatedInputElements[elem].value = response.data[elem];
+        }
+        this.setState({ inputElements: updatedInputElements });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   onBlurEventHandler = (event) => {
@@ -255,7 +250,7 @@ class PersonalInfo extends React.Component {
             />
           ))}
         </div>
-        {["profession", "contactNumber", "dob", "address"].map((element) => (
+        {["profession", "contact", "birthdate", "address"].map((element) => (
           <Input
             key={element}
             elementType={this.state.inputElements[element].elementType}
@@ -306,4 +301,11 @@ class PersonalInfo extends React.Component {
   }
 }
 
-export default PersonalInfo;
+const mapStateToprops = (state) => {
+  return {
+    authToken: state.authToken,
+    userId: state.userId,
+  };
+};
+
+export default connect(mapStateToprops)(PersonalInfo);

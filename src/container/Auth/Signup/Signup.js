@@ -23,7 +23,7 @@ class Signup extends Component {
           elementConfig: {
             name: "firstName",
             type: "text",
-            placeholder: "Enter your First Name",
+            placeholder: "Enter your First Name*",
           },
           value: "",
           validation: {
@@ -43,7 +43,6 @@ class Signup extends Component {
           validation: {
             errorMsg: null,
             isTouched: false,
-            required: true,
           },
         },
         email: {
@@ -51,7 +50,7 @@ class Signup extends Component {
           elementConfig: {
             name: "email",
             type: "text",
-            placeholder: "Enter your Email Address",
+            placeholder: "Enter your Email Address*",
           },
           value: "",
           validation: {
@@ -66,7 +65,7 @@ class Signup extends Component {
           elementConfig: {
             name: "password",
             type: "password",
-            placeholder: "Enter a New Password",
+            placeholder: "Enter a New Password*",
           },
           value: "",
           validation: {
@@ -81,7 +80,7 @@ class Signup extends Component {
           elementConfig: {
             name: "password2",
             type: "password",
-            placeholder: "Re-enter the Password",
+            placeholder: "Re-enter the Password*",
           },
           value: "",
           validation: {
