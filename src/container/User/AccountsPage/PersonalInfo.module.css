@@ -4,6 +4,9 @@
   padding-left: 80px;
   max-width: 400px;
 }
+.PersonalInfo label {
+  color: rgba(44, 41, 38, 0.7);
+}
 
 .PersonalInfo input {
   width: 100%;
@@ -15,7 +18,7 @@
   margin-bottom: 30px;
 }
 
-.PersonalInfo > div {
+.PersonalInfo > form > div {
   width: 100%;
   box-sizing: border-box;
 }

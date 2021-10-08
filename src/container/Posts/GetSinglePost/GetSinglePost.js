@@ -5,7 +5,7 @@ import axios from "../../../axios-instance";
 import parse from "html-react-parser";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./GetSinglePost.module.css";
-import getDateFormat from "../../../Utility/getDateFormat";
+import {getBlogDateFormat} from "../../../Utility/getDateFormat";
 import ProfileIcon from "../../../components/User/Profile/ProfileIcon";
 import copyToClipboard from "../../../Utility/copyToClipboardHandler";
 import editPostHandler from "../utils/editPostHandler";
@@ -183,7 +183,7 @@ class GetSinglePost extends Component {
       post = <ErrorSvg status={this.state.localError} src="SINGLE_POST" />;
     }
     if (this.state.post) {
-      const postDate = getDateFormat(this.state.post.createdAt);
+      const postDate = getBlogDateFormat(this.state.post.createdAt);
       post = (
         <div className={classes.GetSinglePost}>
           <div className={classes.GetSinglePost__title}>
@@ -201,7 +201,7 @@ class GetSinglePost extends Component {
               <small>
                 <Link
                   title="Visit Profile"
-                  to={`/profile/@${this.state.post.creator.userName}`}
+                  to={`/ink/@${this.state.post.creator.userName}`}
                 >
                   {this.state.post.creator.firstName}&nbsp;
                   {this.state.post.creator.lastName}
@@ -345,8 +345,8 @@ const mapStateToprops = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    showNotification: (message, visibility, type) =>
-      dispatch(showNotification(message, visibility, type)),
+    showNotification: (message, type) =>
+      dispatch(showNotification(message, type)),
   };
 };
 

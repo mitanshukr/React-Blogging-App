@@ -156,7 +156,19 @@ class EditPost extends Component {
 
   cancelUpdateHandler = (e) => {
     e.preventDefault();
-    this.props.history.goBack();
+    if (this.state.isChanged) {
+      if (
+        window.confirm(
+          "Are you sure you want to cancel? All your changes will be lost!"
+        )
+      ) {
+        this.props.history.goBack();
+      } else {
+        // Do nothing!
+      }
+    } else {
+      this.props.history.goBack();
+    }
   };
 
   inputHandler = (event) => {

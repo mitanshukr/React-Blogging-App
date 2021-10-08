@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import Aux from "../../../../hoc/Auxiliary";
-import getDateFormat from "../../../../Utility/getDateFormat";
+import {getBlogDateFormat} from "../../../../Utility/getDateFormat";
 import ProfileIcon from "../../../../components/User/Profile/ProfileIcon";
 import DeletePost from "../../../../components/Posts/DeletePost/DeletePost";
 // import { FaRegBookmark, FaBookmark } from "react-icons/fa";
@@ -42,7 +42,7 @@ class GetPost extends React.Component {
   };
 
   render() {
-    const postDate = getDateFormat(this.props.date);
+    const postDate = getBlogDateFormat(this.props.date);
     // const isPostSaved = !!this.props.savedPosts.find(
     //   (postId) => postId === this.props.postId
     // );
@@ -70,7 +70,7 @@ class GetPost extends React.Component {
                 <small>
                   <a
                     title="Visit Profile"
-                    href={`/profile/${this.props.userName}`}
+                    href={`/ink/${this.props.userName}`}
                   >
                     {this.props.firstName}&nbsp;{this.props.lastName}
                   </a>

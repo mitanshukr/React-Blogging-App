@@ -5,6 +5,8 @@ import Input from "../../../components/UI/Input/Input";
 import classes from "./Account.module.css";
 import checkValidity from "../../../Utility/inputValidation";
 import Button from "../../../components/UI/Button/Button";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 class Account extends React.Component {
   constructor(props) {
@@ -129,32 +131,43 @@ class Account extends React.Component {
   render() {
     return (
       <div className={classes.PersonalInfo}>
-        <Input
-          elementType="input"
-          elementConfig={{
-            name: "email",
-            type: "text",
-            placeholder: "Your Email Id",
-          }}
-          label="Email"
-          value={this.state.inputElements.email.value}
-          required={true}
-        />
         <div>
           <Input
             elementType="input"
             elementConfig={{
-              name: "userName",
+              name: "email",
               type: "text",
-              placeholder: "Your Username",
+              placeholder: "Your Email Id",
+              disabled: true,
             }}
-            label="Username"
-            value={this.state.userName}
+            label="Email"
+            value={this.props.email}
             required={true}
           />
-          <Button>Update</Button>
+          <small>Verify Email</small>
         </div>
-        <small>{process.env.REACT_APP_ROOT_URL}/@mitanshu</small>
+        <div className={classes.PersonalInfo__username}>
+          <div>
+            <Input
+              elementType="input"
+              elementConfig={{
+                name: "userName",
+                type: "text",
+                placeholder: "Your Username",
+                readOnly: true,
+              }}
+              label="Username"
+              value={this.props.userName}
+              required={true}
+            />
+            <Button>Update</Button>
+          </div>
+          <div>
+            <Link to={"/ink/@" + this.props.userName} target="_blank">
+              {process.env.REACT_APP_ROOT_URL}/ink/@{this.props.userName}
+            </Link>
+          </div>
+        </div>
         <div>
           <Input
             elementType="input"
@@ -162,9 +175,10 @@ class Account extends React.Component {
               name: "password",
               type: "password",
               placeholder: "Your Password",
+              readOnly: true,
             }}
             label="Password"
-            value={this.state.userName}
+            value="a0dd96439edee48d1f3"
             required={true}
           />
           <Button>Update</Button>
@@ -174,4 +188,23 @@ class Account extends React.Component {
   }
 }
 
-export default Account;
+const mapStateToprops = (state) => {
+  return {
+    authToken: state.authToken,
+    userId: state.userId,
+    email: state.email,
+    userName: state.userName,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // showNotification: (message, type) =>
+    //   dispatch(showNotification(message, type)),
+    // updateName: (fName, lName) => {
+    //   dispatch(updateName(fName, lName));
+    // },
+  };
+};
+
+export default connect(mapStateToprops, mapDispatchToProps)(Account);

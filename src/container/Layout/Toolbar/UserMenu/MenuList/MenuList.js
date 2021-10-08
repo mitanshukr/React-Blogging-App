@@ -38,7 +38,7 @@ class MenuList extends React.Component {
       <div className={classes.UserMenu} ref={this.wrapperRef}>
         <NavigationItem
           onClick={this.linkClicked}
-          link={`/profile/@${this.props.userName}`}
+          link={`/ink/@${this.props.userName}`}
         >
           <span>
             <span>

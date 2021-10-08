@@ -1,21 +1,60 @@
 .PersonalInfo {
-  width: 50%;
+  /* width: 50%; */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .PersonalInfo > div {
   margin: 0;
-}
-
-.PersonalInfo > div:not(:first-of-type) {
   display: flex;
   align-items: flex-end;
+}
+
+.PersonalInfo > div small {
+  align-self: center;
+  margin: 20px 5px 0px 5px;
+  color: tomato;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.PersonalInfo > div small:hover {
+  text-decoration: underline;
+}
+
+.PersonalInfo__username {
+  display: flex;
+  flex-direction: column;
+  /* position: relative; */
+}
+
+.PersonalInfo__username > div:first-of-type {
+  display: flex;
+  align-items: flex-end;
+}
+
+.PersonalInfo__username > div:nth-of-type(2) {
   width: 100%;
+  padding-left: 10px !important;
+  align-self: flex-start;
+  /* position: absolute;
+  bottom: -10px; */
+  transform: translateY(-10px);
 }
 
 .PersonalInfo > div button {
   margin-bottom: 10px;
 }
 
-.PersonalInfo small {
+.PersonalInfo a,
+.PersonalInfo a:visited,
+.PersonalInfo a:active {
   color: tomato;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.PersonalInfo a:hover {
+  text-decoration: underline;
 }

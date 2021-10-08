@@ -13,6 +13,7 @@
   text-transform: capitalize;
   font-weight: 500;
   font-size: 14px;
+  color: rgb(44, 41, 38);
 }
 
 .InputComponent input,
@@ -23,6 +24,12 @@
   width: -moz-available;
   margin-top: 4px;
   padding: 8px;
+  font-size: 14px;
+}
+
+.InputComponent input:focus,
+.InputComponent textarea:focus {
+  box-shadow: tomato 0px 0px 5px 1px;
 }
 
 .InputComponent .error {

@@ -9,6 +9,13 @@ const checkValidity = (value, rules) => {
     }
   }
 
+  if (rules.isNumeric && value) {
+    const pattern = /^\d+$/;
+    if (!pattern.test(value)) {
+      return "Should be Numeric";
+    }
+  }
+
   if (rules.minWordCount) {
     if (value && value.split(" ").length < rules.minWordCount) {
       return `Minimum Word Count must be ${rules.minWordCount}.`;
@@ -44,13 +51,6 @@ const checkValidity = (value, rules) => {
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     if (!pattern.test(value)) {
       return "Invalid Email";
-    }
-  }
-
-  if (rules.isNumeric) {
-    const pattern = /^\d+$/;
-    if (!pattern.test(value)) {
-      return "Should be Numeric";
     }
   }
 

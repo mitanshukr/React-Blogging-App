@@ -1,4 +1,4 @@
-.AccountsPage {
+.AccountsLayout {
   display: flex;
   width: 100%;
   box-sizing: border-box;
@@ -6,39 +6,39 @@
   flex-wrap: wrap;
 }
 
-.AccountsPage__header {
+.AccountsLayout__header {
   flex-basis: 100%;
 }
 
-.AccountsPage__col1 {
+.AccountsLayout__col1 {
   flex: 0 0 200px;
   position: sticky;
   top: 0px;
   height: fit-content;
 }
 
-.AccountsPage__col2 {
+.AccountsLayout__col2 {
   flex: 2 1 auto;
   border: 1px solid rgb(224, 224, 224);
   margin-left: 3px;
   padding: 50px;
 }
 
-.AccountsPage__col1 ul {
+.AccountsLayout__col1 ul {
   list-style: none;
   padding: 0;
 }
 
-.AccountsPage__col1 ul li {
+.AccountsLayout__col1 ul li {
   color: #2c2926;
   border-radius: 500px;
   font-weight: 500;
   overflow: hidden;
 }
 
-.AccountsPage__col1 ul li a,
-.AccountsPage__col1 ul li a:visited,
-.AccountsPage__col1 ul li a:active {
+.AccountsLayout__col1 ul li a,
+.AccountsLayout__col1 ul li a:visited,
+.AccountsLayout__col1 ul li a:active {
   text-decoration: none;
   display: block;
   width: 100%;
@@ -48,7 +48,7 @@
   transition: all 0.2s ease-in-out;
 }
 
-.AccountsPage__col1 ul li a:hover {
+.AccountsLayout__col1 ul li a:hover {
   background-color: rgb(253, 232, 232);
 }
 

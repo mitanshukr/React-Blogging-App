@@ -16,11 +16,11 @@ import Spinner from "./components/UI/Spinner/Spinner";
 import Profile from "./container/User/Profile/Profile";
 import SavedItems from "./container/Posts/SavedItems/SavedItems";
 import Login from "./container/Auth/Login/Login";
+import Error404 from "./components/UI/ErrorSvg/Errors/Error404";
 import ForgotPassword from "./container/Auth/PasswordChange/ForgotPassword";
 import ResetPassword from "./container/Auth/PasswordChange/ResetPassword";
 import EmailVerification from "./container/Auth/EmailVerification/EmailVerification";
 import AuthRoute from "./hoc/AuthRoute";
-import NotFound404 from "./components/UI/SvgImages/NotFound404";
 import GetSinglePost from "./container/Posts/GetSinglePost/GetSinglePost";
 import HomePage from "./container/HomePage/HomePage";
 // import GetSinglePostRouter from "./container/Posts/GetSinglePost/Index";
@@ -56,7 +56,7 @@ class App extends Component {
               <Route path="/signup" component={Signup} />
               <Route path="/feed" exact component={Feed} />
               <Route path="/post/:postId" exact component={GetSinglePost} />
-              <Route path="/profile/:username(@\w+)" component={Profile} />
+              <Route path="/ink/:username(@\w+)" component={Profile} />
               {/* Regex Search in the above path - should start with @ */}
               <AuthRoute path="/user/account">
                 <AccountsPage />
@@ -82,7 +82,7 @@ class App extends Component {
                 <Logout />
               </AuthRoute>
 
-              <Route render={() => <NotFound404 />} />
+              <Route render={() => <Error404 />} />
             </Switch>
           </Layout>
         </Switch>

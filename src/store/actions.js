@@ -128,6 +128,14 @@ const showNotification = (message, type) => {
   };
 };
 
+const updateName = (firstName, lastName) => {
+  return {
+    type: "updateName",
+    firstName: firstName,
+    lastName: lastName,
+  };
+};
+
 export {
   errorHandler,
   sessionRefresher,
@@ -135,4 +143,5 @@ export {
   logoutActionHandler,
   dispatchBodyHandler,
   showNotification,
+  updateName,
 };

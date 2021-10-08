@@ -77,6 +77,12 @@ const reducer = (state = initialState, action) => {
       notifVisibility: action.visibility,
       notifType: action.status,
     };
+  } else if (action.type === "updateName") {
+    return {
+      ...state,
+      firstName: action.firstName,
+      lastName: action.lastName,
+    };
   }
   return state;
 };

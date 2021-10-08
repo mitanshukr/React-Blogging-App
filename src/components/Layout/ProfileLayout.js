@@ -3,8 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import classes from "./AccountsLayout.module.css";
 
-const AccountsLayout = (props) => {
-
+const ProfileLayout = (props) => {
   return (
     <div className={classes.AccountsLayout}>
       <h1 className={classes.AccountsLayout__header}>Account Settings</h1>
@@ -19,7 +18,7 @@ const AccountsLayout = (props) => {
                   </span>
                 ) : (
                   <NavLink
-                    to={`/user/account?page=${item}`}
+                    to={`/ink/${props.userName}?feed=${item}`}
                     className={
                       props.queryParam === item ? classes.activeNav : null
                     }
@@ -37,4 +36,4 @@ const AccountsLayout = (props) => {
   );
 };
 
-export default AccountsLayout;
+export default ProfileLayout;

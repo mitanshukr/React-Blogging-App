@@ -7,6 +7,8 @@ import Button from "../../../components/UI/Button/Button";
 import classes from "./PersonalInfo.module.css";
 import { connect } from "react-redux";
 import axios from "axios";
+import { showNotification, updateName } from "../../../store/actions";
+import { getDateFormat } from "../../../Utility/getDateFormat";
 
 class PersonalInfo extends React.Component {
   constructor(props) {
@@ -37,10 +39,7 @@ class PersonalInfo extends React.Component {
           },
           label: "Last Name",
           value: "",
-          validation: {
-            errorMsg: null,
-            isTouched: false,
-          },
+          validation: {},
         },
         contact: {
           elementType: "input",
@@ -54,6 +53,9 @@ class PersonalInfo extends React.Component {
           validation: {
             errorMsg: null,
             isTouched: false,
+            minLength: 10,
+            maxLength: 10,
+            isNumeric: true,
           },
         },
         birthdate: {
@@ -62,13 +64,11 @@ class PersonalInfo extends React.Component {
             name: "birthdate",
             type: "date",
             placeholder: "Enter your Birth Date",
+            max: getDateFormat(new Date()),
           },
           label: "Birth Date",
           value: "",
-          validation: {
-            errorMsg: null,
-            isTouched: false,
-          },
+          validation: {},
         },
         profession: {
           elementType: "input",
@@ -142,9 +142,6 @@ class PersonalInfo extends React.Component {
     };
   }
 
-  //  PATCH `http://localhost:8000/user/update/${this.props.userId}`
-  //  Req: Bearer Token
-
   componentDidMount() {
     axios
       .get(
@@ -156,7 +153,6 @@ class PersonalInfo extends React.Component {
         }
       )
       .then((response) => {
-        console.log(response.data);
         const updatedInputElements = cloneDeep(this.state.inputElements);
         for (let elem in updatedInputElements) {
           updatedInputElements[elem].value = response.data[elem];
@@ -165,6 +161,10 @@ class PersonalInfo extends React.Component {
       })
       .catch((err) => {
         console.log(err);
+        this.props.showNotification(
+          "Unable to Load. Please try again!",
+          "ERROR"
+        );
       });
   }
 
@@ -175,11 +175,6 @@ class PersonalInfo extends React.Component {
       value,
       this.state.inputElements[name].validation
     );
-    if (name === "password2") {
-      if (value !== this.state.inputElements.password.value) {
-        errorMsg = "Password does not Match.";
-      }
-    }
     const updatedElem = cloneDeep(this.state.inputElements[name]);
     updatedElem.value = value;
     updatedElem.validation.isTouched = true;
@@ -209,24 +204,63 @@ class PersonalInfo extends React.Component {
         this.state.inputElements[name].validation
       );
     }
-    if (name === "password2") {
-      if (value !== this.state.inputElements.password.value) {
-        errorMsg = "Password does not Match.";
-      }
-    }
-
     const updatedInputElements = cloneDeep(this.state.inputElements);
-    // if (name === "password") {
-    //   if (value !== this.state.inputElements.password2.value) {
-    //     updatedInputElements.password2.validation.errorMsg =
-    //       "Password does not Match.";
-    //   } else {
-    //     updatedInputElements.password2.validation.errorMsg = null;
-    //   }
-    // }
     updatedInputElements[name].value = value;
     updatedInputElements[name].validation.errorMsg = errorMsg;
     this.setState({ inputElements: updatedInputElements });
+  };
+
+  updateInfoSubmitHandler = (e) => {
+    e.preventDefault();
+    if (this.state.serverBusy) return;
+    this.setState({ serverBusy: true });
+
+    let error = null;
+    for (let field in this.state.inputElements) {
+      error += this.onBlurEventHandler({
+        name: field,
+        value: this.state.inputElements[field].value,
+      });
+    }
+    if (error) {
+      this.setState({ serverBusy: false });
+      return;
+    }
+
+    const userData = {};
+    for (let elem in this.state.inputElements) {
+      userData[elem] = this.state.inputElements[elem].value;
+    }
+
+    axios
+      .patch(
+        `http://localhost:8000/user/update/${this.props.userId}`,
+        userData,
+        {
+          headers: {
+            Authorization: `Bearer ${this.props.authToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        this.props.updateName(
+          this.state.inputElements.firstName.value,
+          this.state.inputElements.lastName.value
+        );
+        this.props.showNotification("Data Updated Successfully!", "SUCCESS");
+        this.setState({
+          serverBusy: false,
+        });
+      })
+      .catch((err) => {
+        this.props.showNotification(
+          "Failed to Update. Please try again!",
+          "ERROR"
+        );
+        this.setState({
+          serverBusy: false,
+        });
+      });
   };
 
   render() {
@@ -235,67 +269,75 @@ class PersonalInfo extends React.Component {
         <div className={classes.PersonalInfo__dp}>
           <AccountPicture />
         </div>
-        <div className={classes.PersonalInfo__inputRow}>
-          {["firstName", "lastName"].map((element) => (
+        <form onSubmit={this.updateInfoSubmitHandler}>
+          <div className={classes.PersonalInfo__inputRow}>
+            {["firstName", "lastName"].map((element) => (
+              <Input
+                key={element}
+                elementType={this.state.inputElements[element].elementType}
+                onChange={this.inputChangeHandler}
+                elementConfig={this.state.inputElements[element].elementConfig}
+                value={this.state.inputElements[element].value}
+                label={this.state.inputElements[element].label}
+                onBlur={this.onBlurEventHandler}
+                errorMsg={this.state.inputElements[element].validation.errorMsg}
+                required={this.state.inputElements[element].validation.required}
+              />
+            ))}
+          </div>
+          {["profession", "contact", "birthdate", "address"].map((element) => (
             <Input
               key={element}
               elementType={this.state.inputElements[element].elementType}
               onChange={this.inputChangeHandler}
               elementConfig={this.state.inputElements[element].elementConfig}
-              value={this.state.inputElements[element].value}
+              value={
+                element === "birthdate"
+                  ? getDateFormat(this.state.inputElements[element].value)
+                  : this.state.inputElements[element].value
+              }
               label={this.state.inputElements[element].label}
               onBlur={this.onBlurEventHandler}
               errorMsg={this.state.inputElements[element].validation.errorMsg}
               required={this.state.inputElements[element].validation.required}
             />
           ))}
-        </div>
-        {["profession", "contact", "birthdate", "address"].map((element) => (
-          <Input
-            key={element}
-            elementType={this.state.inputElements[element].elementType}
-            onChange={this.inputChangeHandler}
-            elementConfig={this.state.inputElements[element].elementConfig}
-            value={this.state.inputElements[element].value}
-            label={this.state.inputElements[element].label}
-            onBlur={this.onBlurEventHandler}
-            errorMsg={this.state.inputElements[element].validation.errorMsg}
-            required={this.state.inputElements[element].validation.required}
-          />
-        ))}
-        <div className={classes.PersonalInfo__inputRow}>
-          {["city", "state"].map((element) => (
-            <Input
-              key={element}
-              elementType={this.state.inputElements[element].elementType}
-              onChange={this.inputChangeHandler}
-              elementConfig={this.state.inputElements[element].elementConfig}
-              value={this.state.inputElements[element].value}
-              label={this.state.inputElements[element].label}
-              onBlur={this.onBlurEventHandler}
-              errorMsg={this.state.inputElements[element].validation.errorMsg}
-              required={this.state.inputElements[element].validation.required}
-            />
-          ))}
-        </div>
-        <div className={classes.PersonalInfo__inputRow}>
-          {["pinCode", "country"].map((element) => (
-            <Input
-              key={element}
-              elementType={this.state.inputElements[element].elementType}
-              onChange={this.inputChangeHandler}
-              elementConfig={this.state.inputElements[element].elementConfig}
-              value={this.state.inputElements[element].value}
-              label={this.state.inputElements[element].label}
-              onBlur={this.onBlurEventHandler}
-              errorMsg={this.state.inputElements[element].validation.errorMsg}
-              required={this.state.inputElements[element].validation.required}
-            />
-          ))}
-        </div>
-        <div className={classes.PersonalInfo__btn}>
-          <Button>Save</Button>
-        </div>
+          <div className={classes.PersonalInfo__inputRow}>
+            {["city", "state"].map((element) => (
+              <Input
+                key={element}
+                elementType={this.state.inputElements[element].elementType}
+                onChange={this.inputChangeHandler}
+                elementConfig={this.state.inputElements[element].elementConfig}
+                value={this.state.inputElements[element].value}
+                label={this.state.inputElements[element].label}
+                onBlur={this.onBlurEventHandler}
+                errorMsg={this.state.inputElements[element].validation.errorMsg}
+                required={this.state.inputElements[element].validation.required}
+              />
+            ))}
+          </div>
+          <div className={classes.PersonalInfo__inputRow}>
+            {["pinCode", "country"].map((element) => (
+              <Input
+                key={element}
+                elementType={this.state.inputElements[element].elementType}
+                onChange={this.inputChangeHandler}
+                elementConfig={this.state.inputElements[element].elementConfig}
+                value={this.state.inputElements[element].value}
+                label={this.state.inputElements[element].label}
+                onBlur={this.onBlurEventHandler}
+                errorMsg={this.state.inputElements[element].validation.errorMsg}
+                required={this.state.inputElements[element].validation.required}
+              />
+            ))}
+          </div>
+          <div className={classes.PersonalInfo__btn}>
+            <Button type="submit" disabled={this.state.serverBusy}>
+              {this.state.serverBusy ? "Saving..." : "Save"}
+            </Button>
+          </div>
+        </form>
       </div>
     );
   }
@@ -308,4 +350,14 @@ const mapStateToprops = (state) => {
   };
 };
 
-export default connect(mapStateToprops)(PersonalInfo);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showNotification: (message, type) =>
+      dispatch(showNotification(message, type)),
+    updateName: (fName, lName) => {
+      dispatch(updateName(fName, lName));
+    },
+  };
+};
+
+export default connect(mapStateToprops, mapDispatchToProps)(PersonalInfo);
