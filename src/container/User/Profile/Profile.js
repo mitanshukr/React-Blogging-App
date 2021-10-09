@@ -1,10 +1,13 @@
+import autosize from "autosize";
 import axios from "axios";
 import React from "react";
+import { connect } from "react-redux";
 import ProfileLayout from "../../../components/Layout/ProfileLayout";
 import ErrorSvg from "../../../components/UI/ErrorSvg/ErrorSvg";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 
 import ProfileSection from "../../../components/User/Profile/ProfileSection";
+import { showNotification } from "../../../store/actions";
 import GetPosts from "../../Posts/GetPosts/GetPosts";
 import getErrorStatusCode from "../../Posts/utils/errorHandler";
 import classes from "./Profile.module.css";
@@ -12,24 +15,23 @@ import classes from "./Profile.module.css";
 class Profile extends React.Component {
   constructor(props) {
     super(props);
-    // this.getQueryParam = () => {
-    //   return new URLSearchParams(this.props.history.location.search).get(
-    //     "feed"
-    //   );
-    // };
-    // this.userName =
-    //   this.props.match.params.userName[0] === "@"
-    //     ? this.props.match.params.userName
-    //     : "@" + this.props.match.params.userName;
     this.state = {
+      userName: this.props.match.params.username,
       userId: null,
       firstName: null,
       lastName: null,
       email: null,
-      about: null,
+      about: {
+        value: "",
+        loadedValue: "",
+        validation: {
+          errorMsg: null,
+          isTouched: false,
+          minLength: 50,
+          maxLength: 350,
+        },
+      },
       aboutEditModeOn: false,
-      userName: this.props.match.params.username,
-      // feedQuery: this.getQueryParam(),
       localError: null,
       serverBusy: true,
     };
@@ -45,7 +47,14 @@ class Profile extends React.Component {
           firstName: response.data?.firstName,
           lastName: response.data?.lastName,
           email: response.data?.email,
-          about: response.data?.about,
+          about: {
+            ...this.state.about,
+            validation: {
+              ...this.state.about.validation,
+            },
+            value: response.data?.about,
+            loadedValue: response.data?.about,
+          },
           serverBusy: false,
         });
       })
@@ -61,22 +70,86 @@ class Profile extends React.Component {
     this.getUserInfo(this.state.userName);
   }
 
-  // componentDidUpdate() {
-  //   const userName = this.props.match.params.username;
-  //   // this.props.match.params.userName[0] === "@"
-  //   //   ? this.props.match.params.userName
-  //   //   : "@" + this.props.match.params.userName;
-  //   const feedQuery = this.queryParam;
+  componentDidUpdate() {
+    const userName = this.props.match.params.username;
+    if (this.state.userName !== userName) {
+      this.getUserInfo(userName);
+    }
+  }
 
-  //   if (this.state.userName !== userName) {
-  //     this.getUserInfo(userName);
-  //   }
-  //   if (this.state.feedQuery !== feedQuery) {
-  //     this.setState({ feedQuery: feedQuery });
-  //   }
-  // }
+  aboutHeightManager = (elem) => {
+    autosize(elem);
+  };
 
-  aboutEditHandler = () => {};
+  aboutOnChangeHandler = (e) => {
+    if (parseInt(e.target.style.height) > 110) {
+      console.log("Invalid Height");    //validation
+    }
+    this.setState({
+      about: {
+        ...this.state.about,
+        validation: {
+          ...this.state.about.validation,
+        },
+        value: e.target.value,
+      },
+    });
+  };
+
+  editBtnClickHandler = (e) => {
+    if (this.state.aboutEditModeOn) {
+      if (e.target.innerText === "Cancel") {
+        this.setState({
+          aboutEditModeOn: false,
+          about: {
+            ...this.state.about,
+            validation: {
+              ...this.state.about.validation,
+            },
+            value: this.state.about.loadedValue,
+          },
+        });
+        return;
+      }
+      if (this.updatingAbout) return;
+      this.updatingAbout = true;
+      axios
+        .patch(
+          `http://localhost:8000/user/update/${this.state.userId}`,
+          { about: this.state.about.value },
+          {
+            headers: {
+              Authorization: `Bearer ${this.props.authToken}`,
+            },
+          }
+        )
+        .then((response) => {
+          this.props.showNotification("Data Updated Successfully!", "SUCCESS");
+          this.updatingAbout = false;
+          this.setState({
+            aboutEditModeOn: false,
+            about: {
+              ...this.state.about,
+              validation: {
+                ...this.state.about.validation,
+              },
+              loadedValue: this.state.about.value,
+            },
+          });
+        })
+        .catch((err) => {
+          this.updatingAbout = false;
+          this.props.showNotification(
+            "Failed to Update. Please try again!",
+            "ERROR"
+          );
+        });
+    } else {
+      this.setState({
+        aboutEditModeOn: true,
+      });
+    }
+  };
 
   render() {
     this.queryParam = new URLSearchParams(
@@ -90,8 +163,17 @@ class Profile extends React.Component {
     } else {
       return (
         <ProfileLayout
-          queryParam={this.queryParam || "posts"}
+          key={this.state.userName}
+          currentUser={this.props.userName}
           userName={this.state.userName}
+          firstName={this.state.firstName}
+          lastName={this.state.lastName}
+          about={this.state.about.value}
+          aboutEditModeOn={this.state.aboutEditModeOn}
+          aboutOnChangeHandler={this.aboutOnChangeHandler}
+          editBtnClickHandler={this.editBtnClickHandler}
+          aboutHeightCalc={this.aboutHeightManager}
+          queryParam={this.queryParam || "posts"}
           menuItems={{
             posts: {
               name: "Public Posts",
@@ -108,12 +190,16 @@ class Profile extends React.Component {
                   classes.bg_like
                 }`}
               >
-                <h2>Posts liked by {this.state.firstName} &#128077;</h2>
+                <h3>Posts liked by {this.state.firstName} &#128077;</h3>
               </div>
 
-              <GetPosts type="LIKED_POSTS" userName={this.state.userName}>
+              <GetPosts
+                key={this.queryParam}
+                type="LIKED_POSTS"
+                userName={this.state.userName}
+              >
                 <div className={classes.LikedPosts__emptyMsg}>
-                  <h2>Nothing here!</h2>
+                  <h4>Nothing here!</h4>
                   <p style={{ fontStyle: "italic", color: "grey" }}>
                     Whatever you can't let go, goes Stale!
                     <br />
@@ -129,12 +215,16 @@ class Profile extends React.Component {
                   classes.bg_post
                 }`}
               >
-                <h2>{this.state.firstName}'s Blog&#10084;&#65039;</h2>
+                <h3>{this.state.firstName}'s Blog&#10084;&#65039;</h3>
               </div>
 
-              <GetPosts type="PROFILE_POSTS" userName={this.state.userName}>
+              <GetPosts
+                key={this.queryParam}
+                type="PROFILE_POSTS"
+                userName={this.state.userName}
+              >
                 <div className={classes.LikedPosts__emptyMsg}>
-                  <h2>No Post yet!</h2>
+                  <h4>No Post yet!</h4>
                   <p style={{ fontStyle: "italic", color: "grey" }}>
                     Parallel Lines do intersect, and they intersect beautifully.
                     <br />
@@ -210,4 +300,19 @@ class Profile extends React.Component {
   }
 }
 
-export default Profile;
+const mapStateToprops = (state) => {
+  return {
+    authToken: state.authToken,
+    userId: state.userId,
+    userName: state.userName,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    showNotification: (message, type) =>
+      dispatch(showNotification(message, type)),
+  };
+};
+
+export default connect(mapStateToprops, mapDispatchToProps)(Profile);

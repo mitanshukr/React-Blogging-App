@@ -226,7 +226,6 @@ class PersonalInfo extends React.Component {
       this.setState({ serverBusy: false });
       return;
     }
-
     const userData = {};
     for (let elem in this.state.inputElements) {
       userData[elem] = this.state.inputElements[elem].value;

@@ -1,33 +1,33 @@
-.Profile {
+/* .Profile {
   display: flex;
   width: 100%;
   box-sizing: border-box;
   padding: 10px 100px;
-}
+} */
 
-.Profile__col1 {
+/* .Profile__col1 {
   flex-basis: 300px;
   padding-top: 30px;
   height: 200px;
   position: sticky;
   top: 0px;
-}
+} */
 
-.Profile__col2 {
+/* .Profile__col2 {
   flex: 1;
-  /* border: 1px solid rgb(224, 224, 224); */
-}
+  border: 1px solid rgb(224, 224, 224);
+} */
 
 .Profile__col2--head {
   border: 1px solid #c9c9c9;
   border-radius: 4px;
   padding: 10px 5px;
-  margin: 0 58px;
+  margin: 0 80px;
   text-align: center;
   opacity: 0.9;
 }
 
-.Profile__col2--head h2 {
+.Profile__col2--head h3 {
   font-size: 18px;
   color: white;
   text-shadow: 2px 2px #2c2926;

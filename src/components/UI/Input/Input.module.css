@@ -32,6 +32,12 @@
   box-shadow: tomato 0px 0px 5px 1px;
 }
 
+.InputComponent textarea {
+  resize: none;
+  min-height: 60px;
+  font-family: inherit;
+}
+
 .InputComponent .error {
   border: 1.4px solid red;
   outline-color: red;
@@ -45,12 +51,6 @@
   font-size: 10px;
   padding-left: 2px;
   position: absolute;
-}
-
-.InputComponent textarea {
-  resize: none;
-  min-height: 60px;
-  font-family: inherit;
 }
 
 .InputComponent .required {

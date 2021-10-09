@@ -1,0 +1,121 @@
+.ProfileLayout {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 100px 10px;
+  flex-wrap: wrap;
+}
+
+.ProfileLayout__col1 {
+  flex: 0 0 250px;
+  position: sticky;
+  top: 5px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.ProfileLayout__col2 {
+  flex: 2 1 auto;
+  /* border: 1px solid rgb(224, 224, 224); */
+}
+
+.ProfileLayout__name {
+  margin: 8px 0 5px 0;
+}
+
+.ProfileLayout__name h3 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.ProfileLayout__name small {
+  color: tomato;
+  font-size: 14px;
+}
+
+.ProfileLayout__about > div {
+  padding: 0;
+  width: auto;
+}
+
+.ProfileLayout__about > div textarea {
+  padding: 0;
+  color: grey;
+  font-size: 16px;
+  box-sizing: border-box;
+  border: 1.5px solid transparent;
+  border-radius: 2px;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  min-height: fit-content;
+  max-height: 20ch !important;
+  overflow-y: hidden !important;
+  /* text-align: justify; */
+}
+
+.ProfileLayout__edit {
+  display: inline-block;
+  padding: 8px;
+  margin: 10px 0;
+  min-width: 80px;
+  width: fit-content;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  background-color: tomato;
+  border: 0;
+  border-radius: 500px;
+  cursor: pointer;
+}
+
+.ProfileLayout__edit:hover {
+  background-color: rgb(255, 71, 38);
+}
+
+.ProfileLayout__editCancel {
+  margin-left: 5px;
+  border: 1px solid tomato;
+  background-color: transparent;
+  color: tomato;
+}
+
+.ProfileLayout__editCancel:hover {
+  background-color: rgb(255, 145, 125);
+  color: white;
+}
+
+.ProfileLayout__col1 ul {
+  margin-top: 28px;
+  list-style: none;
+  padding: 0;
+}
+
+.ProfileLayout__col1 ul li {
+  color: #2c2926;
+  border-radius: 500px;
+  font-weight: 500;
+  overflow: hidden;
+}
+
+.ProfileLayout__col1 ul li a,
+.ProfileLayout__col1 ul li a:visited,
+.ProfileLayout__col1 ul li a:active {
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  color: inherit;
+  padding: 5px 0 5px 15px;
+  margin: 1px 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.ProfileLayout__col1 ul li a:hover {
+  background-color: rgb(253, 232, 232);
+}
+
+.activeNav {
+  background-color: rgb(253, 232, 232);
+  color: tomato !important;
+}
