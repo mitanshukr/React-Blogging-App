@@ -7,37 +7,25 @@ import checkValidity from "../../../Utility/inputValidation";
 import Button from "../../../components/UI/Button/Button";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import Modal from "../../../components/UI/Modal/Modal";
+import ChangeUsername from "../../../components/User/Account/ChangeUsername";
+import axios from "axios";
 
 class Account extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       inputElements: {
-        email: {
-          elementType: "input",
-          elementConfig: {
-            name: "email",
-            type: "text",
-            placeholder: "Your Email Id",
-          },
-          label: "Email",
-          value: "",
-          validation: {
-            errorMsg: null,
-            isTouched: false,
-            required: true,
-            isEmail: true,
-          },
-        },
         userName: {
           elementType: "input",
           elementConfig: {
             name: "userName",
             type: "text",
-            placeholder: "Your Username",
+            placeholder: "Start typing your new Username...",
           },
-          label: "Username",
+          label: "New Username",
           value: "",
+          isUsernameAvailable: null,
           validation: {
             errorMsg: null,
             isTouched: false,
@@ -66,6 +54,58 @@ class Account extends React.Component {
       localError: null,
     };
   }
+
+  onNewUsernameInputHandler = (e) => {
+    if (this.usernameAvailCheck) {
+      clearTimeout(this.usernameAvailCheck);
+      this.usernameAvailCheck = null;
+      // console.log("Cleared Timeout...starting new Timer.");
+    }
+
+    const updatedInputElements = cloneDeep(this.state.inputElements);
+
+    let errorMsg = null;
+    errorMsg = checkValidity(
+      e.target.value,
+      updatedInputElements.userName.validation
+    );
+    updatedInputElements.userName.value = e.target.value;
+    updatedInputElements.userName.isUsernameAvailable = null;
+    updatedInputElements.userName.validation.errorMsg = errorMsg;
+    this.setState({ inputElements: updatedInputElements });
+
+    if (errorMsg) {
+      return;
+    }
+
+    this.usernameAvailCheck = setTimeout(() => {
+      axios
+        .get(
+          `http://localhost:8000/user/usernameavailabilitystatus/${this.state.inputElements.userName.value}`
+        )
+        .then((response) => {
+          this.setState((prevState) => {
+            return {
+              inputElements: {
+                ...prevState.inputElements,
+                userName: {
+                  ...prevState.inputElements.userName,
+                  isUsernameAvailable: response.data?.status,
+                  validation: {
+                    ...prevState.inputElements.userName.validation,
+                    errorMsg: !response.data?.status && "Username Taken",
+                  },
+                },
+              },
+            };
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log("Checking Availability");
+    }, 1000);
+  };
 
   onBlurEventHandler = (event) => {
     let name = event.target?.name || event.name;
@@ -130,60 +170,76 @@ class Account extends React.Component {
 
   render() {
     return (
-      <div className={classes.PersonalInfo}>
-        <div>
-          <Input
-            elementType="input"
-            elementConfig={{
-              name: "email",
-              type: "text",
-              placeholder: "Your Email Id",
-              disabled: true,
-            }}
-            label="Email"
-            value={this.props.email}
-            required={true}
+      <>
+        <Modal visibility={true}>
+          <ChangeUsername
+            title="Update Username"
+            formData={{ userName: { ...this.state.inputElements.userName } }}
+            onChange={this.onNewUsernameInputHandler}
+            isUsernameAvailable={
+              this.state.inputElements.userName.isUsernameAvailable
+            }
           />
-          <small>Verify Email</small>
-        </div>
-        <div className={classes.PersonalInfo__username}>
+        </Modal>
+        <div className={classes.PersonalInfo}>
           <div>
             <Input
               elementType="input"
               elementConfig={{
-                name: "userName",
+                name: "email",
                 type: "text",
-                placeholder: "Your Username",
+                placeholder: "Your Email Id",
+                disabled: true,
+              }}
+              label="Email"
+              value={this.props.email}
+              required={true}
+            />
+            <small>Verify Email</small>
+          </div>
+          <div className={classes.PersonalInfo__username}>
+            <div>
+              <Input
+                elementType="input"
+                elementConfig={{
+                  name: "userName",
+                  type: "text",
+                  placeholder: "Your Username",
+                  readOnly: true,
+                }}
+                label="Username"
+                value={this.props.userName}
+                required={true}
+              />
+              <Button>Update</Button>
+            </div>
+            <div>
+              <Link
+                title="Your Unique Profile URL"
+                to={"/ink/@" + this.props.userName}
+                target="_blank"
+              >
+                {process.env.REACT_APP_ROOT_URL}/ink/@{this.props.userName}
+              </Link>
+            </div>
+          </div>
+          <div>
+            <Input
+              elementType="input"
+              elementConfig={{
+                name: "password",
+                type: "password",
+                placeholder: "Your Password",
                 readOnly: true,
               }}
-              label="Username"
-              value={this.props.userName}
+              label="Password"
+              value="a0dd96439edee48d1f3"
               required={true}
             />
             <Button>Update</Button>
           </div>
-          <div>
-            <Link to={"/ink/@" + this.props.userName} target="_blank">
-              {process.env.REACT_APP_ROOT_URL}/ink/@{this.props.userName}
-            </Link>
-          </div>
         </div>
-        <div>
-          <Input
-            elementType="input"
-            elementConfig={{
-              name: "password",
-              type: "password",
-              placeholder: "Your Password",
-              readOnly: true,
-            }}
-            label="Password"
-            value="a0dd96439edee48d1f3"
-            required={true}
-          />
-          <Button>Update</Button>
-        </div>
-      </div>
+      </>
     );
   }
 }

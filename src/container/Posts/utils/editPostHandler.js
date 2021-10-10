@@ -4,19 +4,21 @@ const editPostHandler = (e, props, postId, isPrivate) => {
     if (props.location.pathname.includes("/post/")) {
       props.history.replace(`/post/private/edit/${postId}`);
     } else {
-      props.history.push(`/post/private/edit/${postId}`);
+      props.history.push({
+        pathname: `/post/private/edit/${postId}`,
+        state: { prevPath: props.location.pathname },
+      });
     }
   } else {
     if (props.location.pathname.includes("/post/")) {
       props.history.replace(`/post/edit/${postId}`);
     } else {
-      props.history.push(`/post/edit/${postId}`);
+      props.history.push({
+        pathname: `/post/edit/${postId}`,
+        // search: "",
+        state: { prevPath: props.location.pathname },
+      });
     }
-    // props.history.replace({
-    //   pathname: `/post/edit/${postId}`,
-    //   search: '',
-    //   state: { prevPath: props.location.pathname },
-    // });
   }
 };
 

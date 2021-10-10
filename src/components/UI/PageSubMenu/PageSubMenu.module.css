@@ -1,0 +1,42 @@
+.PageSubMenu {
+  list-style: none;
+  padding: 0;
+}
+
+.PageSubMenu li {
+  color: #2c2926;
+  border-radius: 500px;
+  font-weight: 500;
+  overflow: hidden;
+}
+
+.PageSubMenu li a,
+.PageSubMenu li a:visited,
+.PageSubMenu li a:active {
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  color: inherit;
+  padding: 5px 0 5px 15px;
+  margin: 1px 0;
+  transition: all 0.2s ease-in-out;
+}
+
+.PageSubMenu li a:hover {
+  background-color: rgb(253, 232, 232);
+}
+
+.activeNav {
+  background-color: rgb(253, 232, 232);
+  color: tomato !important;
+}
+
+.disabledNav {
+  display: block;
+  width: 100%;
+  color: #2c292673;
+  cursor: not-allowed;
+  padding: 5px 0 5px 15px;
+  margin: 1px 0;
+  transition: all 0.2s ease-in-out;
+}

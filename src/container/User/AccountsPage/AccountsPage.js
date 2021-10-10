@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router";
 
-import AccountsLayout from "../../../components/Layout/AccountsLayout";
+import AccountLayout from "../../../components/Layout/AccountLayout";
 import PersonalInfo from "./PersonalInfo";
 import Account from "./Account";
 
@@ -14,7 +14,7 @@ class AccountsPage extends React.Component {
       this.props.history.location.search
     ).get("page");
     return (
-      <AccountsLayout
+      <AccountLayout
         queryParam={this.queryParam || "personalInfo"}
         menuItems={{
           personalInfo: {
@@ -38,7 +38,7 @@ class AccountsPage extends React.Component {
         }}
       >
         {this.queryParam === "account" ? <Account /> : <PersonalInfo />}
-      </AccountsLayout>
+      </AccountLayout>
     );
   }
 }

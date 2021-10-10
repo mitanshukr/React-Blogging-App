@@ -1,0 +1,25 @@
+.AccountLayout {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 100px;
+  flex-wrap: wrap;
+}
+
+.AccountLayout__header {
+  flex-basis: 100%;
+}
+
+.AccountLayout__col1 {
+  flex: 0 0 200px;
+  position: sticky;
+  top: 0px;
+  height: fit-content;
+}
+
+.AccountLayout__col2 {
+  flex: 2 1 auto;
+  border: 1px solid rgb(224, 224, 224);
+  margin-left: 3px;
+  padding: 50px;
+}

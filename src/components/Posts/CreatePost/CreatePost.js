@@ -4,7 +4,7 @@ import ErrorCard from "../../UI/ErrorCard/ErrorCard";
 import Input from "../../UI/Input/Input";
 import classes from "./CreatePost.module.css";
 
-const createPost = (props) => {
+const CreatePost = (props) => {
   const formElement = Object.keys(props.formData).map((element) => {
     if (element === "body") return null;
     return (
@@ -45,4 +45,4 @@ const createPost = (props) => {
   );
 };
 
-export default createPost;
+export default CreatePost;

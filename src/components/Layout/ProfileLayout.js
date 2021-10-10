@@ -1,8 +1,8 @@
 // import { FaRegUser } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
 import ProfilePicture from "../User/Profile/ProfilePicture";
 import Input from "../UI/Input/Input";
 import classes from "./ProfileLayout.module.css";
+import PageSubMenu from "../UI/PageSubMenu/PageSubMenu";
 
 const ProfileLayout = (props) => {
   return (
@@ -31,6 +31,7 @@ const ProfileLayout = (props) => {
                 ref: (elem) => props.aboutHeightCalc(elem),
               }}
               onChange={props.aboutOnChangeHandler}
+              errorMsg={props.aboutErrorMsg}
               value={props.about}
             />
           ) : null}
@@ -62,28 +63,11 @@ const ProfileLayout = (props) => {
           ) : null}
         </div>
 
-        <ul>
-          {Object.keys(props.menuItems).map((item) => {
-            return (
-              <li key={item}>
-                {props.menuItems[item].disabled ? (
-                  <span className={classes.disabledNav}>
-                    {props.menuItems[item].name}
-                  </span>
-                ) : (
-                  <NavLink
-                    to={`/ink/${props.userName}?feed=${item}`}
-                    className={
-                      props.queryParam === item ? classes.activeNav : null
-                    }
-                  >
-                    {props.menuItems[item].name}
-                  </NavLink>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+        <PageSubMenu
+          urlPathname={`/ink/${props.userName}`}
+          menuItems={props.menuItems}
+          queryParam={props.queryParam}
+        />
       </div>
       <div className={classes.ProfileLayout__col2}>{props.children}</div>
     </div>

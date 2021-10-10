@@ -244,9 +244,13 @@ class EditPost extends Component {
           isChanged: false,
         });
         this.props.showNotification("Post updated Successfully!", "SUCCESS");
-        this.props.history.replace(
-          `/post${this.state.isPrivate ? "/private" : ""}/${this.postId}`
-        );
+        if (this.props.history?.location?.state?.prevPath) {
+          this.props.history.goBack();
+        } else {
+          this.props.history.replace(
+            `/post${this.state.isPrivate ? "/private" : ""}/${this.postId}`
+          );
+        }
       })
       .catch((err) => {
         this.setState({ serverBusy: false });

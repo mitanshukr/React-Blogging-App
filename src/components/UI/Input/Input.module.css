@@ -25,11 +25,14 @@
   margin-top: 4px;
   padding: 8px;
   font-size: 14px;
+  border: 1px solid rgb(44, 41, 38);
+  border-radius: 2px;
 }
 
 .InputComponent input:focus,
 .InputComponent textarea:focus {
   box-shadow: tomato 0px 0px 5px 1px;
+  outline: 0.5px solid rgba(104, 101, 99, 0.5);
 }
 
 .InputComponent textarea {

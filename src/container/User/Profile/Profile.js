@@ -6,8 +6,8 @@ import ProfileLayout from "../../../components/Layout/ProfileLayout";
 import ErrorSvg from "../../../components/UI/ErrorSvg/ErrorSvg";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 
-import ProfileSection from "../../../components/User/Profile/ProfileSection";
 import { showNotification } from "../../../store/actions";
+import checkValidity from "../../../Utility/inputValidation";
 import GetPosts from "../../Posts/GetPosts/GetPosts";
 import getErrorStatusCode from "../../Posts/utils/errorHandler";
 import classes from "./Profile.module.css";
@@ -26,9 +26,8 @@ class Profile extends React.Component {
         loadedValue: "",
         validation: {
           errorMsg: null,
-          isTouched: false,
-          minLength: 50,
-          maxLength: 350,
+          // isTouched: false,
+          maxLength: 220,
         },
       },
       aboutEditModeOn: false,
@@ -82,16 +81,22 @@ class Profile extends React.Component {
   };
 
   aboutOnChangeHandler = (e) => {
-    if (parseInt(e.target.style.height) > 110) {
-      console.log("Invalid Height");    //validation
+    const value = e.target.value;
+    let errorMsg = null;
+    errorMsg = checkValidity(value, this.state.about.validation);
+
+    if (parseInt(e.target.style.height) > 174) {
+      errorMsg = "Height Limit Exceeding.";
     }
+
     this.setState({
       about: {
         ...this.state.about,
         validation: {
           ...this.state.about.validation,
+          errorMsg: errorMsg,
         },
-        value: e.target.value,
+        value: value,
       },
     });
   };
@@ -105,6 +110,7 @@ class Profile extends React.Component {
             ...this.state.about,
             validation: {
               ...this.state.about.validation,
+              errorMsg: null,
             },
             value: this.state.about.loadedValue,
           },
@@ -113,6 +119,10 @@ class Profile extends React.Component {
       }
       if (this.updatingAbout) return;
       this.updatingAbout = true;
+      if (this.state.about.validation.errorMsg) {
+        this.updatingAbout = false;
+        return;
+      }
       axios
         .patch(
           `http://localhost:8000/user/update/${this.state.userId}`,
@@ -154,7 +164,7 @@ class Profile extends React.Component {
   render() {
     this.queryParam = new URLSearchParams(
       this.props.history.location.search
-    ).get("feed");
+    ).get("page");
 
     if (this.state.serverBusy) {
       return <Spinner />;
@@ -173,6 +183,7 @@ class Profile extends React.Component {
           aboutOnChangeHandler={this.aboutOnChangeHandler}
           editBtnClickHandler={this.editBtnClickHandler}
           aboutHeightCalc={this.aboutHeightManager}
+          aboutErrorMsg={this.state.about.validation.errorMsg}
           queryParam={this.queryParam || "posts"}
           menuItems={{
             posts: {
@@ -235,66 +246,6 @@ class Profile extends React.Component {
             </>
           )}
         </ProfileLayout>
-
-        // <div key={this.state.userName} className={classes.Profile}>
-        //   <div className={classes.Profile__col1}>
-        //     <ProfileSection
-        //       firstName={this.state.firstName}
-        //       lastName={this.state.lastName}
-        //       userName={this.state.userName}
-        //       feedQuery={this.state.feedQuery}
-        //       about={this.state.about}
-        //       aboutEditModeOn={this.state.aboutEditModeOn}
-        //       aboutEditHandler={this.aboutEditHandler}
-        //     />
-        //   </div>
-        //   <div key={this.state.feedQuery} className={classes.Profile__col2}>
-        //     {this.state.feedQuery === "likes" ? (
-        //       <>
-        //         <div
-        //           className={`${classes[`Profile__col2--head`]} ${
-        //             classes.bg_like
-        //           }`}
-        //         >
-        //           <h2>Posts liked by {this.state.firstName} &#128077;</h2>
-        //         </div>
-
-        //         <GetPosts type="LIKED_POSTS" userName={this.state.userName}>
-        //           <div className={classes.LikedPosts__emptyMsg}>
-        //             <h2>Nothing here!</h2>
-        //             <p style={{ fontStyle: "italic", color: "grey" }}>
-        //               Whatever you can't let go, goes Stale!
-        //               <br />
-        //               <small>@mitanshukr</small>
-        //             </p>
-        //           </div>
-        //         </GetPosts>
-        //       </>
-        //     ) : (
-        //       <>
-        //         <div
-        //           className={`${classes[`Profile__col2--head`]} ${
-        //             classes.bg_post
-        //           }`}
-        //         >
-        //           <h2>{this.state.firstName}'s Blog&#10084;&#65039;</h2>
-        //         </div>
-
-        //         <GetPosts type="PROFILE_POSTS" userName={this.state.userName}>
-        //           <div className={classes.LikedPosts__emptyMsg}>
-        //             <h2>No Post yet!</h2>
-        //             <p style={{ fontStyle: "italic", color: "grey" }}>
-        //               Parallel Lines do intersect, and they intersect
-        //               beautifully.
-        //               <br />
-        //               <small>@mitanshukr</small>
-        //             </p>
-        //           </div>
-        //         </GetPosts>
-        //       </>
-        //     )}
-        //   </div>
-        // </div>
       );
     }
   }
