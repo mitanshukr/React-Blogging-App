@@ -72,7 +72,7 @@ class Account extends React.Component {
     updatedInputElements.userName.value = e.target.value;
     updatedInputElements.userName.isUsernameAvailable = null;
     updatedInputElements.userName.validation.errorMsg = errorMsg;
-    this.setState({ inputElements: updatedInputElements });
+    this.setState({ inputElements: updatedInputElements, localError: null });
 
     if (errorMsg) {
       return;
@@ -101,9 +101,12 @@ class Account extends React.Component {
           });
         })
         .catch((err) => {
-          console.log(err);
+          this.setState({
+            localError:
+              err.response?.message ||
+              "Something went Wrong. Please try again!",
+          });
         });
-      console.log("Checking Availability");
     }, 1000);
   };
 
@@ -179,6 +182,7 @@ class Account extends React.Component {
             isUsernameAvailable={
               this.state.inputElements.userName.isUsernameAvailable
             }
+            errorMsg={this.state.localError}
           />
         </Modal>
         <div className={classes.PersonalInfo}>

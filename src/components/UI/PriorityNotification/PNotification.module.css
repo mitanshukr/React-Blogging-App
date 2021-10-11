@@ -1,0 +1,31 @@
+.PNotification {
+  background-color: orange;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 8px 30px;
+  min-height: 35px;
+  flex-wrap: wrap;
+  width: 100%;
+  color: black;
+}
+
+.PNotification__msg {
+  display: flex;
+  align-items: center;
+}
+
+.PNotification__dismiss {
+  justify-self: flex-end;
+  align-self: center;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+.PNotification__dismiss:hover {
+  color: brown;
+}
