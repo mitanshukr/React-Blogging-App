@@ -16,7 +16,7 @@ class Layout extends React.Component {
         <Toolbar />
         {/* //sidedrawer */}
         <main style={{ height: "100%" }}>{this.props.children}</main>
-        <Footer/>
+        {/* <Footer/> */}
       </>
     );
   }

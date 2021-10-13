@@ -207,7 +207,7 @@ class GetSinglePost extends Component {
                   {this.state.post.creator.lastName}
                 </Link>
               </small>
-              <small className={classes.postDate}>
+              <small className={classes.postDate} title={new Date(this.state.post.createdAt).toString()}>
                 &nbsp;&#183;&nbsp;{postDate}
               </small>
               {this.state.post.creator._id === this.props.userId ? (

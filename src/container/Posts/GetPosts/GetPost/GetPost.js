@@ -10,6 +10,7 @@ import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import htmlToText from "html2plaintext";
 import classes from "./GetPost.module.css";
 import { Link } from "react-router-dom";
+import ReactTimeAgo from "react-time-ago";
 
 class GetPost extends React.Component {
   state = {
@@ -130,7 +131,15 @@ class GetPost extends React.Component {
         </div>
         <div className={classes.GetPost__info}>
           <section>
-            <small title="Publish Date">{postDate}&nbsp;&#183;&nbsp;</small>
+            {/* <small title="Publish Date">{postDate}&nbsp;&#183;&nbsp;</small> */}
+            <small title="Publish Date">
+              <ReactTimeAgo
+                date={this.props.date}
+                locale="en-US"
+                timeStyle="twitter-minute-now"
+              />
+              &nbsp;&#183;&nbsp;
+            </small>
             {this.props.isPrivate ? (
               <small title="Private" style={{ color: "grey", cursor: "auto" }}>
                 Private
