@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Toolbar from "./Toolbar/Toolbar";
 import Notification from "../../components/UI/Notification/Notification";
+import Footer from "../../components/Layout/Footer";
 
 class Layout extends React.Component {
   render() {
@@ -15,6 +16,7 @@ class Layout extends React.Component {
         <Toolbar />
         {/* //sidedrawer */}
         <main style={{ height: "100%" }}>{this.props.children}</main>
+        <Footer/>
       </>
     );
   }

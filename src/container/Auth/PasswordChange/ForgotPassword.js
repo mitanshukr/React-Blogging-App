@@ -96,10 +96,12 @@ class ForgotPassword extends React.Component {
       })
       .then((response) => {
         console.log(response.data);
-        if (response.data.emailStatus === "success") {
-          this.setState({ resetEmailSent: true });
+        if (response.data.message === "success") {
+          this.setState({ resetEmailSent: true, serverBusy: false });
+        } else {
+          alert("Something went Wrong. Please try again!");
+          this.setState({ serverBusy: false });
         }
-        this.setState({ serverBusy: false });
       })
       .catch((err) => {
         this.setState({

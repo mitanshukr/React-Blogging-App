@@ -54,6 +54,33 @@ const checkValidity = (value, rules) => {
     }
   }
 
+  if (rules.isValidUsername) {
+    const isWhitespace = /^(?=.*\s)/;
+    if (isWhitespace.test(value)) {
+      return "Username must not contain Whitespaces.";
+    }
+
+    const startingWithNumber = /^[0-9].*$/;
+    if (startingWithNumber.test(value)) {
+      return "Username must not start with a Number.";
+    }
+
+    const isContainsSymbol = /^(?=.*[~`!@#$%^&*()--+={}[\]|\\:;"'<>,.?/₹])/;
+    if (isContainsSymbol.test(value)) {
+      return "Only underscore _ special character allowed.";
+    }
+
+    const isContainsAlphabet = /^(?=.*[a-z])/;
+    if (!isContainsAlphabet.test(value)) {
+      return "Username must have at least one alphabet.";
+    }
+
+    const isValidLength = /^.{5,15}$/;
+    if (!isValidLength.test(value)) {
+      return "Username must be 5-15 characters long.";
+    }
+  }
+
   if (rules.isStrongPassword) {
     // let regex = /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).{10,16}$/;
     const isWhitespace = /^(?=.*\s)/;
@@ -81,9 +108,9 @@ const checkValidity = (value, rules) => {
       return "Password must contain at least one Special Symbol.";
     }
 
-    const isValidLength = /^.{10,16}$/;
+    const isValidLength = /^.{10,}$/;
     if (!isValidLength.test(value)) {
-      return "Password must be 10-16 Characters Long.";
+      return "Password must be at least 10 characters long.";
     }
   }
 

@@ -7,8 +7,14 @@ const AccountPicture = (props) => {
       <div className={classes.AccountPicture__dp}>
         <FaRegUser title="Profile Picture" />
       </div>
-      <div className={classes.AccountPicture__edit}>
-        <FaPen title="feature not available" />
+      <div
+        title="edit photo"
+        className={classes.AccountPicture__edit}
+        onClick={() => {
+          alert("Feature not available.");
+        }}
+      >
+        <FaPen />
       </div>
     </div>
   );

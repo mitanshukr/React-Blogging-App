@@ -136,6 +136,39 @@ const updateName = (firstName, lastName) => {
   };
 };
 
+let isVerifEmailSending = null;
+const sendEmailVerificationHandler = (authToken, userId) => {
+  if (isVerifEmailSending) return;
+  isVerifEmailSending = true;
+  axios
+    .get(
+      `http://localhost:8000/user/send-email-verification/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    )
+    .then((response) => {
+      isVerifEmailSending = false;
+      if (response.data?.message === "success") {
+        // this.setState({ isVerificationEmailSent: true });
+        this.dismissTimer = setTimeout(() => {
+          this.dismissNotificationHandler();
+        }, 6000);
+      } else {
+        throw new Error();
+      }
+    })
+    .catch((err) => {
+      isVerifEmailSending = false;
+      this.props.showNotification(
+        "Failed to send Verification Link. Please try again!",
+        "ERROR"
+      );
+    });
+};
+
 export {
   errorHandler,
   sessionRefresher,

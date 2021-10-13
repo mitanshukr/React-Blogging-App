@@ -2,7 +2,7 @@ import './Backdrop.css';
 
 const backdrop = props => {
     return (
-        props.visibility ? <div onClick={props.clicked} className='Backdrop'></div> : null
+        props.visibility ? <div onClick={props.onClick} className='Backdrop'></div> : null
     )
 }
 

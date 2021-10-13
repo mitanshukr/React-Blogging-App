@@ -6,7 +6,7 @@ import "./Modal.css";
 const modal = (props) => {
   return (
     <Aux>
-      <Backdrop visibility={props.visibility} clicked={props.clicked} />
+      <Backdrop visibility={props.visibility} onClick={props.clicked} />
       <div
         className="Modal"
         style={{

@@ -2,13 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 
 import Aux from "../../../../hoc/Auxiliary";
-import {getBlogDateFormat} from "../../../../Utility/getDateFormat";
+import { getBlogDateFormat } from "../../../../Utility/getDateFormat";
 import ProfileIcon from "../../../../components/User/Profile/ProfileIcon";
 import DeletePost from "../../../../components/Posts/DeletePost/DeletePost";
 // import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import htmlToText from "html2plaintext";
 import classes from "./GetPost.module.css";
+import { Link } from "react-router-dom";
 
 class GetPost extends React.Component {
   state = {
@@ -68,12 +69,12 @@ class GetPost extends React.Component {
                   lastLetter={this.props.lastName?.split("")[0]}
                 />
                 <small>
-                  <a
+                  <Link
                     title="Visit Profile"
-                    href={`/ink/${this.props.userName}`}
+                    to={`/ink/${this.props.userName}`}
                   >
                     {this.props.firstName}&nbsp;{this.props.lastName}
-                  </a>
+                  </Link>
                 </small>
               </>
             )}

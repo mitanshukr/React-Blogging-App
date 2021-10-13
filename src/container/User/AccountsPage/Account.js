@@ -30,7 +30,7 @@ class Account extends React.Component {
             errorMsg: null,
             isTouched: false,
             required: true,
-            minLength: 5,
+            isValidUsername: true,
           },
         },
         password: {
@@ -52,6 +52,7 @@ class Account extends React.Component {
       },
       serverBusy: false,
       localError: null,
+      updateUsernameModalVisibility: false,
     };
   }
 
@@ -59,11 +60,8 @@ class Account extends React.Component {
     if (this.usernameAvailCheck) {
       clearTimeout(this.usernameAvailCheck);
       this.usernameAvailCheck = null;
-      // console.log("Cleared Timeout...starting new Timer.");
     }
-
     const updatedInputElements = cloneDeep(this.state.inputElements);
-
     let errorMsg = null;
     errorMsg = checkValidity(
       e.target.value,
@@ -73,15 +71,18 @@ class Account extends React.Component {
     updatedInputElements.userName.isUsernameAvailable = null;
     updatedInputElements.userName.validation.errorMsg = errorMsg;
     this.setState({ inputElements: updatedInputElements, localError: null });
-
     if (errorMsg) {
       return;
     }
-
     this.usernameAvailCheck = setTimeout(() => {
       axios
         .get(
-          `http://localhost:8000/user/usernameavailabilitystatus/${this.state.inputElements.userName.value}`
+          `http://localhost:8000/user/usernameavailabilitystatus/${this.state.inputElements.userName.value}`,
+          {
+            headers: {
+              Authorization: `Bearer ${this.props.authToken}`,
+            },
+          }
         )
         .then((response) => {
           this.setState((prevState) => {
@@ -93,7 +94,8 @@ class Account extends React.Component {
                   isUsernameAvailable: response.data?.status,
                   validation: {
                     ...prevState.inputElements.userName.validation,
-                    errorMsg: !response.data?.status && "Username Taken",
+                    errorMsg:
+                      !response.data?.status && "Username not available!",
                   },
                 },
               },
@@ -108,6 +110,15 @@ class Account extends React.Component {
           });
         });
     }, 1000);
+  };
+
+  onNewUsernameSubmitHandler = () => {};
+  usernameModalToggler = () => {
+    this.setState((prevState) => {
+      return {
+        updateUsernameModalVisibility: !prevState.updateUsernameModalVisibility,
+      };
+    });
   };
 
   onBlurEventHandler = (event) => {
@@ -174,15 +185,20 @@ class Account extends React.Component {
   render() {
     return (
       <>
-        <Modal visibility={true}>
+        <Modal
+          visibility={this.state.updateUsernameModalVisibility}
+          clicked={this.usernameModalToggler}
+        >
           <ChangeUsername
-            title="Update Username"
-            formData={{ userName: { ...this.state.inputElements.userName } }}
+            formData={this.state.inputElements.userName}
             onChange={this.onNewUsernameInputHandler}
+            onSubmit={this.onNewUsernameSubmitHandler}
+            onCancel={this.usernameModalToggler}
             isUsernameAvailable={
               this.state.inputElements.userName.isUsernameAvailable
             }
             errorMsg={this.state.localError}
+            serverBusy={this.state.serverBusy}
           />
         </Modal>
         <div className={classes.PersonalInfo}>
@@ -199,7 +215,7 @@ class Account extends React.Component {
               value={this.props.email}
               required={true}
             />
-            <small>Verify Email</small>
+            <small onClick={this.sendEmailVerificationHandler}>Verify Email</small>
           </div>
           <div className={classes.PersonalInfo__username}>
             <div>
@@ -209,13 +225,13 @@ class Account extends React.Component {
                   name: "userName",
                   type: "text",
                   placeholder: "Your Username",
-                  readOnly: true,
+                  disabled: true,
                 }}
                 label="Username"
                 value={this.props.userName}
                 required={true}
               />
-              <Button>Update</Button>
+              <Button onClick={this.usernameModalToggler}>Update</Button>
             </div>
             <div>
               <Link
@@ -234,7 +250,7 @@ class Account extends React.Component {
                 name: "password",
                 type: "password",
                 placeholder: "Your Password",
-                readOnly: true,
+                disabled: true,
               }}
               label="Password"
               value="a0dd96439edee48d1f3"

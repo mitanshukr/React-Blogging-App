@@ -1,15 +1,19 @@
 .PNotification {
-  background-color: orange;
+  background-color: rgb(255, 192, 74);
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
   overflow: hidden;
-  padding: 8px 30px;
+  padding: 3px 30px;
   min-height: 35px;
   flex-wrap: wrap;
   width: 100%;
   color: black;
+}
+
+.PNotification > * {
+  font-size: 15px;
 }
 
 .PNotification__msg {
@@ -20,12 +24,12 @@
 .PNotification__dismiss {
   justify-self: flex-end;
   align-self: center;
-  font-size: 14px;
-  text-decoration: underline;
   cursor: pointer;
-  padding: 5px 0;
+  margin-left: auto;
+  padding-top: 2px;
+  font-size: 16px;
 }
 
 .PNotification__dismiss:hover {
-  color: brown;
+  color: tomato;
 }

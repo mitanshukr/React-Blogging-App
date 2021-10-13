@@ -13,7 +13,7 @@ class EmailVerification extends React.Component {
   componentDidMount() {
     axios
       .get(
-        `http://localhost:8000/auth/verify-email/${this.props.match.params.userId}/${this.props.match.params.verificationToken}`
+        `http://localhost:8000/user/verify-email/${this.props.match.params.userId}/${this.props.match.params.verificationToken}`
       )
       .then((response) => {
         if (response?.data?.message === "success") {

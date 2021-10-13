@@ -8,6 +8,7 @@ const initialState = {
   lastName: null,
   // about: null,
   expiryTime: null,
+  isEmailVerified: null,
   isAuthenticated: false,
   serverBusy: false,
   notifVisibility: false,
@@ -29,6 +30,7 @@ const reducer = (state = initialState, action) => {
       lastName: action.userData.lastName,
       userName: action.userData.userName,
       email: action.userData.email,
+      isEmailVerified: action.userData.isEmailVerified,
       isAuthenticated: true,
       isSignupSuccess: null,
       error: null,
@@ -45,6 +47,7 @@ const reducer = (state = initialState, action) => {
       lastName: null,
       userName: null,
       email: null,
+      isEmailVerified: null,
     };
   } else if (action.type === "error") {
     if (action.error?.message === "INVALID_PASSWORD") {

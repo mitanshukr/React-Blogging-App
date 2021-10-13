@@ -6,7 +6,7 @@
   padding: 2px 40px;
   background-color: #2c2926;
   height: auto;
-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .Header nav ul {
@@ -41,6 +41,21 @@ flex-wrap: wrap;
   font-size: 18px;
 }
 
-.Header .pNotification{
+.Header .pNotification {
   width: 100%;
+}
+
+.pNotification__emailVerifMsg {
+  margin: 0;
+  font-size: 15px;
+}
+
+.pNotification__emailVerifLink {
+  font-style: normal;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pNotification__emailVerifLink:hover {
+  color: tomato;
 }
