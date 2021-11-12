@@ -9,7 +9,8 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Modal from "../../../components/UI/Modal/Modal";
 import ChangeUsername from "../../../components/User/Account/ChangeUsername";
-import axios from "axios";
+import axios from "../../../axios-instance";
+import { showNotification, updateUsername } from "../../../store/actions";
 
 class Account extends React.Component {
   constructor(props) {
@@ -77,7 +78,7 @@ class Account extends React.Component {
     this.usernameAvailCheck = setTimeout(() => {
       axios
         .get(
-          `http://localhost:8000/user/usernameavailabilitystatus/${this.state.inputElements.userName.value}`,
+          `/user/usernameavailabilitystatus/${this.state.inputElements.userName.value}`,
           {
             headers: {
               Authorization: `Bearer ${this.props.authToken}`,
@@ -112,7 +113,47 @@ class Account extends React.Component {
     }, 1000);
   };
 
-  onNewUsernameSubmitHandler = () => {};
+  onNewUsernameSubmitHandler = (e) => {
+    e.preventDefault();
+    if (this.state.serverBusy) return;
+    this.setState({
+      serverBusy: true,
+    });
+    axios
+      .patch(
+        `/user/update/${this.props.userId}`,
+        {
+          userName: this.state.inputElements.userName.value,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${this.props.authToken}`,
+          },
+        }
+      )
+      .then((res) => {
+        this.props.updateUsername(this.state.inputElements.userName.value);
+        this.props.showNotification(
+          "Username Updated Successfully!",
+          "SUCCESS"
+        );
+        this.setState({
+          serverBusy: false,
+          updateUsernameModalVisibility: false,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        this.props.showNotification(
+          "Failed to Update. Please try again!",
+          "ERROR"
+        );
+        this.setState({
+          serverBusy: false,
+        });
+      });
+  };
+
   usernameModalToggler = () => {
     this.setState((prevState) => {
       return {
@@ -215,7 +256,9 @@ class Account extends React.Component {
               value={this.props.email}
               required={true}
             />
-            <small onClick={this.sendEmailVerificationHandler}>Verify Email</small>
+            <small onClick={this.sendEmailVerificationHandler}>
+              Verify Email
+            </small>
           </div>
           <div className={classes.PersonalInfo__username}>
             <div>
@@ -275,11 +318,11 @@ const mapStateToprops = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // showNotification: (message, type) =>
-    //   dispatch(showNotification(message, type)),
-    // updateName: (fName, lName) => {
-    //   dispatch(updateName(fName, lName));
-    // },
+    showNotification: (message, type) =>
+      dispatch(showNotification(message, type)),
+    updateUsername: (username) => {
+      dispatch(updateUsername(username));
+    },
   };
 };
 

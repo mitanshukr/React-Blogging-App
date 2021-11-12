@@ -208,7 +208,7 @@ class WritingZone extends Component {
       },
     };
     axios
-      .post("http://localhost:8000/post/create", post, {
+      .post("/post/create", post, {
         headers: {
           Authorization: `Bearer ${this.props.authToken}`,
         },

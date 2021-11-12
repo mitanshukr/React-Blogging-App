@@ -1,8 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import Aux from "../../../../hoc/Auxiliary";
-import { getBlogDateFormat } from "../../../../Utility/getDateFormat";
+// import { getBlogDateFormat } from "../../../../Utility/getDateFormat";
 import ProfileIcon from "../../../../components/User/Profile/ProfileIcon";
 import DeletePost from "../../../../components/Posts/DeletePost/DeletePost";
 // import { FaRegBookmark, FaBookmark } from "react-icons/fa";
@@ -44,7 +43,7 @@ class GetPost extends React.Component {
   };
 
   render() {
-    const postDate = getBlogDateFormat(this.props.date);
+    // const postDate = getBlogDateFormat(this.props.date);
     // const isPostSaved = !!this.props.savedPosts.find(
     //   (postId) => postId === this.props.postId
     // );
@@ -154,7 +153,7 @@ class GetPost extends React.Component {
               </small>
             )}
             {this.props.isCurrentUser ? (
-              <Aux>
+              <>
                 <small
                   title="Edit"
                   onClick={this.props.edit}
@@ -169,7 +168,7 @@ class GetPost extends React.Component {
                 >
                   Delete
                 </small>
-              </Aux>
+              </>
             ) : null}
           </section>
           <section>

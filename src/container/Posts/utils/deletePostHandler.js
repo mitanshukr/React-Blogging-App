@@ -2,7 +2,7 @@ import axios from "../../../axios-instance";
 
 const deletePostHandler = (authToken, postId) => {
   return axios
-    .delete(`http://localhost:8000/post/delete/${postId}`, {
+    .delete(`/post/delete/${postId}`, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },

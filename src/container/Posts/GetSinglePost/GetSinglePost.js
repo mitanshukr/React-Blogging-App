@@ -5,7 +5,7 @@ import axios from "../../../axios-instance";
 import parse from "html-react-parser";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./GetSinglePost.module.css";
-import {getBlogDateFormat} from "../../../Utility/getDateFormat";
+import { getBlogDateFormat } from "../../../Utility/getDateFormat";
 import ProfileIcon from "../../../components/User/Profile/ProfileIcon";
 import copyToClipboard from "../../../Utility/copyToClipboardHandler";
 import editPostHandler from "../utils/editPostHandler";
@@ -41,9 +41,9 @@ class GetSinglePost extends Component {
     // const isPrivate = this.props.history.location?.state?.isPrivate === true;
 
     if (isPrivate) {
-      URI = `http://localhost:8000/post/private/${this.postId}`;
+      URI = `/post/private/${this.postId}`;
     } else {
-      URI = `http://localhost:8000/post/public/${this.postId}`;
+      URI = `/post/public/${this.postId}`;
     }
 
     axios
@@ -65,7 +65,7 @@ class GetSinglePost extends Component {
         if (response?.data && !response?.data?.isPrivate) {
           this.viewTimer = setTimeout(() => {
             axios
-              .get(`http://localhost:8000/post/addview/${response?.data?._id}`)
+              .get(`/post/addview/${response?.data?._id}`)
               .then((response) => {
                 this.setState((prevState) => {
                   return { viewCount: prevState.viewCount + 1 };
@@ -149,7 +149,7 @@ class GetSinglePost extends Component {
     });
 
     axios
-      .get(`http://localhost:8000/post/togglelike/${this.postId}`, {
+      .get(`/post/togglelike/${this.postId}`, {
         headers: {
           Authorization: `Bearer ${this.props.authToken}`,
         },
@@ -207,7 +207,10 @@ class GetSinglePost extends Component {
                   {this.state.post.creator.lastName}
                 </Link>
               </small>
-              <small className={classes.postDate} title={new Date(this.state.post.createdAt).toString()}>
+              <small
+                className={classes.postDate}
+                title={new Date(this.state.post.createdAt).toString()}
+              >
                 &nbsp;&#183;&nbsp;{postDate}
               </small>
               {this.state.post.creator._id === this.props.userId ? (
@@ -274,7 +277,7 @@ class GetSinglePost extends Component {
                   )
                 ) : null}
               </small>
-              <small>
+              <small onClick={() => alert("No Info! Stay Tuned...")}>
                 <FiMoreVertical
                   size={20}
                   style={{ cursor: "auto" }}

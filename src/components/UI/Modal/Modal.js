@@ -1,11 +1,10 @@
-import Aux from "../../../hoc/Auxiliary";
 import Backdrop from "../Backdrop/Backdrop";
 import { IoClose } from "react-icons/io5";
 import "./Modal.css";
 
 const modal = (props) => {
   return (
-    <Aux>
+    <>
       <Backdrop visibility={props.visibility} onClick={props.clicked} />
       <div
         className="Modal"
@@ -21,7 +20,7 @@ const modal = (props) => {
         />
         {props.children}
       </div>
-    </Aux>
+    </>
   );
 };
 

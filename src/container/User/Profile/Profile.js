@@ -1,5 +1,5 @@
 import autosize from "autosize";
-import axios from "axios";
+import axios from "../../../axios-instance";
 import React from "react";
 import { connect } from "react-redux";
 import ProfileLayout from "../../../components/Layout/ProfileLayout";
@@ -38,7 +38,7 @@ class Profile extends React.Component {
 
   getUserInfo = (userName) => {
     axios
-      .get(`http://localhost:8000/user/public/${userName}`)
+      .get(`/user/public/${userName}`)
       .then((response) => {
         this.setState({
           userName: userName,
@@ -125,7 +125,7 @@ class Profile extends React.Component {
       }
       axios
         .patch(
-          `http://localhost:8000/user/update/${this.state.userId}`,
+          `/user/update/${this.state.userId}`,
           { about: this.state.about.value },
           {
             headers: {

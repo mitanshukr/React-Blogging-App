@@ -89,9 +89,9 @@ class EditPost extends Component {
     const isPrivate = this.props.match.path.split("/")[2] === "private";
     this.postId = this.props.match.params.postId;
     if (isPrivate) {
-      URI = `http://localhost:8000/post/private/${this.postId}`;
+      URI = `/post/private/${this.postId}`;
     } else {
-      URI = `http://localhost:8000/post/public/${this.postId}`;
+      URI = `/post/public/${this.postId}`;
     }
     axios
       .get(URI, {
@@ -233,7 +233,7 @@ class EditPost extends Component {
       tags: getStringToTagsArray(this.state.inputElements.tags.value),
     };
     axios
-      .patch(`http://localhost:8000/post/edit/${this.postId}`, updatedPost, {
+      .patch(`/post/edit/${this.postId}`, updatedPost, {
         headers: {
           Authorization: `Bearer ${this.props.authToken}`,
         },

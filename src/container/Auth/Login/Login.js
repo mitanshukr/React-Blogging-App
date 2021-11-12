@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "../../../axios-instance";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 import AuthCard from "../../../components/UI/AuthCard/AuthCard";
 
@@ -26,7 +26,7 @@ class Login extends Component {
             type: "text",
             placeholder: "Your Email Id",
           },
-          value: "",
+          value: "mitanshu@test.com",
           validation: {
             errorMsg: null,
             isTouched: false,
@@ -41,7 +41,7 @@ class Login extends Component {
             type: "password",
             placeholder: "Your Password",
           },
-          value: "",
+          value: "admin123",
           validation: {
             errorMsg: null,
             isTouched: false,
@@ -132,7 +132,7 @@ class Login extends Component {
       password: this.state.inputElements.password.value,
     };
     axios
-      .post(`http://localhost:8000/auth/login`, userCred)
+      .post(`/auth/login`, userCred)
       .then((response) => {
         if (response?.data) {
           this.props.loginDispatchHandler(response.data);

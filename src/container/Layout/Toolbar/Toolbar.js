@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../../axios-instance";
 import React from "react";
 import { connect } from "react-redux";
 import { NavLink, withRouter } from "react-router-dom";
@@ -24,14 +24,11 @@ class Toolbar extends React.Component {
     if (this.isEmailSending) return;
     this.isEmailSending = true;
     axios
-      .get(
-        `http://localhost:8000/user/send-email-verification/${this.props.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${this.props.authToken}`,
-          },
-        }
-      )
+      .get(`/user/send-email-verification/${this.props.userId}`, {
+        headers: {
+          Authorization: `Bearer ${this.props.authToken}`,
+        },
+      })
       .then((response) => {
         this.isEmailSending = false;
         if (response.data?.message === "success") {
@@ -79,6 +76,7 @@ class Toolbar extends React.Component {
           (this.props.isEmailVerified ? null : (
             <div className={"pNotification"}>
               <PNotification
+                // key={this.props.isAuthenticated}
                 dismissNotification={this.dismissNotificationHandler}
               >
                 {this.state.isVerificationEmailSent ? (
@@ -111,6 +109,7 @@ const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.isAuthenticated,
     isEmailVerified: state.isEmailVerified,
+    email: state.email,
     authToken: state.authToken,
     userId: state.userId,
   };

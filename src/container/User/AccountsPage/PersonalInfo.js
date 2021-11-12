@@ -6,7 +6,7 @@ import checkValidity from "../../../Utility/inputValidation";
 import Button from "../../../components/UI/Button/Button";
 import classes from "./PersonalInfo.module.css";
 import { connect } from "react-redux";
-import axios from "axios";
+import axios from "../../../axios-instance";
 import { showNotification, updateName } from "../../../store/actions";
 import { getDateFormat } from "../../../Utility/getDateFormat";
 
@@ -144,14 +144,11 @@ class PersonalInfo extends React.Component {
 
   componentDidMount() {
     axios
-      .get(
-        `http://localhost:8000/user/${this.props.userId}?detailedInfo=true`,
-        {
-          headers: {
-            Authorization: `Bearer ${this.props.authToken}`,
-          },
-        }
-      )
+      .get(`/user/${this.props.userId}?detailedInfo=true`, {
+        headers: {
+          Authorization: `Bearer ${this.props.authToken}`,
+        },
+      })
       .then((response) => {
         const updatedInputElements = cloneDeep(this.state.inputElements);
         for (let elem in updatedInputElements) {
@@ -232,15 +229,11 @@ class PersonalInfo extends React.Component {
     }
 
     axios
-      .patch(
-        `http://localhost:8000/user/update/${this.props.userId}`,
-        userData,
-        {
-          headers: {
-            Authorization: `Bearer ${this.props.authToken}`,
-          },
-        }
-      )
+      .patch(`/user/update/${this.props.userId}`, userData, {
+        headers: {
+          Authorization: `Bearer ${this.props.authToken}`,
+        },
+      })
       .then((response) => {
         this.props.updateName(
           this.state.inputElements.firstName.value,

@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../../../axios-instance";
 
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./EmailVerification.module.css";
@@ -13,7 +13,7 @@ class EmailVerification extends React.Component {
   componentDidMount() {
     axios
       .get(
-        `http://localhost:8000/user/verify-email/${this.props.match.params.userId}/${this.props.match.params.verificationToken}`
+        `/user/verify-email/${this.props.match.params.userId}/${this.props.match.params.verificationToken}`
       )
       .then((response) => {
         if (response?.data?.message === "success") {
@@ -60,8 +60,8 @@ class EmailVerification extends React.Component {
           <h2 className={classes.error}>Oops! Something went Wrong...</h2>
           <small>Email verification Failed!</small>
           <p>
-            Looks like the URL is invalid or expired. Please make sure the url is
-            correct and try again!
+            Looks like the URL is invalid or expired. Please make sure the url
+            is correct and try again!
           </p>
         </>
       );

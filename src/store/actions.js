@@ -1,5 +1,4 @@
-import axios from "axios";
-// import axios from "../axios-instance";
+import axios from "../axios-instance";
 
 const localStorageHandler = (
   option,
@@ -56,7 +55,7 @@ const sessionRefresher = () => {
     let localStorageData = localStorageHandler("GET_ITEM");
     const timeLeft = localStorageData.expiryTime - Date.now();
     if (localStorageData.authToken && timeLeft > 0) {
-      const URI = `http://localhost:8000/user/${localStorageData.userId}`;
+      const URI = `/user/${localStorageData.userId}`;
       axios
         .get(URI, {
           headers: {
@@ -136,38 +135,42 @@ const updateName = (firstName, lastName) => {
   };
 };
 
-let isVerifEmailSending = null;
-const sendEmailVerificationHandler = (authToken, userId) => {
-  if (isVerifEmailSending) return;
-  isVerifEmailSending = true;
-  axios
-    .get(
-      `http://localhost:8000/user/send-email-verification/${userId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    )
-    .then((response) => {
-      isVerifEmailSending = false;
-      if (response.data?.message === "success") {
-        // this.setState({ isVerificationEmailSent: true });
-        this.dismissTimer = setTimeout(() => {
-          this.dismissNotificationHandler();
-        }, 6000);
-      } else {
-        throw new Error();
-      }
-    })
-    .catch((err) => {
-      isVerifEmailSending = false;
-      this.props.showNotification(
-        "Failed to send Verification Link. Please try again!",
-        "ERROR"
-      );
-    });
+const updateUsername = (username) => {
+  return {
+    type: "updateUsername",
+    userName: username,
+  };
 };
+
+// let isVerifEmailSending = null;
+// const sendEmailVerificationHandler = (authToken, userId) => {
+//   if (isVerifEmailSending) return;
+//   isVerifEmailSending = true;
+//   axios
+//     .get(`/user/send-email-verification/${userId}`, {
+//       headers: {
+//         Authorization: `Bearer ${authToken}`,
+//       },
+//     })
+//     .then((response) => {
+//       isVerifEmailSending = false;
+//       if (response.data?.message === "success") {
+//         // this.setState({ isVerificationEmailSent: true });
+//         this.dismissTimer = setTimeout(() => {
+//           this.dismissNotificationHandler();
+//         }, 6000);
+//       } else {
+//         throw new Error();
+//       }
+//     })
+//     .catch((err) => {
+//       isVerifEmailSending = false;
+//       this.props.showNotification(
+//         "Failed to send Verification Link. Please try again!",
+//         "ERROR"
+//       );
+//     });
+// };
 
 export {
   errorHandler,
@@ -177,4 +180,5 @@ export {
   dispatchBodyHandler,
   showNotification,
   updateName,
+  updateUsername,
 };

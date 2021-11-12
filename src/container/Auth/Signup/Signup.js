@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import axios from "../../../axios-instance";
 
 import Button from "../../../components/UI/Button/Button";
 import Input from "../../../components/UI/Input/Input";
@@ -189,7 +189,7 @@ class Signup extends Component {
       lastName: this.state.inputElements.lastName.value,
     };
     axios
-      .post("http://localhost:8000/auth/signup", userData)
+      .post("/auth/signup", userData)
       .then((response) => {
         const updatedInputElements = cloneDeep(this.state.inputElements);
         for (let elem in updatedInputElements) {

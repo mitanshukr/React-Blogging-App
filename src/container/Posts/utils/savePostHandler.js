@@ -2,7 +2,7 @@ import axios from "../../../axios-instance";
 
 const savePostHandler = (authToken, postId) => {
   return axios
-    .get(`http://localhost:8000/post/togglesave/${postId}`, {
+    .get(`/post/togglesave/${postId}`, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },

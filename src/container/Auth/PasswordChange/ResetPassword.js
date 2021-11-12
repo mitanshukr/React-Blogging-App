@@ -3,7 +3,7 @@ import React from "react";
 import Input from "../../../components/UI/Input/Input";
 import Button from "../../../components/UI/Button/Button";
 
-import axios from "axios";
+import axios from "../../../axios-instance";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 import AuthCard from "../../../components/UI/AuthCard/AuthCard";
 import { Link } from "react-router-dom";
@@ -64,7 +64,7 @@ class ResetPassword extends React.Component {
       this.setState({ localError: "Looks like the URL is invalid." });
     }
     // axios
-    //   .get(`http://localhost:8000/user/info/${this.props.match.params.userId}`)
+    //   .get(`/user/info/${this.props.match.params.userId}`)
     //   .then((response) => {
     //     this.setState({ userEmail: response?.data?.email });
     //   })
@@ -150,7 +150,7 @@ class ResetPassword extends React.Component {
     }
 
     axios
-      .post("http://localhost:8000/auth/reset-password", {
+      .post("/auth/reset-password", {
         userId: this.props.match.params.userId,
         resetToken: this.props.match.params.resetToken,
         newPassword: this.state.inputElements.password2.value,

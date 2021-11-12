@@ -1,4 +1,3 @@
-import Aux from "../../../hoc/Auxiliary";
 import Button from "../../UI/Button/Button";
 import ErrorCard from "../../UI/ErrorCard/ErrorCard";
 import Input from "../../UI/Input/Input";

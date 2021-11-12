@@ -3,7 +3,7 @@ import React from "react";
 import Input from "../../../components/UI/Input/Input";
 import Button from "../../../components/UI/Button/Button";
 
-import axios from "axios";
+import axios from "../../../axios-instance";
 import AuthLayout from "../../../components/Layout/AuthLayout";
 import AuthCard from "../../../components/UI/AuthCard/AuthCard";
 import { cloneDeep } from "lodash";
@@ -91,7 +91,7 @@ class ForgotPassword extends React.Component {
     if (this.state.serverBusy) return;
     this.setState({ serverBusy: true });
     axios
-      .post("http://localhost:8000/auth/forgot-password", {
+      .post("/auth/forgot-password", {
         email: this.state.inputElements.email.value,
       })
       .then((response) => {

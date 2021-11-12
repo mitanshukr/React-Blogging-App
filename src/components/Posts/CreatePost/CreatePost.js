@@ -1,4 +1,3 @@
-import Aux from "../../../hoc/Auxiliary";
 import Button from "../../UI/Button/Button";
 import ErrorCard from "../../UI/ErrorCard/ErrorCard";
 import Input from "../../UI/Input/Input";
@@ -8,7 +7,7 @@ const CreatePost = (props) => {
   const formElement = Object.keys(props.formData).map((element) => {
     if (element === "body") return null;
     return (
-      <Aux key={element}>
+      <div key={element}>
         <Input
           elementType={props.formData[element].elementType}
           elementConfig={props.formData[element].elementConfig}
@@ -19,7 +18,7 @@ const CreatePost = (props) => {
           required={props.formData[element].validation.required}
           onBlur={props.onBlur}
         />
-      </Aux>
+      </div>
     );
   });
   return (

@@ -86,7 +86,13 @@ const reducer = (state = initialState, action) => {
       firstName: action.firstName,
       lastName: action.lastName,
     };
+  } else if (action.type === "updateUsername") {
+    return {
+      ...state,
+      userName: action.userName,
+    };
   }
+
   return state;
 };
 

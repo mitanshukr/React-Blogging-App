@@ -6,9 +6,6 @@ import PersonalInfo from "./PersonalInfo";
 import Account from "./Account";
 
 class AccountsPage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     this.queryParam = new URLSearchParams(
       this.props.history.location.search

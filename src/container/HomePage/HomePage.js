@@ -1,5 +1,5 @@
 import React from "react";
-import homeSVG from "../../assets/home.svg";
+// import homeSVG from "../../assets/home.svg";
 import classes from "./HomePage.module.css";
 
 import Typewriter from "typewriter-effect";
