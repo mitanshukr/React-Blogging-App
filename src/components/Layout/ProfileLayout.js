@@ -3,6 +3,7 @@ import ProfilePicture from "../User/Profile/ProfilePicture";
 import Input from "../UI/Input/Input";
 import classes from "./ProfileLayout.module.css";
 import PageSubMenu from "../UI/PageSubMenu/PageSubMenu";
+import Error400 from "../UI/ErrorSvg/Errors/Error400";
 
 const ProfileLayout = (props) => {
   return (
@@ -67,6 +68,7 @@ const ProfileLayout = (props) => {
           urlPathname={`/ink/${props.userName}`}
           menuItems={props.menuItems}
           queryParam={props.queryParam}
+          showSidebar={false}
         />
       </div>
       <div className={classes.ProfileLayout__col2}>{props.children}</div>

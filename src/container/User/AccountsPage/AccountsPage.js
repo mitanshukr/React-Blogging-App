@@ -6,6 +6,16 @@ import PersonalInfo from "./PersonalInfo";
 import Account from "./Account";
 
 class AccountsPage extends React.Component {
+  state = {
+    sidebarVisibility: false,
+  };
+
+  sidebarToggler = () => {
+    this.setState((prevState) => ({
+      sidebarVisibility: !prevState.sidebarVisibility,
+    }));
+  };
+
   render() {
     this.queryParam = new URLSearchParams(
       this.props.history.location.search
@@ -13,6 +23,8 @@ class AccountsPage extends React.Component {
     return (
       <AccountLayout
         queryParam={this.queryParam || "personalInfo"}
+        showSidebar={this.state.sidebarVisibility}
+        sidebarToggler={this.sidebarToggler}
         menuItems={{
           personalInfo: {
             name: "Personal Info",

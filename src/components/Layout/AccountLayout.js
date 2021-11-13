@@ -11,6 +11,8 @@ const AccountLayout = (props) => {
           urlPathname="/user/account"
           menuItems={props.menuItems}
           queryParam={props.queryParam}
+          showSidebar={props.showSidebar}
+          sidebarToggler={props.sidebarToggler}
         />
       </div>
       <div className={classes.AccountLayout__col2}>{props.children}</div>

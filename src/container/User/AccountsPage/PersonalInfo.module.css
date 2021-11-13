@@ -1,8 +1,10 @@
 .PersonalInfo {
   display: flex;
   flex-direction: column;
-  padding-left: 80px;
+  /* padding-left: 80px; */
   max-width: 400px;
+  overflow: hidden;
+  box-sizing: content-box;
 }
 .PersonalInfo label {
   color: rgba(44, 41, 38, 0.7);
@@ -29,16 +31,23 @@
 
 .PersonalInfo__inputRow > div {
   margin: 0;
+  box-sizing: border-box;
   width: 100%;
 }
 
-.PersonalInfo__inputRow > div:not(:last-of-type) {
-  margin-right: 15px;
+.PersonalInfo__btn button {
+  margin-top: 30px;
+  width: 97%;
 }
 
-.PersonalInfo__btn button {
-  margin: 0;
-  margin-left: 10px;
-  margin-top: 30px;
-  width: 80px;
+@media screen and (max-width: 450px) {
+  .PersonalInfo__inputRow {
+    display: inline;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .PersonalInfo__inputRow {
+    display: inline;
+  }
 }

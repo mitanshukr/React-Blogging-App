@@ -24,7 +24,7 @@
   padding: 10px 5px;
   margin: 0 80px;
   text-align: center;
-  opacity: 0.9;
+  /* opacity: 0.9; */
 }
 
 .Profile__col2--head h3 {

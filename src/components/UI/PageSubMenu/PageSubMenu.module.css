@@ -3,6 +3,12 @@
   padding: 0;
 }
 
+.PageSubMenuSidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.PageSubMenuSidebar li,
 .PageSubMenu li {
   color: #2c2926;
   border-radius: 500px;
@@ -10,6 +16,9 @@
   overflow: hidden;
 }
 
+.PageSubMenuSidebar li a,
+.PageSubMenuSidebar li a:visited,
+.PageSubMenuSidebar li a:active,
 .PageSubMenu li a,
 .PageSubMenu li a:visited,
 .PageSubMenu li a:active {
@@ -31,6 +40,10 @@
   color: tomato !important;
 }
 
+.PageSubMenuSidebar .activeNav {
+  background-color: transparent;
+}
+
 .disabledNav {
   display: block;
   width: 100%;
@@ -39,4 +52,41 @@
   padding: 5px 0 5px 15px;
   margin: 1px 0;
   transition: all 0.2s ease-in-out;
+}
+
+.PageSubMenuSidebar {
+  display: none;
+  opacity: 0;
+}
+
+.PageSubMenuSidebar .menuIcon {
+  padding: 5px;
+  background-color: rgb(255, 249, 241);
+}
+
+.PageSubMenuSidebar .menuIcon div {
+  display: inline;
+  cursor: pointer;
+}
+
+.PageSubMenuSidebar .menuIcon div:hover {
+  color: tomato;
+}
+
+.PageSubMenuSidebar .menuIcon span {
+  display: inline-block;
+  transform: translateY(-2px);
+  margin-left: 3px;
+}
+
+@media screen and (max-width: 670px) {
+  .PageSubMenuSidebar {
+    display: block;
+    opacity: 1;
+  }
+
+  .PageSubMenu {
+    display: none;
+    opacity: 0;
+  }
 }

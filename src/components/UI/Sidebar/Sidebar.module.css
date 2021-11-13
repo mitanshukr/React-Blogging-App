@@ -1,0 +1,30 @@
+.Sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  background-color: rgb(243, 243, 243);
+  border-right: 1ps solid rgba(59, 59, 59, 0.4);
+  box-shadow: 1px 0px 10px 1px rgba(59, 59, 59, 0.2);
+  height: 100vh;
+  max-width: 250px;
+  min-width: 160px;
+  width: 42vw;
+  padding: 18px;
+  padding-top: 30px;
+  box-sizing: border-box;
+}
+
+.Sidebar .closeIcon {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 20px;
+}
+
+@media screen and (max-width: 450px) {
+  .Sidebar {
+    padding: 8px;
+    padding-top: 30px;
+  }
+}

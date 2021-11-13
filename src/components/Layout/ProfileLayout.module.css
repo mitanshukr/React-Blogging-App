@@ -17,7 +17,6 @@
 
 .ProfileLayout__col2 {
   flex: 2 1 auto;
-  /* border: 1px solid rgb(224, 224, 224); */
 }
 
 .ProfileLayout__name {
@@ -119,4 +118,63 @@
 .activeNav {
   background-color: rgb(253, 232, 232);
   color: tomato !important;
+}
+
+@media screen and (max-width: 1150px) {
+  .ProfileLayout {
+    padding: 20px 50px 10px;
+  }
+
+  .ProfileLayout__col2 {
+    flex: 2 1 auto;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  .AccountLayout {
+    padding: 10px 30px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .AccountLayout {
+    padding: 8px 10px;
+  }
+
+  .AccountLayout__col1 {
+    flex: 0 0 160px;
+  }
+
+  .AccountLayout__col2 {
+    padding: 20px 30px;
+  }
+}
+
+@media screen and (max-width: 670px) {
+  .AccountLayout__col1 {
+    flex-basis: 100%;
+    position: inherit;
+  }
+
+  .AccountLayout__col2 {
+    margin-left: 0px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .AccountLayout__col2 {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .AccountLayout {
+    padding: 0;
+    margin: 0;
+  }
+
+  .AccountLayout__col2 {
+    border: none;
+    padding: 12px 8px;
+  }
 }

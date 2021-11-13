@@ -168,6 +168,7 @@ class GetPost extends React.Component {
                 >
                   Delete
                 </small>
+                &nbsp;
               </>
             ) : null}
           </section>
