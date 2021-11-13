@@ -12,7 +12,7 @@ class HomePage extends React.Component {
         Home
         <h1>Start your Journal</h1>
         <p>Write what you Love!</p>
-        <iframe src="https://www.aveva.com/en/perspectives/success-stories/" />
+        <iframe title="aveva" src="https://www.aveva.com/en/perspectives/success-stories/" />
         <Typewriter
           options={{
             strings: ["Hello", "World"],
