@@ -21,3 +21,14 @@
   padding: 0;
   margin: 0;
 } */
+
+@media only screen and (max-width: 800px) {
+  .ProfilePicture {
+    width: 6.5rem;
+    height: 6.5rem;
+  }
+
+  .ProfilePicture svg {
+    font-size: 3.2rem;
+  }
+}

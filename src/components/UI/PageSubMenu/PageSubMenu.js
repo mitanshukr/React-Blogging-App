@@ -32,14 +32,9 @@ const PageSubMenu = (props) => {
             <span>Menu</span>
           </div>
         </div>
-        {props.showSidebar ? (
-          <Sidebar
-            visibility={props.showSidebar}
-            onClose={props.sidebarToggler}
-          >
-            <ul>{menuItems}</ul>
-          </Sidebar>
-        ) : null}
+        <Sidebar visibility={props.showSidebar} onClose={props.sidebarToggler}>
+          <ul>{menuItems}</ul>
+        </Sidebar>
       </div>
       <ul className={classes.PageSubMenu}>{menuItems}</ul>
     </>

@@ -27,14 +27,21 @@ class Profile extends React.Component {
         validation: {
           errorMsg: null,
           // isTouched: false,
-          maxLength: 220,
+          maxLength: 250,
         },
       },
       aboutEditModeOn: false,
+      sidebarVisibility: false,
       localError: null,
       serverBusy: true,
     };
   }
+
+  sidebarToggler = () => {
+    this.setState((prevState) => ({
+      sidebarVisibility: !prevState.sidebarVisibility,
+    }));
+  };
 
   getUserInfo = (userName) => {
     axios
@@ -85,7 +92,7 @@ class Profile extends React.Component {
     let errorMsg = null;
     errorMsg = checkValidity(value, this.state.about.validation);
 
-    if (parseInt(e.target.style.height) > 174) {
+    if (parseInt(e.target.style.height) > 220) {
       errorMsg = "Height Limit Exceeding.";
     }
 
@@ -126,7 +133,7 @@ class Profile extends React.Component {
       axios
         .patch(
           `/user/update/${this.state.userId}`,
-          { about: this.state.about.value },
+          { about: this.state.about.value.trim() },
           {
             headers: {
               Authorization: `Bearer ${this.props.authToken}`,
@@ -143,7 +150,7 @@ class Profile extends React.Component {
               validation: {
                 ...this.state.about.validation,
               },
-              loadedValue: this.state.about.value,
+              loadedValue: this.state.about.value.trim(),
             },
           });
         })
@@ -184,6 +191,8 @@ class Profile extends React.Component {
           editBtnClickHandler={this.editBtnClickHandler}
           aboutHeightCalc={this.aboutHeightManager}
           aboutErrorMsg={this.state.about.validation.errorMsg}
+          showSidebar={this.state.sidebarVisibility}
+          sidebarToggler={this.sidebarToggler}
           queryParam={this.queryParam || "posts"}
           menuItems={{
             posts: {

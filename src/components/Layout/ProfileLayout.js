@@ -35,39 +35,41 @@ const ProfileLayout = (props) => {
               value={props.about}
             />
           ) : null}
-          {"@" + props.currentUser !== props.userName ? (
-            <button
-              className={classes.ProfileLayout__edit}
-              onClick={() => {
-                alert("Feature not available yet. Stay Tuned!");
-              }}
-            >
-              Follow
-            </button>
-          ) : (
-            <button
-              className={classes.ProfileLayout__edit}
-              onClick={props.editBtnClickHandler}
-            >
-              {props.aboutEditModeOn ? "OK" : "Edit Bio"}
-            </button>
-          )}
+          <div>
+            {"@" + props.currentUser !== props.userName ? (
+              <button
+                className={classes.ProfileLayout__edit}
+                onClick={() => {
+                  alert("Feature not available yet. Stay Tuned!");
+                }}
+              >
+                Follow
+              </button>
+            ) : (
+              <button
+                className={classes.ProfileLayout__edit}
+                onClick={props.editBtnClickHandler}
+              >
+                {props.aboutEditModeOn ? "OK" : "Edit Bio"}
+              </button>
+            )}
 
-          {props.aboutEditModeOn ? (
-            <button
-              className={`${classes.ProfileLayout__edit} ${classes.ProfileLayout__editCancel}`}
-              onClick={props.editBtnClickHandler}
-            >
-              Cancel
-            </button>
-          ) : null}
+            {props.aboutEditModeOn ? (
+              <button
+                className={`${classes.ProfileLayout__edit} ${classes.ProfileLayout__editCancel}`}
+                onClick={props.editBtnClickHandler}
+              >
+                Cancel
+              </button>
+            ) : null}
+          </div>
         </div>
-
         <PageSubMenu
           urlPathname={`/ink/${props.userName}`}
           menuItems={props.menuItems}
           queryParam={props.queryParam}
-          showSidebar={false}
+          showSidebar={props.showSidebar}
+          sidebarToggler={props.sidebarToggler}
         />
       </div>
       <div className={classes.ProfileLayout__col2}>{props.children}</div>

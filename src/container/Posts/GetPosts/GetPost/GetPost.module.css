@@ -72,6 +72,7 @@
   transition: all 0.2s ease-in-out;
   /* font-weight: normal; */
   font-size: 28px;
+  margin-right: 20px;
 }
 
 .GetPost__main p {
@@ -181,17 +182,21 @@
 
 @media only screen and (max-width: 400px) {
   .GetPost {
-    padding: 12px;
+    padding: 12px 14px;
+  }
+
+  .GetPost__main h2 {
+    font-size: 22px;
+    margin-bottom: 3px;
   }
 }
 @media only screen and (max-width: 350px) {
   .GetPost {
-    padding: 8px 16px;
+    padding: 12px 10px;
   }
 
   .GetPost__main h2 {
-    font-size: 24px;
-    margin-bottom: 3px;
+    font-size: 20px;
   }
 
   .GetPost__main p {

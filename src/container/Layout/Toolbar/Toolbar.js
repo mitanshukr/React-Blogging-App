@@ -35,7 +35,7 @@ class Toolbar extends React.Component {
           this.setState({ isVerificationEmailSent: true });
           this.dismissTimer = setTimeout(() => {
             this.dismissNotificationHandler();
-          }, 6000);
+          }, 4000);
         } else {
           throw new Error();
         }
@@ -76,7 +76,6 @@ class Toolbar extends React.Component {
           (this.props.isEmailVerified ? null : (
             <div className={"pNotification"}>
               <PNotification
-                // key={this.props.isAuthenticated}
                 dismissNotification={this.dismissNotificationHandler}
               >
                 {this.state.isVerificationEmailSent ? (

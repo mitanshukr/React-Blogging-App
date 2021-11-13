@@ -8,6 +8,7 @@
 
 .AccountLayout__header {
   flex-basis: 100%;
+  padding-left: 5px;
 }
 
 .AccountLayout__col1 {
@@ -51,9 +52,18 @@
   .AccountLayout__col2 {
     padding: 20px 30px;
   }
+
+  .AccountLayout__header {
+    margin-top: 10px;
+  }
 }
 
-@media screen and (max-width: 670px) {
+@media screen and (max-width: 780px) {
+  .AccountLayout__header {
+    font-size: 26px;
+    margin: 10px 0 15px 0;
+  }
+
   .AccountLayout__col1 {
     flex-basis: 100%;
     position: inherit;

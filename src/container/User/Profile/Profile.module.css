@@ -22,7 +22,7 @@
   border: 1px solid #c9c9c9;
   border-radius: 4px;
   padding: 10px 5px;
-  margin: 0 80px;
+  margin: 0 70px;
   text-align: center;
   /* opacity: 0.9; */
 }
@@ -36,12 +36,32 @@
 
 .bg_post {
   background: url("../../../assets/Images/10.jpg") no-repeat;
-  background-position-y: -170px;
+  /* background-position-y: -170px; */
+  background-position: center;
   background-size: cover;
 }
 
 .bg_like {
   background: url("../../../assets/Images/6.jpg") repeat;
-  background-position-y: -170px;
+  /* background-position-y: -170px; */
+  background-position: center;
   background-size: cover;
+}
+
+@media only screen and (max-width: 900px) {
+  .Profile__col2--head {
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 780px) {
+  .Profile__col2--head {
+    margin: 0 40px;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .Profile__col2--head {
+    margin: 0;
+  }
 }

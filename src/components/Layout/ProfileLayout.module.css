@@ -3,7 +3,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 20px 100px 10px;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
 }
 
 .ProfileLayout__col1 {
@@ -39,7 +39,7 @@
 }
 
 .ProfileLayout__about > div textarea {
-  padding: 0;
+  padding: 0 5px;
   color: grey;
   font-size: 16px;
   box-sizing: border-box;
@@ -48,8 +48,8 @@
   box-shadow: none !important;
   background-color: transparent !important;
   min-height: fit-content;
-  max-height: 20ch !important;
-  overflow-y: hidden !important;
+  /* max-height: 20ch !important; */
+  /* overflow-y: hidden !important; */
   /* text-align: justify; */
 }
 
@@ -122,59 +122,75 @@
 
 @media screen and (max-width: 1150px) {
   .ProfileLayout {
-    padding: 20px 50px 10px;
+    padding: 20px 20px 10px 40px;
   }
+
+  .ProfileLayout__col1 {
+    /* flex: 0 0 200px; */
+    padding-right: 10px;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .ProfileLayout {
+    padding: 20px 10px 10px 30px;
+  }
+
+  /* .ProfileLayout__col1 {
+    flex: 0 0 220px;
+  } */
 
   .ProfileLayout__col2 {
     flex: 2 1 auto;
   }
+
+  .ProfileLayout__name {
+    margin: 8px 0 1px 0;
+  }
+
+  .ProfileLayout__name small {
+    font-size: 13px;
+  }
 }
 
 @media screen and (max-width: 850px) {
-  .AccountLayout {
-    padding: 10px 30px;
+  .ProfileLayout__col1 {
+    flex: 0 0 200px;
+  }
+
+  .ProfileLayout__name h3 {
+    font-size: 24px;
   }
 }
 
-@media screen and (max-width: 800px) {
-  .AccountLayout {
-    padding: 8px 10px;
+@media screen and (max-width: 780px) {
+  .ProfileLayout {
+    flex-wrap: wrap;
+    padding: 20px 10px 0 10px;
   }
 
-  .AccountLayout__col1 {
-    flex: 0 0 160px;
-  }
-
-  .AccountLayout__col2 {
-    padding: 20px 30px;
-  }
-}
-
-@media screen and (max-width: 670px) {
-  .AccountLayout__col1 {
+  .ProfileLayout__col1 {
+    position: relative;
     flex-basis: 100%;
-    position: inherit;
+    align-items: center;
+    padding-bottom: 10px;
   }
 
-  .AccountLayout__col2 {
-    margin-left: 0px;
-  }
-}
-
-@media screen and (max-width: 450px) {
-  .AccountLayout__col2 {
-    display: block;
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .AccountLayout {
-    padding: 0;
-    margin: 0;
+  .ProfileLayout__col1 > *:not(:first-of-type) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .AccountLayout__col2 {
-    border: none;
-    padding: 12px 8px;
+  .ProfileLayout__about > div textarea {
+    width: 80vw;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .ProfileLayout__edit {
+    min-width: 100px;
+    margin-left: 10px;
+    margin-bottom: 20px;
   }
 }

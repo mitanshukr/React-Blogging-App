@@ -79,10 +79,11 @@
   margin-left: 3px;
 }
 
-@media screen and (max-width: 670px) {
+@media screen and (max-width: 780px) {
   .PageSubMenuSidebar {
-    display: block;
+    display: block !important;
     opacity: 1;
+    align-self: stretch;
   }
 
   .PageSubMenu {

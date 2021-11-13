@@ -6,9 +6,13 @@ const Sidebar = (props) => {
   return (
     <>
       <Backdrop visibility={props.visibility} onClick={props.onClose} />
-      <div className={classes.Sidebar}>
+      <div
+        className={`${classes.Sidebar} ${
+          props.visibility ? classes.visibility : ""
+        }`}
+      >
         <IoClose className={classes.closeIcon} onClick={props.onClose} />
-        <div>{props.children}</div>
+        <div onClick={props.onClose}>{props.children}</div>
       </div>
     </>
   );
