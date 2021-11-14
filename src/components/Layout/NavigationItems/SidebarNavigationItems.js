@@ -1,4 +1,4 @@
-import MenuList from "../../../container/Layout/Toolbar/UserMenu/MenuList/MenuList";
+// import MenuList from "../../../container/Layout/Toolbar/UserMenu/MenuList/MenuList";
 import ProfileIcon from "../../User/Profile/ProfileIcon";
 
 const SidebarNavigationItems = (props) => {
