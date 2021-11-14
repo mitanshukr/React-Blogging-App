@@ -133,7 +133,7 @@ class GetPost extends React.Component {
             {/* <small title="Publish Date">{postDate}&nbsp;&#183;&nbsp;</small> */}
             <small title="Publish Date">
               <ReactTimeAgo
-                date={this.props.date}
+                date={Date.parse(this.props.date)}
                 locale="en-US"
                 timeStyle="twitter-minute-now"
               />

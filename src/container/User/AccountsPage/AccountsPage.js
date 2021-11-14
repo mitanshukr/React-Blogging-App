@@ -10,10 +10,17 @@ class AccountsPage extends React.Component {
     sidebarVisibility: false,
   };
 
-  sidebarToggler = () => {
-    this.setState((prevState) => ({
-      sidebarVisibility: !prevState.sidebarVisibility,
-    }));
+  sidebarToggler = (status) => {
+    this.setState((prevState) => {
+      if (status === true || status === false)
+        return {
+          sidebarVisibility: status,
+        };
+      else
+        return {
+          sidebarVisibility: !prevState.sidebarVisibility,
+        };
+    });
   };
 
   render() {

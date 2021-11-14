@@ -32,6 +32,35 @@
   color: tomato;
 }
 
+.Header .mobileNav {
+  display: none;
+  opacity: 0;
+  color: white;
+  font-size: 26px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.Header .mobileNav ul {
+  margin: 0;
+}
+
+.Header .mobileNav ul li {
+  padding: 0 10px 0 3px;
+}
+
+.Header .mobileNav .icon {
+  color: white;
+  font-size: 21px;
+  transform: translateY(2px);
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.Header .mobileNav .icon:hover {
+  color: tomato;
+}
+
 .Header .logo > a,
 .Header .logo > a:visited,
 .Header .logo > a:active,
@@ -59,4 +88,28 @@
 
 .pNotification__emailVerifLink:hover {
   color: tomato;
+}
+
+@media (hover: none), only screen and (max-width: 900px) {
+  .Header .navbar {
+    display: none;
+    opacity: 0;
+  }
+
+  .Header .mobileNav {
+    display: block;
+    opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .Header {
+    padding: 2px 20px;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .Header {
+    padding: 2px 10px;
+  }
 }

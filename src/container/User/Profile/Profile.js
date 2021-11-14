@@ -37,10 +37,17 @@ class Profile extends React.Component {
     };
   }
 
-  sidebarToggler = () => {
-    this.setState((prevState) => ({
-      sidebarVisibility: !prevState.sidebarVisibility,
-    }));
+  sidebarToggler = (status) => {
+    this.setState((prevState) => {
+      if (status === true || status === false)
+        return {
+          sidebarVisibility: status,
+        };
+      else
+        return {
+          sidebarVisibility: !prevState.sidebarVisibility,
+        };
+    });
   };
 
   getUserInfo = (userName) => {

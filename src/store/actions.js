@@ -66,7 +66,7 @@ const sessionRefresher = () => {
           clearTimeout(timeout);
           dispatch(sessionTimeout(timeLeft));
           response.data.authToken = localStorageData.authToken;
-          console.log(response.data);
+          // console.log(response.data);
           dispatch({ type: "loginSuccess", userData: response.data });
           dispatch({ type: "serverStatus", serverBusy: false });
         })

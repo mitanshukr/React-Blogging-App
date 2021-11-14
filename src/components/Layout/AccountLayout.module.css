@@ -25,7 +25,20 @@
   justify-content: center;
   margin-left: 3px;
   padding: 50px;
+  position: relative;
   /* padding-left: 80px; */
+}
+
+.AccountLayout__col2 h3 {
+  margin: 0px;
+  font-size: 16px;
+  font-weight: 400;
+  color: tomato;
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  display: none;
+  opacity: 0;
 }
 
 @media screen and (max-width: 1000px) {
@@ -50,7 +63,7 @@
   }
 
   .AccountLayout__col2 {
-    padding: 20px 30px;
+    padding: 30px;
   }
 
   .AccountLayout__header {
@@ -72,6 +85,11 @@
   .AccountLayout__col2 {
     margin-left: 0px;
   }
+
+  .AccountLayout__col2 h3 {
+    opacity: 1;
+    display: block;
+  }
 }
 
 @media screen and (max-width: 450px) {
@@ -88,6 +106,10 @@
 
   .AccountLayout__col2 {
     border: none;
-    padding: 12px 8px;
+    padding: 30px 8px;
+  }
+
+  .AccountLayout__col2 h3 {
+    font-size: 14px;
   }
 }

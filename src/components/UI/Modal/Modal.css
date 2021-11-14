@@ -1,15 +1,16 @@
 .Modal {
   z-index: 1001;
-  position: absolute;
+  position: fixed;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  top: 50px;
+  transform: translateX(-50%);
   background-color: #fff;
   width: 400px;
   max-width: 100vw;
   height: auto;
   text-align: center !important;
   margin: 0 auto;
+  transition: all 0.5s ease-in-out;
 }
 
 .Modal .Modal__closeIcon {

@@ -1,7 +1,7 @@
 .Sidebar {
   position: fixed;
   top: 0;
-  left: -500px;
+  /* left: -500px; */
   z-index: 1001;
   background-color: rgb(243, 243, 243);
   border-right: 1ps solid rgba(59, 59, 59, 0.4);
@@ -18,14 +18,30 @@
 
 .Sidebar .closeIcon {
   position: absolute;
-  top: 8px;
-  right: 10px;
-  font-size: 20px;
+  top: 12px;
+  right: 18px;
+  font-size: 26px;
   cursor: pointer;
 }
 
-.Sidebar.visibility {
+.Sidebar .closeIcon:hover {
+  color: tomato;
+}
+
+.Sidebar.left {
+  left: -500px;
+}
+
+.Sidebar.right {
+  right: -500px;
+}
+
+.Sidebar.visibility_left {
   left: 0px;
+}
+
+.Sidebar.visibility_right {
+  right: 0px;
 }
 
 @media screen and (max-width: 450px) {

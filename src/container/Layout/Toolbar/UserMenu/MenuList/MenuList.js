@@ -26,8 +26,8 @@ class MenuList extends React.Component {
   handleClickOutside(event) {
     if (
       !this.wrapperRef.current.contains(event.target) &&
-      event.currentTarget.id !== this.props.iconId.selfId &&
-      event.target.id !== this.props.iconId.childId
+      event.currentTarget.id !== this.props.iconId?.selfId &&
+      event.target.id !== this.props.iconId?.childId
     ) {
       this.linkClicked();
     }

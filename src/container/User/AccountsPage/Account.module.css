@@ -1,4 +1,4 @@
-.PersonalInfo {
+.Account {
   /* width: 50%; */
   margin-right: auto;
   display: flex;
@@ -6,17 +6,17 @@
   align-items: flex-start;
 }
 
-.PersonalInfo > div {
+.Account > div {
   margin: 0;
   display: flex;
   align-items: flex-end;
 }
 
-.PersonalInfo input {
+.Account input {
   box-shadow: none !important;
 }
 
-.PersonalInfo > div small {
+.Account > div small {
   align-self: center;
   margin: 20px 5px 0px 5px;
   color: tomato;
@@ -24,22 +24,22 @@
   font-size: 14px;
 }
 
-.PersonalInfo > div small:hover {
+.Account > div small:hover {
   text-decoration: underline;
 }
 
-.PersonalInfo__username {
+.Account__username {
   display: flex;
   flex-direction: column;
   /* position: relative; */
 }
 
-.PersonalInfo__username > div:first-of-type {
+.Account__username > div:first-of-type {
   display: flex;
   align-items: flex-end;
 }
 
-.PersonalInfo__username > div:nth-of-type(2) {
+.Account__username > div:nth-of-type(2) {
   width: 100%;
   padding-left: 10px !important;
   align-self: flex-start;
@@ -48,18 +48,18 @@
   transform: translateY(-10px);
 }
 
-.PersonalInfo > div button {
+.Account > div button {
   margin-bottom: 10px;
 }
 
-.PersonalInfo a,
-.PersonalInfo a:visited,
-.PersonalInfo a:active {
+.Account a,
+.Account a:visited,
+.Account a:active {
   color: tomato;
   text-decoration: none;
   font-size: 13px;
 }
 
-.PersonalInfo a:hover {
+.Account a:hover {
   text-decoration: underline;
 }

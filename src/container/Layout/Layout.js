@@ -2,9 +2,22 @@ import React from "react";
 import { connect } from "react-redux";
 import Toolbar from "./Toolbar/Toolbar";
 import Notification from "../../components/UI/Notification/Notification";
+import Sidebar from "../../components/UI/Sidebar/Sidebar";
+import SidebarNavigationItems from "../../components/Layout/NavigationItems/SidebarNavigationItems";
 // import Footer from "../../components/Layout/Footer";
+import "./Layout.css";
 
 class Layout extends React.Component {
+  state = {
+    navSidebarVisibility: false,
+  };
+
+  mobileNavToggler = () => {
+    this.setState((prevState) => {
+      return { navSidebarVisibility: !prevState.navSidebarVisibility };
+    });
+  };
+
   render() {
     return (
       <>
@@ -13,8 +26,16 @@ class Layout extends React.Component {
           show={this.props.notifVisibility}
           type={this.props.notifType}
         />
-        <Toolbar />
-        {/* //sidedrawer */}
+        <Toolbar onMobileNavClick={this.mobileNavToggler} />
+        <div className="sidebar__menu">
+          <Sidebar
+            alignment="right"
+            visibility={this.state.navSidebarVisibility}
+            onClose={this.mobileNavToggler}
+          >
+            <SidebarNavigationItems />
+          </Sidebar>
+        </div>
         <main style={{ height: "100%" }}>{this.props.children}</main>
         {/* <Footer/> */}
       </>

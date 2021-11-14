@@ -1,29 +1,40 @@
+.notificationIcon {
+  color: white;
+  font-size: 21px;
+  transform: translateY(3px);
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.notificationIcon:hover {
+  color: tomato;
+}
+
 .MenuIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* position: absolute;
     top: -5px;
     right: 10px; */
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
-    background-color: rgb(156, 154, 154);
-    margin-left: 10px;
-    padding: 0;
-    color: white;
-} 
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  background-color: rgb(156, 154, 154);
+  margin-left: 10px;
+  padding: 0;
+  color: white;
+}
 
 .MenuIcon p {
-    margin: 0;
-    padding: 0;
-    vertical-align:baseline;
-    font-weight: bold;
-    font-size: 12px;
-    
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 .MenuIcon:hover {
-    color: tomato;
-    cursor: pointer;
+  color: tomato;
+  cursor: pointer;
 }

@@ -15,7 +15,14 @@ const AccountLayout = (props) => {
           sidebarToggler={props.sidebarToggler}
         />
       </div>
-      <div className={classes.AccountLayout__col2}>{props.children}</div>
+      <div className={classes.AccountLayout__col2}>
+        <h3>
+          {props.queryParam.toLowerCase() === "personalinfo"
+            ? "Personal Details"
+            : null}
+        </h3>
+        {props.children}
+      </div>
     </div>
   );
 };

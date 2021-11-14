@@ -2,9 +2,15 @@ import { NavLink } from "react-router-dom";
 
 const navigationItem = (props) => {
   return (
-    <li>
+    <li
+      style={{
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
       <NavLink
         exact
+        style={{ ...props.style }}
         onClick={props.onClick}
         // activeClassName="active"
         to={{

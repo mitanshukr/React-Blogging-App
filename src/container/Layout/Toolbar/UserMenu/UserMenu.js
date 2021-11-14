@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-
+import { IoNotificationsOutline } from "react-icons/io5";
 import MenuList from "./MenuList/MenuList";
 import classes from "./UserMenu.module.css";
 
@@ -18,6 +18,15 @@ class MenuIcon extends React.Component {
   render() {
     return (
       <>
+        <div
+          className={classes.notificationIcon}
+          title="Notifications (0)"
+          onClick={() => {
+            alert("No Notifications");
+          }}
+        >
+          <IoNotificationsOutline />
+        </div>
         <div
           className={classes.MenuIcon}
           id="user-icon-01"

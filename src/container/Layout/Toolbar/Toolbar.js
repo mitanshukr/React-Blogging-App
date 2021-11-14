@@ -5,9 +5,13 @@ import { NavLink, withRouter } from "react-router-dom";
 import NavigationItems from "../../../components/Layout/NavigationItems/NavigationItems";
 import PNotification from "../../../components/UI/PriorityNotification/PNotification";
 import { showNotification } from "../../../store/actions";
+import { IoNotificationsOutline } from "react-icons/io5";
+import { VscThreeBars } from "react-icons/vsc";
+import { RiHomeLine } from "react-icons/ri";
 
 import "./Toolbar.css";
 import UserMenu from "./UserMenu/UserMenu";
+import NavigationItem from "../../../components/Layout/NavigationItems/NavigationItem/NavigationItem";
 
 class Toolbar extends React.Component {
   state = {
@@ -58,7 +62,8 @@ class Toolbar extends React.Component {
               Immune Ink
             </NavLink>
           </div>
-          <nav>
+
+          <nav className={"navbar"}>
             <NavigationItems
               isAuthenticated={this.props.isAuthenticated}
               prevPath={this.props.history?.location?.pathname}
@@ -67,7 +72,42 @@ class Toolbar extends React.Component {
                 <UserMenu prevPath={this.props.history?.location?.pathname} />
               ) : null}
             </NavigationItems>
-            {/* togglerBtn */}
+          </nav>
+
+          <nav className={"mobileNav"}>
+            <ul>
+              {!this.props.isAuthenticated ? (
+                <NavigationItem
+                  style={{ fontSize: "17px", margin: "0 8px 2.5px 0" }}
+                  link="/feed"
+                  // prevPath={this.props.history?.location?.pathname}
+                >
+                  Feed
+                </NavigationItem>
+              ) : (
+                <>
+                  <NavigationItem link="/">
+                    <RiHomeLine
+                      title="Home"
+                      style={{
+                        fontSize: "22px",
+                        transform: "translateY(0.6px)",
+                      }}
+                    />
+                  </NavigationItem>
+                  <li
+                    className="icon"
+                    title="Notifications (0)"
+                    onClick={() => {
+                      alert("No Notifications");
+                    }}
+                  >
+                    <IoNotificationsOutline />
+                  </li>
+                </>
+              )}
+              <VscThreeBars onClick={this.props.onMobileNavClick} />
+            </ul>
           </nav>
         </header>
 

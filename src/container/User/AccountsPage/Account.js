@@ -242,7 +242,7 @@ class Account extends React.Component {
             serverBusy={this.state.serverBusy}
           />
         </Modal>
-        <div className={classes.PersonalInfo}>
+        <div className={classes.Account}>
           <div>
             <Input
               elementType="input"
@@ -260,7 +260,7 @@ class Account extends React.Component {
               Verify Email
             </small>
           </div>
-          <div className={classes.PersonalInfo__username}>
+          <div className={classes.Account__username}>
             <div>
               <Input
                 elementType="input"

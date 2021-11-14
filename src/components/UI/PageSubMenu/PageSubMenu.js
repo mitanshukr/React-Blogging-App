@@ -15,6 +15,7 @@ const PageSubMenu = (props) => {
           <NavLink
             to={`${props.urlPathname}?page=${item}`}
             className={props.queryParam === item ? classes.activeNav : null}
+            onClick={props.sidebarToggler.bind(this, false)}
           >
             {props.menuItems[item].name}
           </NavLink>
@@ -22,7 +23,6 @@ const PageSubMenu = (props) => {
       </li>
     );
   });
-  console.log(props.showSidebar);
   return (
     <>
       <div className={classes.PageSubMenuSidebar}>
