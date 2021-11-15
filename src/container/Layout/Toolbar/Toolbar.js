@@ -56,7 +56,7 @@ class Toolbar extends React.Component {
   render() {
     return (
       <>
-        <header className="Header">
+        <header className="Header noselect">
           <div className="logo">
             <NavLink to="/" exact>
               Immune Ink
@@ -90,7 +90,7 @@ class Toolbar extends React.Component {
                     <RiHomeLine
                       title="Home"
                       style={{
-                        fontSize: "22px",
+                        fontSize: "23px",
                         transform: "translateY(1px)",
                       }}
                     />
@@ -106,14 +106,14 @@ class Toolbar extends React.Component {
                   </li>
                 </>
               )}
-              <div
+              <li
                 style={{
                   padding: 0,
                   transform: "translateY(3px)",
                 }}
               >
                 <VscThreeBars onClick={this.props.onMobileNavClick} />
-              </div>
+              </li>
             </ul>
           </nav>
         </header>

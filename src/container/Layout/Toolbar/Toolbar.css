@@ -57,10 +57,6 @@
   cursor: pointer;
 }
 
-.Header .mobileNav .icon:hover {
-  color: tomato;
-}
-
 .Header .logo > a,
 .Header .logo > a:visited,
 .Header .logo > a:active,
