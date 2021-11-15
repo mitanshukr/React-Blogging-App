@@ -33,7 +33,12 @@ class Layout extends React.Component {
             visibility={this.state.navSidebarVisibility}
             onClose={this.mobileNavToggler}
           >
-            <SidebarNavigationItems />
+            <SidebarNavigationItems
+              isAuthenticated={this.props.isAuthenticated}
+              userName={this.props.userName}
+              firstName={this.props.firstName}
+              lastName={this.props.lastName}
+            />
           </Sidebar>
         </div>
         <main style={{ height: "100%" }}>{this.props.children}</main>
@@ -45,6 +50,10 @@ class Layout extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    isAuthenticated: state.isAuthenticated,
+    userName: state.userName,
+    firstName: state.firstName,
+    lastName: state.lastName,
     notifVisibility: state.notifVisibility,
     notifMessage: state.notifMessage,
     notifType: state.notifType,
