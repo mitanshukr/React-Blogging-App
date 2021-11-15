@@ -106,12 +106,14 @@ class Toolbar extends React.Component {
                   </li>
                 </>
               )}
-              <li style={{
-                        padding: 0,
-                        transform: "translateY(3px)",
-                      }}>
+              <div
+                style={{
+                  padding: 0,
+                  transform: "translateY(3px)",
+                }}
+              >
                 <VscThreeBars onClick={this.props.onMobileNavClick} />
-              </li>
+              </div>
             </ul>
           </nav>
         </header>

@@ -52,7 +52,7 @@
 .Header .mobileNav .icon {
   color: white;
   font-size: 21px;
-  transform: translateY(3px);
+  transform: translateY(2.5px);
   margin-right: 4px;
   cursor: pointer;
 }
