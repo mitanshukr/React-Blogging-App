@@ -91,7 +91,7 @@ class Toolbar extends React.Component {
                       title="Home"
                       style={{
                         fontSize: "22px",
-                        transform: "translateY(0.6px)",
+                        transform: "translateY(1px)",
                       }}
                     />
                   </NavigationItem>
@@ -106,7 +106,12 @@ class Toolbar extends React.Component {
                   </li>
                 </>
               )}
-              <VscThreeBars onClick={this.props.onMobileNavClick} />
+              <li style={{
+                        padding: 0,
+                        transform: "translateY(3px)",
+                      }}>
+                <VscThreeBars onClick={this.props.onMobileNavClick} />
+              </li>
             </ul>
           </nav>
         </header>

@@ -10,9 +10,9 @@ const modal = (props) => {
         className="Modal"
         style={{
           transform: !props.visibility
-            ? "translate(-50%, -400px)"
+            ? "translate(-50%, -700px)"
             : "translate(-50%, 50px)",
-          opacity: props.visibility ? "1" : "0",
+          // opacity: props.visibility ? "1" : "0",
         }}
       >
         <IoClose
