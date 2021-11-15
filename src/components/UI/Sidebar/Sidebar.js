@@ -6,7 +6,7 @@ const Sidebar = (props) => {
   if (props.visibility) {
     document.body.style.overflow = "hidden";
   } else {
-    document.body.style.overflow = "scroll";
+    document.body.style.overflow = "auto";
   }
 
   return (
