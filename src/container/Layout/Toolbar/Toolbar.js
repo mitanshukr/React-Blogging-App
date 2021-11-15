@@ -91,7 +91,7 @@ class Toolbar extends React.Component {
                       title="Home"
                       style={{
                         fontSize: "23px",
-                        transform: "translateY(1px)",
+                        transform: "translateY(1.5px)",
                       }}
                     />
                   </NavigationItem>
