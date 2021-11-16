@@ -56,7 +56,8 @@ class App extends Component {
               <Route path="/signup" component={Signup} />
               <Route path="/feed" exact component={Feed} />
               <Route path="/post/:postId" exact component={GetSinglePost} />
-              <Route path="/ink/:username(@\w+)" component={Profile} />
+              {/* <Route path="/ink/:username" exact component={Profile} /> */}
+              <Route path="/ink/:username(@\w+)" exact component={Profile} />
               {/* Regex Search in the above path - should start with @ */}
               <AuthRoute path="/user/account">
                 <AccountsPage />

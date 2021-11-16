@@ -4,3 +4,7 @@
     opacity: 0;
   }
 }
+
+li a.activeNav {
+  color: tomato !important;
+}

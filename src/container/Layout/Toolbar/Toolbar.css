@@ -27,8 +27,7 @@
   color: white;
 }
 
-.Header nav ul li a:hover,
-.Header nav ul li a.active {
+.Header nav ul li a:hover {
   color: tomato;
   /* background: transparent; */
 }

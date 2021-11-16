@@ -86,7 +86,7 @@
   color: white;
 }
 
-.ProfileLayout__col1 ul {
+/* .ProfileLayout__col1 ul {
   margin-top: 25px;
   list-style: none;
   padding: 0;
@@ -97,9 +97,9 @@
   border-radius: 500px;
   font-weight: 500;
   overflow: hidden;
-}
+} */
 
-.ProfileLayout__col1 ul li a,
+/* .ProfileLayout__col1 ul li a,
 .ProfileLayout__col1 ul li a:visited,
 .ProfileLayout__col1 ul li a:active {
   text-decoration: none;
@@ -109,16 +109,16 @@
   padding: 5px 0 5px 15px;
   margin: 1px 0;
   transition: all 0.2s ease-in-out;
-}
+} */
 
-.ProfileLayout__col1 ul li a:hover {
+/* .ProfileLayout__col1 ul li a:hover {
   background-color: rgb(253, 232, 232);
 }
 
 .activeNav {
   background-color: rgb(253, 232, 232);
   color: tomato !important;
-}
+} */
 
 @media screen and (max-width: 1150px) {
   .ProfileLayout {

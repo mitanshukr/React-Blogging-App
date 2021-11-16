@@ -3,18 +3,26 @@ import { connect } from "react-redux";
 import Toolbar from "./Toolbar/Toolbar";
 import Notification from "../../components/UI/Notification/Notification";
 import Sidebar from "../../components/UI/Sidebar/Sidebar";
-import SidebarNavigationItems from "../../components/Layout/NavigationItems/SidebarNavigationItems";
+import SidebarNavigationItems from "../../components/Layout/SidebarNavigationItems/SidebarNavigationItems";
 // import Footer from "../../components/Layout/Footer";
 import "./Layout.css";
+import { withRouter } from "react-router";
 
 class Layout extends React.Component {
   state = {
-    navSidebarVisibility: false,
+    sidebarVisibility: false,
   };
 
-  mobileNavToggler = () => {
+  mobileNavToggler = (status) => {
     this.setState((prevState) => {
-      return { navSidebarVisibility: !prevState.navSidebarVisibility };
+      if (status === true || status === false)
+        return {
+          sidebarVisibility: status,
+        };
+      else
+        return {
+          sidebarVisibility: !prevState.sidebarVisibility,
+        };
     });
   };
 
@@ -30,7 +38,7 @@ class Layout extends React.Component {
         <div className="sidebar__menu">
           <Sidebar
             alignment="right"
-            visibility={this.state.navSidebarVisibility}
+            visibility={this.state.sidebarVisibility}
             onClose={this.mobileNavToggler}
           >
             <SidebarNavigationItems
@@ -38,6 +46,8 @@ class Layout extends React.Component {
               userName={this.props.userName}
               firstName={this.props.firstName}
               lastName={this.props.lastName}
+              prevPath={this.props.history?.location?.pathname}
+              onItemClick={this.mobileNavToggler}
             />
           </Sidebar>
         </div>
@@ -60,4 +70,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(Layout);
+export default connect(mapStateToProps)(withRouter(Layout));

@@ -69,6 +69,7 @@ class Profile extends React.Component {
             loadedValue: response.data?.about,
           },
           serverBusy: false,
+          localError: null,
         });
       })
       .catch((err) => {
@@ -183,7 +184,7 @@ class Profile extends React.Component {
     if (this.state.serverBusy) {
       return <Spinner />;
     } else if (this.state.localError) {
-      return <ErrorSvg status={this.state.localError} src="SINGLE_POST" />;
+      return <ErrorSvg status={this.state.localError} />;
     } else {
       return (
         <ProfileLayout

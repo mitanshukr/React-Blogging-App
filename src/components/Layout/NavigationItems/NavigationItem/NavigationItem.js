@@ -12,7 +12,7 @@ const navigationItem = (props) => {
         exact
         style={{ ...props.style }}
         onClick={props.onClick}
-        // activeClassName="active"
+        activeClassName="activeNav"
         to={{
           pathname: props.link,
           state: {

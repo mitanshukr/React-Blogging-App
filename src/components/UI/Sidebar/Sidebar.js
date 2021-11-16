@@ -28,7 +28,7 @@ const Sidebar = (props) => {
           className={classes.closeIcon}
           onClick={props.onClose}
         />
-        <div>{props.children}</div>
+        <div className={classes.content}>{props.children}</div>
       </div>
     </>
   );

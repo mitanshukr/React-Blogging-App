@@ -1,24 +1,22 @@
 .Sidebar {
   position: fixed;
   top: 0;
-  /* left: -500px; */
   z-index: 1001;
   background-color: rgb(243, 243, 243);
-  border-right: 1ps solid rgba(59, 59, 59, 0.4);
-  box-shadow: 1px 0px 10px 1px rgba(59, 59, 59, 0.2);
-  height: 100vh;
-  max-width: 250px;
-  min-width: 160px;
-  width: 42vw;
-  padding: 18px;
-  padding-top: 30px;
   box-sizing: border-box;
   transition: all 0.3s ease-in-out;
+  height: 100vh;
+  max-width: 200px;
+  min-width: 160px;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .Sidebar .closeIcon {
   position: absolute;
-  top: 12px;
+  top: 14px;
   right: 18px;
   font-size: 26px;
   cursor: pointer;
@@ -30,10 +28,19 @@
 
 .Sidebar.left {
   left: -500px;
+  padding: 32px 20px 10px 5px;
+  /* box-shadow: 1px 0px 10px 2px rgba(88, 88, 88, 0.2); */
+  max-width: 200px;
+  min-width: 160px;
+  width: 50vw;
 }
 
 .Sidebar.right {
   right: -500px;
+  padding: 32px 20px 10px 10px;
+  max-width: 240px;
+  min-width: 200px;
+  width: 50vw;
 }
 
 .Sidebar.visibility_left {
@@ -44,9 +51,12 @@
   right: 0px;
 }
 
-@media screen and (max-width: 450px) {
-  .Sidebar {
-    padding: 8px;
-    padding-top: 30px;
+.Sidebar .content {
+  height: 100%;
+}
+
+@media screen and (max-width: 380px) {
+  .Sidebar.right {
+    padding: 32px 0px 10px 10px;
   }
 }
