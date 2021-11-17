@@ -8,13 +8,17 @@ class Logout extends Component {
   componentDidMount() {
     this.props.logoutDispatchHandler();
     this.props.history.replace({
-      pathname: this.props.location.state.prevPath,
+      pathname: this.props.location?.state?.prevPath || "/",
       isLogout: true,
     });
   }
 
   render() {
-    return <></>;
+    return (
+      <>
+        <p>You have been Logged out. Redirecting back to Homepage...</p>
+      </>
+    );
   }
 }
 

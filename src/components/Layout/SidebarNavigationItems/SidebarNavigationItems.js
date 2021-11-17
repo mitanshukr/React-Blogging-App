@@ -30,7 +30,7 @@ const SidebarNavigationItems = (props) => {
           prevPath={props.prevPath}
         />
       )}
-      <small style={{ color: "rgb(177, 177, 177)", fontSize: "10px" }}>
+      <small style={{ color: "rgb(177, 177, 177)", fontSize: "12px" }}>
         v1.0.0
       </small>
     </div>

@@ -8,17 +8,20 @@ const InitialNavItems = (props) => {
   return (
     <ul className={classes.InitialNavItems}>
       <NavigationItem link="/feed" onClick={props.onItemClick}>
-        <IoReader /> Feed
+        <IoReader />
+        Feed
       </NavigationItem>
       <NavigationItem
         link="/login"
         onClick={props.onItemClick}
         prevPath={props.prevPath}
       >
-        <FiLogIn /> Login
+        <FiLogIn />
+        Login
       </NavigationItem>
       <NavigationItem link="/signup" onClick={props.onItemClick}>
-        <AiOutlineUserAdd /> Signup
+        <AiOutlineUserAdd />
+        Signup
       </NavigationItem>
     </ul>
   );

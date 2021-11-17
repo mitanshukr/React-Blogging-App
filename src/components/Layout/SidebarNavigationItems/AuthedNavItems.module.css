@@ -7,7 +7,7 @@
 }
 
 .AuthedNavItems li {
-  padding: 9px 0;
+  padding: 12px 0;
 }
 
 .AuthedNavItems a,
@@ -27,6 +27,7 @@
 
 .AuthedNavItems a svg {
   padding-right: 8px;
+  transform: translateY(1px);
 }
 
 .AuthedNavItems li:first-of-type a {

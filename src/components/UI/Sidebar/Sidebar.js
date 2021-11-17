@@ -13,7 +13,7 @@ const Sidebar = (props) => {
     <>
       <Backdrop visibility={props.visibility} onClick={props.onClose} />
       <div
-        className={`${classes.Sidebar} ${
+        className={`noselect ${classes.Sidebar} ${
           props.alignment === "right" ? classes.right : classes.left
         } ${
           props.visibility

@@ -6,7 +6,7 @@
 }
 
 .InitialNavItems li {
-  padding: 10px 0;
+  padding: 12px 0;
 }
 
 .InitialNavItems a,
@@ -25,7 +25,8 @@
 }
 
 .InitialNavItems a svg {
-  padding-right: 5px;
+  padding-right: 7px;
+  transform: translateY(1px);
 }
 
 .InitialNavItems li:last-of-type a {
@@ -37,7 +38,6 @@
 
 .InitialNavItems li:last-of-type a svg {
   padding-right: 3px;
-  transform: translateY(1px);
 }
 
 .InitialNavItems li:last-of-type a:hover {
