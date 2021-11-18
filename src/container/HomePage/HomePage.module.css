@@ -111,20 +111,24 @@
   }
 }
 
-@media only screen and (max-width: 360px) {
+@media only screen and (max-width: 420px) {
   .Home {
-    padding-top: 80px;
+    padding-top: 110px;
   }
 
   .Home .headline {
-    font-size: 45px;
-    letter-spacing: -1px;
+    line-height: 48px;
   }
 
   .Home .typewriter {
-    font-size: 20px;
-    height: 150px;
-    width: 260px;
+    height: 175px;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+  .Home .headline {
+    font-size: 45px;
+    letter-spacing: -1px;
   }
 
   .cta a,

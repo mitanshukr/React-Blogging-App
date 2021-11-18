@@ -117,7 +117,7 @@ class GetPost extends React.Component {
               htmlToText(this.props.body)
                 .replace(/\s+/g, " ")
                 .trim()
-                .substring(0, 300) + "..."}
+                .substring(0, 120) + "..."}
           </p>
           <button
             onClick={this.props.onClick}

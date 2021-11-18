@@ -47,7 +47,7 @@ class WritingZone extends Component {
           errorMsg: null,
           isTouched: false,
           minLength: 50,
-          maxLength: 350,
+          maxLength: 120,
         },
       },
       body: {
