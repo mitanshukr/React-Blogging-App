@@ -7,7 +7,7 @@ import PNotification from "../../../components/UI/PriorityNotification/PNotifica
 import { showNotification } from "../../../store/actions";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { VscThreeBars } from "react-icons/vsc";
-import { RiHomeLine } from "react-icons/ri";
+import { BsPencilSquare } from "react-icons/bs";
 
 import "./Toolbar.css";
 import UserMenu from "./UserMenu/UserMenu";
@@ -79,19 +79,18 @@ class Toolbar extends React.Component {
               {!this.props.isAuthenticated ? (
                 <NavigationItem
                   style={{ fontSize: "17px", margin: "0 8px 2.5px 0" }}
-                  link="/feed"
+                  link="/write"
                   // prevPath={this.props.history?.location?.pathname}
                 >
-                  Feed
+                  Write
                 </NavigationItem>
               ) : (
                 <>
-                  <NavigationItem link="/">
-                    <RiHomeLine
-                      title="Home"
+                  <NavigationItem link="/write">
+                    <BsPencilSquare
+                      title="write"
                       style={{
-                        fontSize: "23px",
-                        transform: "translateY(1.5px)",
+                        fontSize: "20px",
                       }}
                     />
                   </NavigationItem>

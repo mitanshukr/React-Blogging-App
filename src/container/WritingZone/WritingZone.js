@@ -12,6 +12,7 @@ import htmlToText from "html2plaintext";
 import checkValidity from "../../Utility/inputValidation";
 import { getStringToTagsArray } from "../Posts/utils/tagsFormatHandler";
 import "./WritingZone.css";
+import { withRouter } from "react-router";
 
 class WritingZone extends Component {
   state = {
@@ -124,7 +125,12 @@ class WritingZone extends Component {
       }
       this.setState({ modalVisibility: true });
     } else {
-      this.props.history.push("/login");
+      this.props.history.replace({
+        pathname: "/login",
+        state: {
+          prevPath: this.props.history?.location?.pathname,
+        },
+      });
     }
   };
 
@@ -272,23 +278,31 @@ class WritingZone extends Component {
                 height: "100%",
                 width: "100%",
                 content_css: "./WritingZone.css",
-                menubar: false,
+                menubar: true,
                 branding: false,
+                auto_focus: true,
                 resize: false,
+                // images_upload_url: "provide upload server",
+                image_advtab: true,
                 plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table paste code help wordcount",
+                  "save directionality visualchars hr textpattern noneditable quickbars emoticons advlist autolink lists link image charmap print preview searchreplace code fullscreen insertdatetime table paste help wordcount",
                 ],
+                quickbars_selection_toolbar:
+                  "bold italic | quicklink h2 h3 blockquote quickimage quicktable",
                 toolbar:
-                  "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
+                  "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat",
               }}
               onEditorChange={this.inputChangeHandler}
             />
           </div>
-          <Button btntype="Submit">
-            {this.props.isAuthenticated ? "Save" : "Login to Save"}
-          </Button>
+          <div>
+            <Button
+              type="Submit"
+              style={{ minWidth: "180px", fontSize: "16px", height: "38px" }}
+            >
+              {this.props.isAuthenticated ? "Save" : "Login to Save"}
+            </Button>
+          </div>
         </form>
       </>
     );
@@ -315,4 +329,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(WritingZone);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(WritingZone));

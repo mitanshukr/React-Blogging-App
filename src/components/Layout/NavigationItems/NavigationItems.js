@@ -3,8 +3,8 @@ import NavigationItem from "./NavigationItem/NavigationItem";
 const navigationItems = (props) => {
   return (
     <ul>
-      <NavigationItem link="/" exact>
-        Home
+      <NavigationItem link="/write" exact>
+        Write
       </NavigationItem>
       <NavigationItem link="/feed" exact>
         Feed

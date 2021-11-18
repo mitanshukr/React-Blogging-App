@@ -7,7 +7,6 @@
   background-color: #2c2926;
   height: auto;
   flex-wrap: wrap;
-  /* overflow: hidden; */
 }
 
 .Header nav ul {
@@ -110,6 +109,6 @@
   }
 }
 
-.icon:hover {
+.icon:active {
   color: tomato !important;
 }

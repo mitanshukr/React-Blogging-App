@@ -11,7 +11,7 @@ const modal = (props) => {
         style={{
           transform: !props.visibility
             ? "translate(-50%, -700px)"
-            : "translate(-50%, 50px)",
+            : "translate(-50%, 2%)",
           // opacity: props.visibility ? "1" : "0",
         }}
       >

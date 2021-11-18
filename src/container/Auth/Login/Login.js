@@ -59,6 +59,8 @@ class Login extends Component {
   authCheck() {
     if (this.props.location?.state?.from?.isLogout) {
       this.props.history.replace("/");
+    } else if (this.props.location?.state?.prevPath === "/") {
+      this.from = "/write";
     } else {
       this.from = this.props.location?.state?.from ||
         this.props.location?.state?.prevPath || { pathname: "/" };

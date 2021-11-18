@@ -50,8 +50,8 @@ class App extends Component {
           />
           <Layout>
             <Switch>
-              <Route path="/home" exact component={HomePage} />
-              <Route path="/" exact component={WritingZone} />
+              <Route path="/" exact component={HomePage} />
+              <Route path="/write" exact component={WritingZone} />
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
               <Route path="/feed" exact component={Feed} />
