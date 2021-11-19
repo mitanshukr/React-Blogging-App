@@ -51,35 +51,41 @@ class Profile extends React.Component {
   };
 
   getUserInfo = (userName) => {
+    this.mounted = true;
     axios
       .get(`/user/public/${userName}`)
       .then((response) => {
-        this.setState({
-          userName: userName,
-          userId: response.data?.userId,
-          firstName: response.data?.firstName,
-          lastName: response.data?.lastName,
-          email: response.data?.email,
-          about: {
-            ...this.state.about,
-            validation: {
-              ...this.state.about.validation,
+        if (this.mounted)
+          this.setState({
+            userName: userName,
+            userId: response.data?.userId,
+            firstName: response.data?.firstName,
+            lastName: response.data?.lastName,
+            email: response.data?.email,
+            about: {
+              ...this.state.about,
+              validation: {
+                ...this.state.about.validation,
+              },
+              value: response.data?.about,
+              loadedValue: response.data?.about,
             },
-            value: response.data?.about,
-            loadedValue: response.data?.about,
-          },
-          serverBusy: false,
-          localError: null,
-        });
+            serverBusy: false,
+            localError: null,
+          });
       })
       .catch((err) => {
-        this.setState({
-          localError: getErrorStatusCode(err),
-          serverBusy: false,
-        });
+        if (this.mounted)
+          this.setState({
+            localError: getErrorStatusCode(err),
+            serverBusy: false,
+          });
       });
   };
 
+  componentWillUnmount() {
+    this.mounted = false;
+  }
   componentDidMount() {
     this.getUserInfo(this.state.userName);
   }
@@ -117,6 +123,7 @@ class Profile extends React.Component {
   };
 
   editBtnClickHandler = (e) => {
+    // e.stopPropagation();
     if (this.state.aboutEditModeOn) {
       if (e.target.innerText === "Cancel") {
         this.setState({

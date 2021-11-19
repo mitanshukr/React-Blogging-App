@@ -280,7 +280,6 @@ class WritingZone extends Component {
                 content_css: "./WritingZone.css",
                 menubar: true,
                 branding: false,
-                auto_focus: true,
                 resize: false,
                 // images_upload_url: "provide upload server",
                 image_advtab: true,
@@ -296,10 +295,7 @@ class WritingZone extends Component {
             />
           </div>
           <div>
-            <Button
-              type="Submit"
-              style={{ minWidth: "180px", fontSize: "16px", height: "38px" }}
-            >
+            <Button type="Submit" style={{ minWidth: "180px" }}>
               {this.props.isAuthenticated ? "Save" : "Login to Save"}
             </Button>
           </div>

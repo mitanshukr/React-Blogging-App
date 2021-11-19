@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import axios from "../../../axios-instance";
-import GetPost from "./GetPost/GetPost";
+import GetPost from "../../../components/Posts/GetPost/GetPost";
 import Spinner from "../../../components/UI/Spinner/Spinner";
 import classes from "./GetPosts.module.css";
 
@@ -18,7 +18,7 @@ import savePostHandler from "../utils/savePostHandler";
 import ErrorSvg from "../../../components/UI/ErrorSvg/ErrorSvg";
 import getErrorStatusCode from "../utils/errorHandler";
 
-// let isMounted = true;
+// let mounted = true;
 
 class GetPosts extends Component {
   constructor(props) {
@@ -32,11 +32,12 @@ class GetPosts extends Component {
     };
   }
 
-  // componentWillUnmount() {
-  //   isMounted = false;
-  // }
+  componentWillUnmount() {
+    this.mounted = false;
+  }
 
   componentDidMount() {
+    this.mounted = true;
     this.setState({ serverBusy: true });
     axios
       .get(
@@ -49,15 +50,17 @@ class GetPosts extends Component {
       )
       .then((response) => {
         const posts = response.data.posts;
-        this.setState({
-          posts: posts,
-          leftOffpostId: response.data.leftOffId,
-          remainingPosts: response.data.remaining,
-          serverBusy: false,
-        });
+        if (this.mounted)
+          this.setState({
+            posts: posts,
+            leftOffpostId: response.data.leftOffId,
+            remainingPosts: response.data.remaining,
+            serverBusy: false,
+          });
       })
       .catch((err) => {
-        this.setState({ localError: getErrorStatusCode(err) });
+        if (this.mounted)
+          this.setState({ localError: getErrorStatusCode(err) });
       });
   }
 
@@ -194,6 +197,7 @@ class GetPosts extends Component {
                     userName={`@${post.creator?.userName}`}
                     likeCount={post.likes.length}
                     viewCount={post.viewCount}
+                    isAuthenticated={this.props.isAuthenticated}
                     isSaved={post.savedby.find(
                       (userId) => userId === this.props.userId
                     )}

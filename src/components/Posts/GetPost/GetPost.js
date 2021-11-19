@@ -1,9 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
 
 // import { getBlogDateFormat } from "../../../../Utility/getDateFormat";
-import ProfileIcon from "../../../../components/User/Profile/ProfileIcon";
-import DeletePost from "../../../../components/Posts/DeletePost/DeletePost";
+import ProfileIcon from "../../User/Profile/ProfileIcon";
+import DeletePost from "../DeletePost/DeletePost";
 // import { FaRegBookmark, FaBookmark } from "react-icons/fa";
 import { BsBookmarkPlus, BsBookmarkFill } from "react-icons/bs";
 import htmlToText from "html2plaintext";
@@ -193,12 +192,4 @@ class GetPost extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    // savedPosts: state.savedPosts,
-    authToken: state.authToken,
-    isAuthenticated: state.isAuthenticated,
-  };
-};
-
-export default connect(mapStateToProps)(GetPost);
+export default GetPost;

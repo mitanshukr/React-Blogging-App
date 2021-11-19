@@ -32,9 +32,11 @@ class GetSinglePost extends Component {
 
   componentWillUnmount() {
     clearTimeout(this.viewTimer);
+    this.mounted = false;
   }
 
   componentDidMount() {
+    this.mounted = true;
     let URI = null;
     this.postId = this.props.match.params.postId;
     const isPrivate = this.props.match.path.split("/")[2] === "private";
@@ -56,12 +58,13 @@ class GetSinglePost extends Component {
         const isPostLiked = !!response?.data.likes.find(
           (id) => id.toString() === this.props.userId
         );
-        this.setState({
-          post: response?.data,
-          isPostLiked: isPostLiked,
-          likeCount: response?.data.likes.length,
-          viewCount: +response?.data.viewCount,
-        });
+        if (this.mounted)
+          this.setState({
+            post: response?.data,
+            isPostLiked: isPostLiked,
+            likeCount: response?.data.likes.length,
+            viewCount: +response?.data.viewCount,
+          });
         if (response?.data && !response?.data?.isPrivate) {
           this.viewTimer = setTimeout(() => {
             axios
@@ -78,7 +81,8 @@ class GetSinglePost extends Component {
         }
       })
       .catch((err) => {
-        this.setState({ localError: getErrorStatusCode(err) });
+        if (this.mounted)
+          this.setState({ localError: getErrorStatusCode(err) });
       });
   }
 

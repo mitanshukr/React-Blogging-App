@@ -67,7 +67,7 @@ class PersonalInfo extends React.Component {
             max: getDateFormat(new Date()),
           },
           label: "Birth Date",
-          value: "",
+          value: "01-01-0000",
           validation: {},
         },
         profession: {
@@ -142,7 +142,12 @@ class PersonalInfo extends React.Component {
     };
   }
 
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
   componentDidMount() {
+    this.mounted = true;
     axios
       .get(`/user/${this.props.userId}?detailedInfo=true`, {
         headers: {
@@ -154,14 +159,16 @@ class PersonalInfo extends React.Component {
         for (let elem in updatedInputElements) {
           updatedInputElements[elem].value = response.data[elem];
         }
-        this.setState({ inputElements: updatedInputElements });
+        if (this.mounted)
+          this.setState({ inputElements: updatedInputElements });
       })
       .catch((err) => {
-        console.log(err);
-        this.props.showNotification(
-          "Unable to Load. Please try again!",
-          "ERROR"
-        );
+        // console.log(err);
+        if (this.mounted)
+          this.props.showNotification(
+            "Unable to Load. Please try again!",
+            "ERROR"
+          );
       });
   }
 

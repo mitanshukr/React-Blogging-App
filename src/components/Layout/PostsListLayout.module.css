@@ -1,17 +1,19 @@
-.Feed__banner {
+.PostsList__banner {
   height: 200px;
   background-color: tomato;
   text-align: center;
   padding: 30px;
   box-sizing: border-box;
   color: white;
-  background: url("../../../assets/Images/2.png") no-repeat;
-  background-size: cover;
+  /* background: url("../../../assets/Images/6.jpg") no-repeat; */
+  /* background-size: cover;
+  background-position: left; */
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.Feed__banner > * {
+.PostsList__banner > * {
   margin: 5px 0;
+  text-shadow: 2px 2px black;
 }
